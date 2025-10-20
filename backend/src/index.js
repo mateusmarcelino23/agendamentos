@@ -1,38 +1,39 @@
-//importando bibliotecas necessárias
-import express from 'express'; // framework para criar o servidor
-import cors from 'cors';  // middleware para habilitar CORS (permite acessar o backend de outras origens)
-import dotenv from 'dotenv'; // biblioteca para carregar variáveis de ambiente (variáveis do ambiente são importantes pois permitem configurar o comportamento do aplicativo sem alterar o código)
-import routes from './routes'; // importando rotas definidas em outro arquivo
+// Importa as bibliotecas necessárias
+import express from 'express';      // framework para criar o servidor HTTP e gerenciar rotas
+import cors from 'cors';            // middleware que permite o acesso de outras origens (ex: frontend React)
+import dotenv from 'dotenv';        // carrega variáveis de ambiente a partir de um arquivo .env
 
-//configurando dotenv para carregar variáveis de ambiente do arquivo .env
-dotenv.config();
-
-//criando a instância do servidor
-const app = express(); // app é o objeto principal do servidor
-
-//configurando middlewares
-app.use(cors()); // habilitando CORS para todas as rotas
-app.use(express.json()); // habilitando o servidor para entender requisições com corpo em JSON
-
-//definindo as rotas do servidor
-
-//rota de teste
-app.get('/', (req , res) => {})
-    //Req: objeto que representa a requisição feita pelo cliente
-    //Res: objeto que representa a resposta enviada pelo servidor ao cliente
-    res.Send("Hello World!"); // Envia mensagem para navegador ou postman
-
-
+// Importa rotas (serão criadas depois)
 import professoresRoutes from './routes/professoresRoutes.js';
 import equipamentosRoutes from './routes/equipamentosRoutes.js';
 import agendamentosRoutes from './routes/agendamentosRoutes.js';
 
+// Carrega variáveis de ambiente do arquivo .env
+dotenv.config();
 
-//definindo porta do servidor
-const PORT = process.env.PORT || 3000; // se nenhuma porta for especificada no ambiente, usa a porta 3000
+// Cria a aplicação Express (servidor)
+const app = express();
 
-//iniciando o servidor
+// Configura middlewares globais
+app.use(cors());           // habilita CORS para permitir acesso de outros domínios
+app.use(express.json());   // faz o servidor entender dados em formato JSON (ex: POST com JSON)
+
+// Rota simples para testar se o servidor está funcionando
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+// Registra as rotas principais da aplicação
+// (Esses arquivos ainda não existem, serão criados depois)
+app.use('/professores', professoresRoutes);
+app.use('/equipamentos', equipamentosRoutes);
+app.use('/agendamentos', agendamentosRoutes);
+
+// Define a porta do servidor. Primeiro tenta usar a variável de ambiente PORT.
+// Se não existir, usa a porta 3000 por padrão.
+const PORT = process.env.PORT || 3000;
+
+// Inicia o servidor e exibe mensagem no console
 app.listen(PORT, () => {
-    console.log(`Servidor iniciado na porta ${PORT}`);
-    //mensagem do console após sabrer qual porta o servidor iniciou
+  console.log(`Servidor iniciado na porta ${PORT}`);
 });
