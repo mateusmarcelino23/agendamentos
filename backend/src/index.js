@@ -20,7 +20,7 @@ app.use(express.json());   // faz o servidor entender dados em formato JSON (ex:
 
 // Rota simples para testar se o servidor está funcionando
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('Hello, World!');
 });
 
 // Registra as rotas principais da aplicação
