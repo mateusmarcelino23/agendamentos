@@ -34,11 +34,12 @@ CREATE TABLE `agendamentos` (
   `id` int(11) NOT NULL,
   `equipamento_id` int(11) NOT NULL,
   `data` date NOT NULL,
-  `aula` tinyint(4) NOT NULL,
+  `periodo` tinyint(4) NOT NULL,
+  `aula` varchar(100) NOT NULL,
+  `quantidade` int(11) NOT NULL,
   `nome_professor` varchar(80) NOT NULL,
   `email_professor` varchar(150) NOT NULL,
   `criado_em` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
