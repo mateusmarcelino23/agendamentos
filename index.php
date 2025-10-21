@@ -9,7 +9,7 @@ if (isset($_SESSION['user_id'])) {
 
 // Gerar URL de autenticação do Google
 $params = [
-  'client_id' => $_ENV[GOOGLE_CLIENT_ID],
+  'client_id' => $_ENV['GOOGLE_CLIENT_ID'],
   'redirect_uri' => GOOGLE_REDIRECT_URI,
   'response_type' => 'code',
   'scope' => 'email profile',
