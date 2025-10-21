@@ -30,7 +30,7 @@ Sistema simples para suprir uma necessidade interna da escola. Permite que os pr
 
 ### 3. Criar Banco de Dados
 
-Vá no seu PHP MyAdmin e crie o seu banco de dados, depois importe o arquivo `db.sql` para criar as tabelas necessárias
+Vá no seu PHPMyAdmin e importe o arquivo `db.sql` para criar as tabelas necessárias, ele criará um banco de dados chamado `sae`, se não quiser o nome crie você mesmo e depois remova as linhas `CREATE DATBASE sae;` e `USE sae;`.
 
 ### 4. Executar o Projeto
 
