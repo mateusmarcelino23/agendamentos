@@ -163,7 +163,7 @@ try {
     unset($_SESSION['oauth_error']);
 
     // Redirecionar para dashboard
-    header('Location: calendario.php');
+    header('Location: dashboard.php');
     exit;
 } catch (Throwable $e) {
     sendErrorAndExit('Exceção disparada', [

@@ -3,7 +3,7 @@ require_once 'config.php';
 
 // Se já estiver logado, redirecionar para dashboard
 if (isset($_SESSION['user_id'])) {
-  header('Location: calendario.php');
+  header('Location: dashboard.php');
   exit;
 }
 

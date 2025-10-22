@@ -5,7 +5,7 @@ $dotenv->load();
 // Configurações do Google OAuth2
 define('GOOGLE_CLIENT_ID', $_ENV['GOOGLE_CLIENT_ID']);
 define('GOOGLE_CLIENT_SECRET', $_ENV['GOOGLE_CLIENT_SECRET']);
-define('GOOGLE_REDIRECT_URI', 'http://127.0.0.1:8081/SAE/callback.php');
+define('GOOGLE_REDIRECT_URI', 'http://127.0.0.1:8081/agendamentos/callback.php');
 
 // Configurações do banco de dados
 define('DB_HOST', $_ENV['DB_HOST']);
