@@ -8,15 +8,15 @@ session_start();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-  <title>SAE</title>
+  <title>Página Inicial</title>
 </head>
 
 <body>
   <!-- <div>
     <h3>Bem-Vindo ao SAE, professor <span style="color: red;"><?php echo htmlspecialchars($_SESSION['user_name']); ?></span></h3>
   </div> -->
-  <div class="container class=" card text-white bg-success mb-3"">
-    <form method="POST" action="backend/calendario.php" id="agendamentoForm">
+  <div class="container card text-white bg-success mb-3 ">
+    <form method="POST" action="backend/pages/dashboard" id="agendamentoForm">
       <!-- 1️⃣ Data -->
       <div id="etapa1">
         <label for="data-agendamento">Selecione a data de agendamento:</label><br>

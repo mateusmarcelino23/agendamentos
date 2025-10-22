@@ -20,8 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `sae`
 
-CREATE DATABASE sae;
-USE sae;
+CREATE DATABASE agendamentos;
+USE agendamentos;
 --
 
 -- --------------------------------------------------------
