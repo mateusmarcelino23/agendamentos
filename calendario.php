@@ -144,7 +144,7 @@ session_start();
     </script>
 
   </div>
-  <style>
+  <!-- <style>
     .center {
       display: block;
       margin-left: auto;
@@ -177,7 +177,7 @@ session_start();
     // opcional: remove cliques
     video.addEventListener('click', e => e.stopPropagation());
     });
-  </script>
+  </script> -->
 </body>
 
 </html>
