@@ -63,7 +63,7 @@ function h($s)
   <?php
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clear'])) {
     unset($_SESSION['oauth_error']);
-    header('Location: index.php');
+    header('Location: ../../');
     exit;
   }
   ?>

@@ -1,6 +1,7 @@
 <?php
 session_start();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,9 +13,9 @@ session_start();
 </head>
 
 <body>
-  <!-- <div>
-    <h3>Bem-Vindo ao SAE, professor <span style="color: red;"><?php echo htmlspecialchars($_SESSION['user_name']); ?></span></h3>
-  </div> -->
+  <div>
+    <h3>Bem-Vindo ao SAEE, professor <span style="color: red;"><?php echo htmlspecialchars($_SESSION['user_name']); ?></span></h3>
+  </div>
   <div class="container card text-white bg-success mb-3 ">
     <form method="POST" action="backend/pages/dashboard" id="agendamentoForm">
       <!-- 1️⃣ Data -->
@@ -63,6 +64,8 @@ session_start();
       </div>
       <button type="submit">Agendar</button>
     </form>
+
+    <a href="../../backend/controllers/logoutController.php">logout</a>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -144,40 +147,5 @@ session_start();
     </script>
 
   </div>
-  <!-- <style>
-    .center {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      width: 50%;
-      padding: 10px;
-      font-size: 20px;
-      background-color: red;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-  </style>
-  <button class="center" id="botao">Não clique!!!</button>
-  <script>
-    document.getElementById('botao').addEventListener('click', () => {
-    // cria um vídeo invisível na página
-    const video = document.createElement('video');
-    video.src = 'img/cow-windows-xp-279msvlenomtq5d8.webp'; // ou 'seu_audio.mp3'
-    video.autoplay = true;
-    video.controls = false;
-    video.style.position = 'fixed';
-    video.style.top = '0';
-    video.style.left = '0';
-    video.style.width = '100%';
-    video.style.height = '100%';
-    video.style.zIndex = '9999';
-    document.body.appendChild(video);
-    // opcional: remove cliques
-    video.addEventListener('click', e => e.stopPropagation());
-    });
-  </script> -->
-</body>
 
 </html>

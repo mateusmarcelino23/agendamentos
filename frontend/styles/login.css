@@ -1,0 +1,356 @@
+@import url('https://fonts.googleapis.com/css2?family=Caprasimo&display=swap');
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    top: 0;
+    box-sizing: border-box;
+}
+
+/* Body principal */
+body,
+html {
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Inter', Arial, sans-serif;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    padding: 0 0;
+    background-color: #eeeeee;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    overflow: scroll;
+}
+
+/* ==========================================================
+   POR LARGURA (min-width)
+   ========================================================== */
+
+/* Pequenos dispositivos (>= 320px) — smartphones maiores */
+@media (min-width: 200px) {
+
+    /* Container principal da versão mobile */
+    .login-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100vw;
+        height: 100vh;
+        font-family: 'Inter', Arial, sans-serif;
+    }
+
+    .login-header {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    .login-header .logo {
+        height: 50px;
+        object-fit: contain;
+    }
+
+    .login-header .saee-logo {
+        height: 120px;
+        object-fit: contain;
+    }
+
+    #robozinho {
+        position: relative;
+        width: 270px;
+        height: 270px;
+        top: -10px;
+    }
+
+    /* Botão do Google */
+    .google-btn {
+        position: relative;
+        top: -10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #ffffff;
+        color: #ff8c00;
+        border: 2px solid #ff8c00;
+        text-decoration: none;
+        width: calc(100vw - 2rem);
+        font-weight: 600;
+        padding: 1.2rem 1.2rem;
+        border-radius: 6px;
+        transition: background 0.3s, color 0.3s;
+        margin-bottom: 0;
+    }
+
+    .google-btn svg {
+        margin-right: 8px;
+    }
+
+    .google-btn:active,
+    .google-btn:focus {
+        background-color: #ff8c00;
+        color: #fff;
+        transform: scale(1.02);
+    }
+
+    /* link de Sobre */
+    .about-link {
+        position: relative;
+        top: 30px;
+        color: #ff8c00;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .about-link:active,
+    .about-link:focus {
+        color: #c56c00;
+        text-decoration: underline;
+    }
+
+    /* Footer */
+    .login-footer {
+        position: relative;
+        margin-top: 60%;
+        color: #555;
+        font-size: 0.9rem;
+        max-width: calc(100vw - 4rem);
+    }
+
+    /* Por padrão, escondemos toda a versão desktop */
+    .desktop-login-container {
+        display: none;
+    }
+
+}
+
+/* Dispositivos médios (>= 600px) — tablets */
+@media (min-width: 600px) {
+    .google-btn {
+        width: calc(100vw - 10rem);
+    }
+
+    /* Por padrão, escondemos toda a versão desktop */
+    .desktop-login-container {
+        display: none;
+    }
+
+}
+
+/* Dispositivos grandes (>= 1024px) — notebooks */
+@media (min-width: 1024px) {
+
+    body,
+    html {
+        overflow: hidden;
+    }
+
+    /* Container principal da versão desktop */
+    .desktop-login-container {
+        display: flex;
+        flex-direction: row;
+        width: 100vw;
+        height: 100vh;
+        font-family: 'Inter', Arial, sans-serif;
+    }
+
+    /* LADO ESQUERDO */
+    .desktop-left-side {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        padding: 2rem;
+        background-color: #eeeeee;
+        color: #333;
+        overflow-y: auto;
+    }
+
+    /* Header do lado esquerdo */
+    .desktop-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        width: 100%;
+        margin-bottom: 2rem;
+        max-width: 100%;
+    }
+
+    .desktop-logo {
+        height: 60px;
+        object-fit: contain;
+    }
+
+    .saee-logo-desktop {
+        position: relative;
+        height: 140px;
+        top: -38px;
+    }
+
+    /* Robo */
+    #desktop-robozinho {
+        position: relative;
+        top: 0px;
+        width: 340px;
+        height: 340px;
+        margin-bottom: 2rem;
+    }
+
+    /* Caixa de login */
+    .desktop-login-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .desktop-google-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        background-color: #ffffff;
+        color: #ff8c00;
+        border: 2px solid #ff8c00;
+        text-decoration: none;
+        width: calc(50vw - 12rem);
+        font-weight: 600;
+        padding: 1rem 1.5rem;
+        border-radius: 6px;
+        transition: background 0.3s, color 0.3s, transform 0.2s;
+    }
+
+    .desktop-google-btn svg {
+        margin-right: 8px;
+    }
+
+    .desktop-google-btn:hover,
+    .desktop-google-btn:focus {
+        background-color: #ff8c00;
+        color: #fff;
+        transform: scale(1.02);
+    }
+
+    /* Link de sobre */
+    .desktop-about-link-container {
+        margin: 1rem 0;
+    }
+
+    .desktop-about-link {
+        color: #ff8c00;
+        text-decoration: none;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .desktop-about-link:hover,
+    .desktop-about-link:focus {
+        color: #c56c00;
+        text-decoration: underline;
+    }
+
+    /* Footer */
+    .desktop-login-footer {
+        position: static;
+        margin-top: auto;
+        font-size: 0.9rem;
+        color: #555;
+        text-align: center;
+    }
+
+    /* LADO DIREITO: vídeo */
+    .desktop-right-side {
+        position: relative;
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .desktop-background-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.6);
+        z-index: 1;
+    }
+
+    .desktop-overlay-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        text-align: center;
+        color: #fff;
+        font-family: 'Caprasimo', serif;
+        font-weight: 200;
+        text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        padding: 1rem;
+        width: 90%;
+    }
+
+    .desktop-overlay-text h1 {
+        font-size: 4vw;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    /* Esconde o layout mobile */
+    .login-container,
+    .login-header,
+    .login-box,
+    #robozinho,
+    .about-link,
+    .login-footer {
+        display: none;
+    }
+}
+
+/* Dispositivos extra grandes (>= 1280px) — desktops */
+@media (min-width: 1280px) {
+    /* seus estilos aqui */
+}
+
+/* Dispositivos muito grandes (>= 1536px) — monitores grandes / TVs */
+@media (min-width: 1536px) {
+    /* seus estilos aqui */
+}
+
+/* ==========================================================
+   POR ALTURA (min-height)
+   ========================================================== */
+
+/* Alturas pequenas (>= 480px) — smartphones em modo paisagem */
+@media (min-height: 220px) {
+    /* seus estilos aqui */
+}
+
+/* Alturas médias (>= 768px) — tablets e notebooks */
+@media (min-height: 768px) {
+    /* seus estilos aqui */
+}
+
+/* Alturas grandes (>= 900px) — desktops comuns */
+@media (min-height: 900px) {
+    /* seus estilos aqui */
+}
+
+/* Alturas muito grandes (>= 1080px) — telas full HD ou superiores */
+@media (min-height: 1080px) {
+    /* seus estilos aqui */
+}

@@ -1,5 +1,5 @@
 <?php
-include '../database.php';
+include '../config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // session_start();
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   if (!$data || empty($aulas) || !$equipamento_tipo || !$extra || $periodo === '') {
     $_SESSION['mensagem_preencha_campos'] = "Por favor, preencha todos os campos obrigatórios.";
-    header("Location: ../calendario.php");
+    header("Location: ../../frontend/pages/dashboard.php");
     exit;
   }
 
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $equipamento = $stmt->fetch();
   if (!$equipamento) {
     $_SESSION['mensagem_erro'] = "Equipamento não encontrado.";
-    header("Location: ../calendario.php");
+    header("Location: ../../frontend/pages/dashboard.php");
     exit;
   } 
   $equipamento_id = $equipamento['id'];
@@ -43,6 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $stmt->execute([$equipamento_id, $data, $aulas_str, $periodo, $nome_professor, $email_professor]);
 
   $_SESSION['mensagem_sucesso'] = "Agendamento salvo com sucesso!";
-  header("Location: ../calendario.php");
+  header("Location: ../../frontend/pages/dashboard.php");
   exit;
 }

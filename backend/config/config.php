@@ -1,11 +1,11 @@
 <?php
-require_once 'vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+require_once __DIR__ . '/../vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(realpath(__DIR__ . '/..'));
 $dotenv->load();
 // Configurações do Google OAuth2
 define('GOOGLE_CLIENT_ID', $_ENV['GOOGLE_CLIENT_ID']);
 define('GOOGLE_CLIENT_SECRET', $_ENV['GOOGLE_CLIENT_SECRET']);
-define('GOOGLE_REDIRECT_URI', 'http://127.0.0.1:8081/agendamentos/callback.php');
+define('GOOGLE_REDIRECT_URI', 'http://localhost:8081/agendamentos/backend/callback.php');
 
 // Configurações do banco de dados
 define('DB_HOST', $_ENV['DB_HOST']);
@@ -20,3 +20,5 @@ define('GOOGLE_USER_INFO_URL', 'https://www.googleapis.com/oauth2/v2/userinfo');
 
 // Iniciar sessão
 session_start();
+
+?>
