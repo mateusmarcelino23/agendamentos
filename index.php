@@ -36,7 +36,7 @@ $googleLoginUrl = GOOGLE_AUTH_URL . '?' . http_build_query($params); // Constant
   <!-- Lottie Animation Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.2/lottie.min.js"></script>
   <!-- Estilos personalizados -->
-  <link rel="stylesheet" href="frontend/styles/login.css">
+  <link rel="stylesheet" href="frontend/assets/styles/login.css">
   <title>Login do Professor - SAEE</title>
 </head>
 
@@ -48,9 +48,9 @@ $googleLoginUrl = GOOGLE_AUTH_URL . '?' . http_build_query($params); // Constant
 
     <!-- Cabeçalho com logos -->
     <div class="login-header">
-      <img src="frontend/img/1748908346791.png" alt="Logo Miguel Vicente Cury" class="logo">
-      <img src="frontend/img/saeelogo.png" alt="Logo SAEE" class="logo saee-logo">
-      <img src="frontend/img/f3y98K8qjJjSJr8w7M6qu2EpzpofC8MLWbltM77l.png" alt="Secretaria de Educação" class="logo">
+      <img src="frontend/assets/img/1748908346791.png" alt="Logo Miguel Vicente Cury" class="logo">
+      <img src="frontend/assets/img/saeelogo.png" alt="Logo SAEE" class="logo saee-logo">
+      <img src="frontend/assets/img/f3y98K8qjJjSJr8w7M6qu2EpzpofC8MLWbltM77l.png" alt="Secretaria de Educação" class="logo">
     </div>
 
     <!-- Animação do robozinho dando oi -->
@@ -103,9 +103,9 @@ $googleLoginUrl = GOOGLE_AUTH_URL . '?' . http_build_query($params); // Constant
 
       <!-- Cabeçalho com logos (versão desktop) -->
       <div class="desktop-header">
-        <img src="frontend/img/1748908346791.png" alt="Logo Miguel Vicente Cury" class="desktop-logo">
-        <img src="frontend/img/saeelogo.png" alt="Logo SAEE" class="desktop-logo saee-logo-desktop">
-        <img src="frontend/img/f3y98K8qjJjSJr8w7M6qu2EpzpofC8MLWbltM77l.png" alt="Secretaria de Educação" class="desktop-logo">
+        <img src="frontend/assets/img/1748908346791.png" alt="Logo Miguel Vicente Cury" class="desktop-logo">
+        <img src="frontend/assets/img/saeelogo.png" alt="Logo SAEE" class="desktop-logo saee-logo-desktop">
+        <img src="frontend/assets/img/f3y98K8qjJjSJr8w7M6qu2EpzpofC8MLWbltM77l.png" alt="Secretaria de Educação" class="desktop-logo">
       </div>
 
       <!-- Animação do robozinho -->
@@ -147,7 +147,7 @@ $googleLoginUrl = GOOGLE_AUTH_URL . '?' . http_build_query($params); // Constant
     <!-- Lado direito: vídeo + frase -->
     <div class="desktop-right-side">
       <video autoplay muted loop class="desktop-background-video">
-        <source src="frontend/img/200522-SpeedLineAnimeHol.mp4" type="video/mp4">
+        <source src="frontend/assets/animations/200522-SpeedLineAnimeHol.mp4" type="video/mp4">
       </video>
       <div class="desktop-overlay-text">
         <h1>Educação é o futuro sendo escrito hoje.</h1>
@@ -170,7 +170,7 @@ $googleLoginUrl = GOOGLE_AUTH_URL . '?' . http_build_query($params); // Constant
     renderer: 'svg', // pode ser 'svg', 'canvas' ou 'html'
     loop: true, // repetir indefinidamente
     autoplay: true, // inicia sozinha
-    path: 'frontend/img/RobotSaludando.json' // caminho do arquivo JSON
+    path: 'frontend/assets/animations/RobotSaludando.json' // caminho do arquivo JSON
   });
 </script>
 
@@ -184,7 +184,7 @@ $googleLoginUrl = GOOGLE_AUTH_URL . '?' . http_build_query($params); // Constant
     renderer: 'svg', // pode ser 'svg', 'canvas' ou 'html'
     loop: true, // repetir indefinidamente
     autoplay: true, // inicia sozinha
-    path: 'frontend/img/RobotSaludando.json' // caminho do arquivo JSON
+    path: 'frontend/assets/animations/RobotSaludando.json' // caminho do arquivo JSON
   });
 </script>
 

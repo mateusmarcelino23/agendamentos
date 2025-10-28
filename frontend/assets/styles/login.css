@@ -20,9 +20,7 @@ html {
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: #fff;
     padding: 0 0;
-    background-color: #eeeeee;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     overflow: scroll;
 }
@@ -40,6 +38,7 @@ html {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
+        background-color: #ffffff;
         align-items: center;
         width: 100vw;
         height: 100vh;
@@ -107,8 +106,8 @@ html {
 
     /* link de Sobre */
     .about-link {
-        position: relative;
-        top: 30px;
+        display: block;
+        margin-top: 50px;
         color: #ff8c00;
         text-decoration: none;
         font-weight: 500;
@@ -123,7 +122,7 @@ html {
     /* Footer */
     .login-footer {
         position: relative;
-        margin-top: 60%;
+        margin-top: auto;
         color: #555;
         font-size: 0.9rem;
         max-width: calc(100vw - 4rem);
@@ -161,6 +160,7 @@ html {
     .desktop-login-container {
         display: flex;
         flex-direction: row;
+        justify-content: center;
         width: 100vw;
         height: 100vh;
         font-family: 'Inter', Arial, sans-serif;
@@ -173,8 +173,7 @@ html {
         align-items: center;
         flex-direction: column;
         padding: 2rem;
-        background-color: #eeeeee;
-        color: #333;
+        background-color: #ffffff;
         overflow-y: auto;
     }
 
@@ -305,9 +304,10 @@ html {
     }
 
     .desktop-overlay-text h1 {
-        font-size: 4vw;
+        font-size: 3.1vw;
         margin: 0;
         line-height: 1.2;
+        user-select: none;
     }
 
     /* Esconde o layout mobile */
