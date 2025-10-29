@@ -10,7 +10,7 @@ body,
 html {
   height: 100%;
   width: 100%;
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: "Inter", Arial, sans-serif;
   background-size: cover;
   display: flex;
   flex-direction: column;
@@ -18,14 +18,12 @@ html {
   overflow: auto;
 }
 
-
 /* ==========================================================
 BREAKPOINTS POR LARGURA (MOBILE FIRST)
 ========================================================== */
 
 /* Smartphones maiores (>= 480px) */
 @media (min-width: 280px) {
-
   .header-mobile {
     position: fixed;
     top: 0;
@@ -50,23 +48,6 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
   .header-mobile-menu {
     position: absolute;
     left: 0;
-  }
-
-  #menu {
-    position: fixed;
-    top: 75px;
-    left: -250px;
-    /* escondido fora da tela */
-    width: 250px;
-    height: 100%;
-    background: #fff;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-    transition: left 0.3s ease;
-  }
-
-  #menu.on {
-    left: 0;
-    /* quando ativado, aparece */
   }
 
   #toggle {
@@ -117,7 +98,7 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     transform: rotate(-45deg) translate(7px, -8px);
   }
 
-  #toggle.on+#menu {
+  #toggle.on + #menu {
     opacity: 1;
     visibility: visible;
   }
@@ -149,6 +130,75 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     color: #d4f5d4;
   }
 
+  #menu {
+    position: fixed;
+    top: 75px;
+    left: -310px;
+    /* escondido fora da tela */
+    width: 300px;
+    height: 100%;
+    background: #fff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: left 0.3s ease;
+  }
+
+  #menu.on {
+    left: 0;
+    /* quando ativado, aparece */
+  }
+
+  #menu ul {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  /* Itens do menu */
+  .sidebar-item a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #ff8c00;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+
+  /* Hover nos links */
+  .sidebar-item a:hover {
+    background: rgba(255, 140, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  /* Ícones Lottie */
+  .animacao-mobile {
+    width: 35px;
+    height: 35px;
+    background-color: rgba(255, 140, 0, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  /* Hover nos ícones */
+  .sidebar-item a:hover .animacao {
+    background-color: rgba(255, 140, 0, 0.3);
+  }
+
+  /* Texto dos itens */
+  .sidebar-item span {
+    font-size: 16px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
   .conteudo-principal {
     padding-top: 100px;
     border-top: 20px;
@@ -157,7 +207,6 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     width: 100%;
     background-color: #eeeeee;
   }
-
 }
 
 /* Tablets (>= 768px) */
@@ -167,7 +216,6 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
 
 /* Notebooks pequenos (>= 1024px) */
 @media (min-width: 951px) {
-
   /* Header principal */
   .header-desktop__nav {
     width: 100%;
@@ -175,8 +223,8 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     position: fixed;
     top: 0;
     left: 0;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+    /* border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px; */
     background: #fff;
     /* fundo branco */
     color: #ff8c00;
@@ -257,11 +305,10 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
 
   /* Conteúdo principal (para não ficar escondido atrás da header) */
   .conteudo-principal {
-    margin-top: 60px;
+    margin-top: 80px;
     /* espaço abaixo do header */
     padding: 20px;
   }
-
 }
 
 /* Desktops médios (>= 1280px) */
