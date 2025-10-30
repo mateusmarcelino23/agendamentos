@@ -46,41 +46,6 @@ function sendErrorAndExit($title, $meta = [])
     exit; // Interrompe o script
 }
 
-// Função que salva ou atualiza um professor no banco de dados
-function saveUser($googleId, $name, $email, $photo)
-{
-    global $pdo; // Usa a conexão PDO global
-
-    // Primeiro, verifica se o usuário já existe (por google_id ou email)
-    $stmt = $pdo->prepare("SELECT id FROM professores WHERE google_id = :google_id OR email = :email LIMIT 1");
-    $stmt->execute([
-        ':google_id' => $googleId,
-        ':email' => $email
-    ]);
-
-    $user = $stmt->fetch(PDO::FETCH_ASSOC); // Tenta obter usuário existente
-
-    if ($user) {
-        // Se usuário existe, apenas atualiza a última vez que ele fez login e sua foto
-        $stmt = $pdo->prepare("UPDATE professores SET ultimo_login = CURRENT_TIMESTAMP, foto = :foto WHERE id = :id");
-        $stmt->execute([
-            ':foto' => $photo,
-            ':id' => $user['id']
-        ]);
-        return $user['id']; // Retorna o ID existente
-    } else {
-        // Se não existe, insere novo registro
-        $stmt = $pdo->prepare("INSERT INTO professores (nome, email, google_id, foto) VALUES (:nome, :email, :google_id, :foto)");
-        $stmt->execute([
-            ':nome' => $name,
-            ':email' => $email,
-            ':google_id' => $googleId,
-            ':foto' => $photo
-        ]);
-        return $pdo->lastInsertId(); // Retorna o ID do novo registro
-    }
-}
-
 try {
     // Verifica se o código de autorização do Google foi recebido
     if (!isset($_GET['code'])) {
