@@ -1,6 +1,10 @@
 <?php
 require_once __DIR__ . '/config.php';
-// session_start();
+
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+
 
 function getConnection()
 {
@@ -39,6 +43,7 @@ function saveUser($googleId, $name, $email, $picture)
 
   return $pdo->lastInsertId() ?: $pdo->query("SELECT id FROM professores WHERE google_id = '$googleId'")->fetchColumn();
 }
+
 
 function getUserById($id)
 {

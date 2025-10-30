@@ -1,56 +1,56 @@
--- phpMyAdmin SQL Dump - Versão Base
--- Estrutura inicial do banco de dados: agendamentos
+-- phpMyAdmin SQL Dump - Reformulado e Normalizado
+-- Banco de dados: agendamentos
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-CREATE DATABASE IF NOT EXISTS agendamentos;
+CREATE DATABASE IF NOT EXISTS agendamentos CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE agendamentos;
 
 -- --------------------------------------------------------
--- Estrutura da tabela `agendamentos`
+-- Tabela: equipamentos
 -- --------------------------------------------------------
-
-CREATE TABLE `agendamentos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `equipamento_id` int(11) NOT NULL,
-  `data` date NOT NULL,
-  `aula` set('1','2','3','4','5','6') NOT NULL,
-  `nome_professor` varchar(80) NOT NULL,
-  `email_professor` varchar(150) NOT NULL,
-  `criado_em` datetime DEFAULT current_timestamp(),
-  `periodo` enum('manha','tarde','noite') NOT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_equipamento` FOREIGN KEY (`equipamento_id`) REFERENCES `equipamentos` (`id`) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS equipamentos (
+    id INT NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    tipo ENUM('laboratorio', 'guardiao') NOT NULL,
+    quantidade INT DEFAULT 0,
+    PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
--- Estrutura da tabela `equipamentos`
+-- Tabela: professores
 -- --------------------------------------------------------
-
-CREATE TABLE `equipamentos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome_equip` varchar(40) DEFAULT NULL,
-  `tipo` enum('laboratorio','guardiao') NOT NULL,
-  `quantidade` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE IF NOT EXISTS professores (
+    id INT NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(80) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    google_id VARCHAR(100),
+    foto TEXT,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ultimo_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    funcao ENUM('professor','admin') NOT NULL DEFAULT 'professor',
+    PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
--- Estrutura da tabela `professores`
+-- Tabela: agendamentos
 -- --------------------------------------------------------
-
-CREATE TABLE `professores` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(80) DEFAULT NULL,
-  `email` varchar(150) DEFAULT NULL UNIQUE,
-  `google_id` varchar(100) DEFAULT NULL,
-  `foto` text DEFAULT NULL,
-  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
-  `ultimo_login` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `funcao` enum('professor','admin') NOT NULL DEFAULT 'professor',
-  PRIMARY KEY (`id`)
+CREATE TABLE IF NOT EXISTS agendamentos (
+    id INT NOT NULL AUTO_INCREMENT,
+    equipamento_id INT NOT NULL,
+    professor_id INT NOT NULL,
+    data DATE NOT NULL,
+    aula TINYINT UNSIGNED NOT NULL CHECK(aula BETWEEN 1 AND 6),
+    periodo ENUM('manha','tarde','noite') NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_equipamento FOREIGN KEY (equipamento_id) REFERENCES equipamentos(id) ON DELETE CASCADE,
+    CONSTRAINT fk_professor FOREIGN KEY (professor_id) REFERENCES professores(id) ON DELETE CASCADE,
+    INDEX idx_data (data),
+    INDEX idx_equipamento (equipamento_id),
+    INDEX idx_professor (professor_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 COMMIT;

@@ -205,7 +205,8 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     height: 100vh;
     overflow: auto;
     width: 100%;
-    background-color: #eeeeee;
+    background-color: #fff;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   }
 }
 
@@ -275,6 +276,12 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
 
   /* Hover nos links */
   .nav-menu__item a:hover {
+    background: rgba(255, 140, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  /* Hover fixo quando estiver na página */
+  .nav-menu__item a.active-page {
     background: rgba(255, 140, 0, 0.1);
     transform: translateY(-2px);
   }

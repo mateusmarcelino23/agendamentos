@@ -13,7 +13,7 @@
 <!-- Header para mobile -->
 <div class="header-mobile">
   <!-- Adicionado classe para header mobile -->
-  <div class="header-mobile__container">
+  <nav class="header-mobile__container">
     <!-- Container para alinhar itens -->
     <div class="header-mobile-logo">
       <!-- Logo mobile -->
@@ -28,7 +28,7 @@
       <a href="#" id="toggle"><span></span></a>
     </div>
 
-    <nav id="menu">
+    <div id="menu">
       <ul>
         <li class="sidebar-item">
           <a href="/agendamentos/frontend/pages/dashboard.php">
@@ -90,8 +90,8 @@
           </a>
         </li>
       </ul>
-    </nav>
-  </div>
+    </div>
+  </nav>
 </div>
 
 <!-- Header para desktop -->
@@ -238,7 +238,7 @@
     // Ajuste visual do ícone de relatórios
     setTimeout(() => {
       const svg = document.querySelector(
-        ".nav-menu__item:nth-child(3) .animacao-mobile svg"
+        ".sidebar-item:nth-child(3) .animacao-mobile svg"
       );
       if (svg) {
         svg.style.transform = "scale(0.8)";
@@ -249,16 +249,15 @@
     // Ajuste visual do último ícone (conta)
     setTimeout(() => {
       const svg = document.querySelector(
-        ".nav-menu__item:last-child .animacao-mobile svg"
+        ".sidebar-item:last-child .animacao-mobile svg"
       );
       if (svg) {
-        svg.style.transform = "scale(0.6)";
+        svg.style.transform = "scale(0.7)";
         svg.style.transformOrigin = "center";
       }
     }, 500);
   });
 </script>
-
 
 <!-- JavaScript para Ícones animados desktop -->
 <script>
@@ -266,7 +265,6 @@
     const animacoes = document.querySelectorAll(".animacao");
 
     animacoes.forEach((animDiv) => {
-      // Inicializa a animação Lottie
       const anim = lottie.loadAnimation({
         container: animDiv,
         renderer: "svg",
@@ -275,7 +273,7 @@
         path: animDiv.dataset.path,
       });
 
-      // Altera a cor de todos os paths para #ff8c00
+      // Altera a cor de todos os paths
       anim.addEventListener("DOMLoaded", () => {
         const paths = animDiv.querySelectorAll(
           "path, circle, rect, polygon, line"
@@ -286,20 +284,27 @@
         });
       });
 
-      // Seleciona o item do menu para hover
       const menuItem = animDiv.closest(".nav-menu__item");
+      const link = menuItem.querySelector("a");
 
-      // Hover: inicia a animação
-      menuItem.addEventListener("mouseover", () => {
-        anim.play();
-      });
-
-      // Mouseout: pausa a animação
+      // Hover normal
+      menuItem.addEventListener("mouseover", () => anim.play());
       menuItem.addEventListener("mouseout", () => {
-        anim.stop();
+        if (!link.classList.contains("active-page")) {
+          anim.stop();
+        }
       });
-    });
 
+      // Detecta se este item corresponde à página atual
+      if (link.getAttribute("href") === window.location.pathname) {
+        anim.play(); // animação ligada permanentemente
+        link.classList.add("active-page"); // adiciona classe para efeito de hover fixo
+      }
+    });
+  });
+
+  // Ajustes visuais
+  document.addEventListener("DOMContentLoaded", () => {
     // Ajuste visual do ícone de relatórios
     setTimeout(() => {
       const svg = document.querySelector(

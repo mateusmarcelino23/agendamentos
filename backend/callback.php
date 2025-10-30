@@ -1,33 +1,36 @@
 <?php
-require_once __DIR__ . '/config/config.php';
-require_once __DIR__ . '/config/database.php';
-session_start();
+require_once __DIR__ . '/config/config.php'; // Arquivo com constantes do Google e do sistema
+require_once __DIR__ . '/config/database.php'; // Arquivo que cria a conexão PDO $pdo
+session_start(); // Inicia a sessão PHP para armazenar dados do usuário e erros
 
-// converte warnings/notices em exceções
+// Converte warnings e notices do PHP em exceções para tratar de forma unificada
 set_error_handler(function ($severity, $message, $file, $line) {
     throw new ErrorException($message, 0, $severity, $file, $line);
 });
 
-// sanitiza dados sensíveis antes de enviar pro error.php
+// Função para remover dados sensíveis antes de armazenar ou mostrar em página de erro
 function redact_sensitive($data)
 {
-    if (is_array($data)) {
+    if (is_array($data)) { // Se for array, percorre recursivamente
         $out = [];
         foreach ($data as $k => $v) {
             $key = strtolower($k);
+            // Se a chave sugere informação sensível, substitui por "[REDACTED]"
             if (strpos($key, 'secret') !== false || strpos($key, 'token') !== false || strpos($key, 'access') !== false || strpos($key, 'id_token') !== false) {
                 $out[$k] = '[REDACTED]';
             } else {
-                $out[$k] = redact_sensitive($v);
+                $out[$k] = redact_sensitive($v); // Chama recursivamente para valores aninhados
             }
         }
         return $out;
     }
-    return $data;
+    return $data; // Se não for array, retorna o valor original
 }
 
+// Função que envia o erro para a página de erro e termina o script
 function sendErrorAndExit($title, $meta = [])
 {
+    // Monta o payload com título, metadados, URL da requisição e info do servidor
     $payload = [
         'title' => $title,
         'meta' => redact_sensitive($meta),
@@ -35,25 +38,58 @@ function sendErrorAndExit($title, $meta = [])
         'server' => [
             'method' => $_SERVER['REQUEST_METHOD'] ?? null,
             'host' => $_SERVER['HTTP_HOST'] ?? null,
-            'time' => date('c')
+            'time' => date('c') // Hora atual no padrão ISO 8601
         ]
     ];
-    $_SESSION['oauth_error'] = $payload;
-    // redireciona para página de erro (altere se necessário)
-    header('Location: /agendamentos/error.php');
-    exit;
+    $_SESSION['oauth_error'] = $payload; // Armazena o payload na sessão
+    header('Location: /agendamentos/error.php'); // Redireciona para página de erro
+    exit; // Interrompe o script
+}
+
+// Função que salva ou atualiza um professor no banco de dados
+function saveUser($googleId, $name, $email, $photo)
+{
+    global $pdo; // Usa a conexão PDO global
+
+    // Primeiro, verifica se o usuário já existe (por google_id ou email)
+    $stmt = $pdo->prepare("SELECT id FROM professores WHERE google_id = :google_id OR email = :email LIMIT 1");
+    $stmt->execute([
+        ':google_id' => $googleId,
+        ':email' => $email
+    ]);
+
+    $user = $stmt->fetch(PDO::FETCH_ASSOC); // Tenta obter usuário existente
+
+    if ($user) {
+        // Se usuário existe, apenas atualiza a última vez que ele fez login e sua foto
+        $stmt = $pdo->prepare("UPDATE professores SET ultimo_login = CURRENT_TIMESTAMP, foto = :foto WHERE id = :id");
+        $stmt->execute([
+            ':foto' => $photo,
+            ':id' => $user['id']
+        ]);
+        return $user['id']; // Retorna o ID existente
+    } else {
+        // Se não existe, insere novo registro
+        $stmt = $pdo->prepare("INSERT INTO professores (nome, email, google_id, foto) VALUES (:nome, :email, :google_id, :foto)");
+        $stmt->execute([
+            ':nome' => $name,
+            ':email' => $email,
+            ':google_id' => $googleId,
+            ':foto' => $photo
+        ]);
+        return $pdo->lastInsertId(); // Retorna o ID do novo registro
+    }
 }
 
 try {
-    // Verificar se recebeu o código
+    // Verifica se o código de autorização do Google foi recebido
     if (!isset($_GET['code'])) {
-        // não trata como fatal: apenas redireciona com info
         sendErrorAndExit('Código de autorização ausente', ['query' => $_GET]);
     }
 
-    $code = $_GET['code'];
+    $code = $_GET['code']; // Captura o código enviado pelo Google
 
-    // Trocar código por token de acesso
+    // Monta dados para trocar o código pelo token de acesso
     $tokenData = [
         'code' => $code,
         'client_id' => GOOGLE_CLIENT_ID,
@@ -62,19 +98,20 @@ try {
         'grant_type' => 'authorization_code'
     ];
 
+    // Inicia requisição cURL para obter o token
     $ch = curl_init(GOOGLE_TOKEN_URL);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($tokenData));
-    // optional: set timeout
-    curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Retornar resultado como string
+    curl_setopt($ch, CURLOPT_POST, true); // POST
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($tokenData)); // Dados codificados
+    curl_setopt($ch, CURLOPT_TIMEOUT, 15); // Timeout 15s
 
-    $response = curl_exec($ch);
-    $curlErrNo = curl_errno($ch);
+    $response = curl_exec($ch); // Executa requisição
+    $curlErrNo = curl_errno($ch); // Captura erros cURL
     $curlErr = curl_error($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
+    curl_close($ch); // Fecha cURL
 
+    // Se ocorreu erro cURL, envia para página de erro
     if ($curlErrNo !== 0) {
         sendErrorAndExit('Erro cURL ao obter token', [
             'curl_errno' => $curlErrNo,
@@ -83,7 +120,7 @@ try {
         ]);
     }
 
-    $tokenInfo = json_decode($response, true);
+    $tokenInfo = json_decode($response, true); // Decodifica JSON
     if (json_last_error() !== JSON_ERROR_NONE) {
         sendErrorAndExit('Resposta JSON inválida do token endpoint', [
             'json_error' => json_last_error_msg(),
@@ -92,6 +129,7 @@ try {
         ]);
     }
 
+    // Verifica se o access_token foi retornado
     if (!isset($tokenInfo['access_token'])) {
         sendErrorAndExit('Não foi retornado access_token', [
             'token_response' => $tokenInfo,
@@ -99,7 +137,7 @@ try {
         ]);
     }
 
-    // Obter informações do usuário
+    // Requisição cURL para obter informações do usuário
     $ch = curl_init(GOOGLE_USER_INFO_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -123,7 +161,7 @@ try {
         ]);
     }
 
-    $userInfo = json_decode($response, true);
+    $userInfo = json_decode($response, true); // Decodifica JSON do usuário
     if (json_last_error() !== JSON_ERROR_NONE) {
         sendErrorAndExit('Resposta JSON inválida do userinfo', [
             'json_error' => json_last_error_msg(),
@@ -132,6 +170,7 @@ try {
         ]);
     }
 
+    // Verifica se Google retornou ID do usuário
     if (!isset($userInfo['id'])) {
         sendErrorAndExit('Erro ao obter informações do usuário', [
             'userinfo_response' => $userInfo,
@@ -139,7 +178,7 @@ try {
         ]);
     }
 
-    // Salvar usuário no banco de dados (supondo que saveUser exista)
+    // Salva usuário no banco e obtém o ID
     $userId = saveUser(
         $userInfo['id'],
         $userInfo['name'] ?? null,
@@ -148,27 +187,24 @@ try {
     );
 
     if (!$userId) {
-        sendErrorAndExit('Falha ao salvar usuário no banco', [
-            'userinfo' => $userInfo
-        ]);
+        sendErrorAndExit('Falha ao salvar usuário no banco', ['userinfo' => $userInfo]);
     }
 
-    // Salvar na sessão
+    // Armazena informações do usuário na sessão
     $_SESSION['user_id'] = $userId;
     $_SESSION['user_name'] = $userInfo['name'] ?? null;
     $_SESSION['user_email'] = $userInfo['email'] ?? null;
     $_SESSION['user_picture'] = $userInfo['picture'] ?? null;
 
-    // Limpa qualquer erro anterior
-    unset($_SESSION['oauth_error']);
-
-    // Redirecionar para dashboard
-    header('Location: ../frontend/pages/dashboard.php');
+    unset($_SESSION['oauth_error']); // Limpa erro anterior se houver
+    header('Location: ../frontend/pages/dashboard.php'); // Redireciona para dashboard
     exit;
-} catch (Throwable $e) {
+} catch (Throwable $e) { // Captura qualquer exceção
     sendErrorAndExit('Exceção disparada', [
         'message' => $e->getMessage(),
         'file' => $e->getFile() . ':' . $e->getLine(),
         'trace' => $e->getTraceAsString()
     ]);
 }
+
+?>

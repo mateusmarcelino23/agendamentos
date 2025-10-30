@@ -1,48 +1,95 @@
 <?php
-include '../config/database.php';
+// Inicia sessão se não estiver ativa
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  // session_start();
+require_once('../config/database.php'); // Contém $pdo
 
-  $nome_professor  = $_SESSION['user_name'] ?? 'Desconhecido';
-  $email_professor = $_SESSION['user_email'] ?? 'desconhecido@email.com';
-  $data            = trim($_POST['data-agendamento'] ?? '');
-  $aulas           = $_POST['aulas'] ?? [];
-  $equipamento_tipo = trim($_POST['equipamentos'] ?? '');
-  $periodo         = trim($_POST['periodo'] ?? '');
-  $extra           = trim($_POST['laboratorio'] ?? ($_POST['guardiao'] ?? ''));
+// Detecta se a requisição é AJAX
+$isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
 
-  if (!$data || empty($aulas) || !$equipamento_tipo || !$extra || $periodo === '') {
-    $_SESSION['mensagem_preencha_campos'] = "Por favor, preencha todos os campos obrigatórios.";
-    header("Location: ../../frontend/pages/dashboard.php");
-    exit;
+// Se o usuário não estiver logado, retorna erro JSON ou redireciona
+if (!isset($_SESSION['user_id'])) {
+  if ($isAjax) {
+    header('Content-Type: application/json');
+    echo json_encode(['error' => 'Usuário não autenticado']);
+  } else {
+    header('Location: ../../'); // Redireciona para a página inicial
   }
-
-  $pdo = getConnection();
-
-  // Pega equipamento
-  $stmt = $pdo->prepare("SELECT id FROM equipamentos WHERE tipo=? AND (nome_equip=? OR nome_equip='')");
-  $stmt->execute([$equipamento_tipo, $extra]);
-  $equipamento = $stmt->fetch();
-  if (!$equipamento) {
-    $_SESSION['mensagem_erro'] = "Equipamento não encontrado.";
-    header("Location: ../../frontend/pages/dashboard.php");
-    exit;
-  } 
-  $equipamento_id = $equipamento['id'];
-
-  // Concatena as aulas selecionadas
-  $aulas_str = implode(',', $aulas);
-
-  // Insere no banco incluindo período
-  $stmt = $pdo->prepare("
-        INSERT INTO agendamentos 
-        (equipamento_id, data, aula, periodo, nome_professor, email_professor) 
-        VALUES (?, ?, ?, ?, ?, ?)
-    ");
-  $stmt->execute([$equipamento_id, $data, $aulas_str, $periodo, $nome_professor, $email_professor]);
-
-  $_SESSION['mensagem_sucesso'] = "Agendamento salvo com sucesso!";
-  header("Location: ../../frontend/pages/dashboard.php");
   exit;
 }
+
+// ID do professor logado
+$professorId = $_SESSION['user_id'] ?? null;
+
+try {
+  // Conexão PDO
+  $conn = getConnection();
+
+  // Buscar dados do professor no banco pelo ID
+  $stmt = $conn->prepare("SELECT nome, email FROM professores WHERE id = :id");
+  $stmt->execute([':id' => $professorId]);
+  $professor = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  if (!$professor) {
+    // Se o professor não existir no banco (inconsistência)
+    throw new Exception('Professor não encontrado no banco de dados.');
+  }
+
+  // Pega o nome completo do professor
+  $nomeCompleto = $professor['nome'];
+  // Extrai o primeiro nome (até o primeiro espaço) ou usa fallback
+  $primeiroNome = explode(' ', trim($nomeCompleto))[0] ?? 'Professor';
+
+  // Próximo agendamento do professor
+  $stmt = $conn->prepare("
+        SELECT a.data, a.aula, e.nome AS equipamento
+        FROM agendamentos a
+        JOIN equipamentos e ON a.equipamento_id = e.id
+        WHERE a.professor_id = :professor_id AND a.data >= CURDATE()
+        ORDER BY a.data ASC, a.aula ASC
+        LIMIT 1
+    ");
+  $stmt->execute([':professor_id' => $professorId]);
+  $proximoAgendamento = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+
+  // Últimos 5 agendamentos do professor
+  $stmt = $conn->prepare("
+        SELECT a.data, a.aula, e.nome AS equipamento
+        FROM agendamentos a
+        JOIN equipamentos e ON a.equipamento_id = e.id
+        WHERE a.professor_id = :professor_id
+        ORDER BY a.data DESC, a.aula DESC
+        LIMIT 5
+    ");
+  $stmt->execute([':professor_id' => $professorId]);
+  $ultimosAgendamentos = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+  // Total de equipamentos cadastrados
+  $stmt = $conn->query("SELECT COUNT(*) AS total FROM equipamentos");
+  $totalEquipamentos = $stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+
+  // Monta resposta JSON
+  $data = [
+    'primeiroNome' => $primeiroNome,
+    'proximoAgendamento' => $proximoAgendamento,
+    'ultimosAgendamentos' => $ultimosAgendamentos,
+    'totalEquipamentos' => $totalEquipamentos
+  ];
+
+  header('Content-Type: application/json');
+  echo json_encode($data);
+} catch (PDOException $e) {
+  // Erro de conexão ou execução SQL
+  http_response_code(500);
+  header('Content-Type: application/json');
+  echo json_encode(['error' => 'Erro de conexão ao banco de dados', 'message' => $e->getMessage()]);
+} catch (Exception $e) {
+  // Qualquer outro erro
+  http_response_code(500);
+  header('Content-Type: application/json');
+  echo json_encode(['error' => $e->getMessage()]);
+}
+
+exit();
