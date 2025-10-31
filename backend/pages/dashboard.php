@@ -81,15 +81,17 @@ try {
   header('Content-Type: application/json');
   echo json_encode($data);
 } catch (PDOException $e) {
-  // Erro de conexão ou execução SQL
   http_response_code(500);
   header('Content-Type: application/json');
-  echo json_encode(['error' => 'Erro de conexão ao banco de dados', 'message' => $e->getMessage()]);
+  // Loga o erro internamente
+  error_log("Erro PDO: " . $e->getMessage());
+  echo json_encode(['error' => 'Erro interno do servidor']);
 } catch (Exception $e) {
-  // Qualquer outro erro
   http_response_code(500);
   header('Content-Type: application/json');
-  echo json_encode(['error' => $e->getMessage()]);
+  error_log("Erro: " . $e->getMessage());
+  echo json_encode(['error' => 'Erro interno do servidor']);
 }
 
 exit();
+?>

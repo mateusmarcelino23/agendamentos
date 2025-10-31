@@ -17,7 +17,7 @@
     <!-- Container para alinhar itens -->
     <div class="header-mobile-logo">
       <!-- Logo mobile -->
-      <a href="/agendamentos/frontend/pages/dashboard.php">
+      <a href="/agendamentos/frontend/pages/dashboard.html">
         <!-- Link para a página inicial -->
         <img src="../assets/img/saeebranco.png" alt="Logo Mobile" />
         <!-- Imagem do logo -->
@@ -31,7 +31,7 @@
     <div id="menu">
       <ul>
         <li class="sidebar-item">
-          <a href="/agendamentos/frontend/pages/dashboard.php">
+          <a href="/agendamentos/frontend/pages/dashboard.html">
             <div
               class="animacao-mobile"
               data-path="../assets/animations/homeicon.json"
@@ -41,17 +41,17 @@
         </li>
 
         <li class="sidebar-item">
-          <a href="/agendamentos/frontend/pages/agendamentos.php">
+          <a href="/agendamentos/frontend/pages/atividade.html">
             <div
               class="animacao-mobile"
               data-path="../assets/animations/calendar.json"
             ></div>
-            <span>Agendamentos</span>
+            <span>Minha atividade</span>
           </a>
         </li>
 
         <li class="sidebar-item">
-          <a href="/agendamentos/frontend/pages/relatorios.php">
+          <a href="/agendamentos/frontend/pages/relatorios.html">
             <div
               class="animacao-mobile"
               data-path="../assets/animations/report.json"
@@ -61,7 +61,7 @@
         </li>
 
         <li class="sidebar-item">
-          <a href="/agendamentos/frontend/pages/configuracoes.php">
+          <a href="/agendamentos/frontend/pages/configuracoes.html">
             <div
               class="animacao-mobile"
               data-path="../assets/animations/settings.json"
@@ -71,7 +71,7 @@
         </li>
 
         <li class="sidebar-item">
-          <a href="/agendamentos/frontend/pages/suporte.php">
+          <a href="/agendamentos/frontend/pages/suporte.html">
             <div
               class="animacao-mobile"
               data-path="../assets/animations/support.json"
@@ -81,7 +81,7 @@
         </li>
 
         <li class="sidebar-item">
-          <a href="/agendamentos/frontend/pages/conta.php">
+          <a href="/agendamentos/frontend/pages/conta.html">
             <div
               class="animacao-mobile"
               data-path="../assets/animations/users.json"
@@ -103,7 +103,7 @@
       <!-- Navegação desktop -->
       <div class="header-desktop__logo">
         <!-- Logo desktop -->
-        <a href="/agendamentos/frontend/pages/dashboard.php">
+        <a href="/agendamentos/frontend/pages/dashboard.html">
           <!-- Link para a página inicial -->
           <img src="../assets/img/saeelogo.png" alt="Logo Desktop" />
           <!-- Imagem do logo -->
@@ -111,7 +111,7 @@
       </div>
       <ul class="nav-menu">
         <li class="nav-menu__item">
-          <a href="/agendamentos/frontend/pages/dashboard.php">
+          <a href="/agendamentos/frontend/pages/dashboard.html">
             <div
               class="animacao"
               data-path="../assets/animations/homeicon.json"
@@ -121,17 +121,17 @@
         </li>
 
         <li class="nav-menu__item">
-          <a href="/agendamentos/frontend/pages/agendamentos.php">
+          <a href="/agendamentos/frontend/pages/atividade.html">
             <div
               class="animacao"
               data-path="../assets/animations/calendar.json"
             ></div>
-            <span>Agendamentos</span>
+            <span>Minha atividade</span>
           </a>
         </li>
 
         <li class="nav-menu__item">
-          <a href="/agendamentos/frontend/pages/relatorios.php">
+          <a href="/agendamentos/frontend/pages/relatorios.html">
             <div
               class="animacao"
               data-path="../assets/animations/report.json"
@@ -141,7 +141,7 @@
         </li>
 
         <li class="nav-menu__item">
-          <a href="/agendamentos/frontend/pages/configuracoes.php">
+          <a href="/agendamentos/frontend/pages/configuracoes.html">
             <div
               class="animacao"
               data-path="../assets/animations/settings.json"
@@ -151,7 +151,7 @@
         </li>
 
         <li class="nav-menu__item">
-          <a href="/agendamentos/frontend/pages/suporte.php">
+          <a href="/agendamentos/frontend/pages/suporte.html">
             <div
               class="animacao"
               data-path="../assets/animations/support.json"
@@ -161,7 +161,7 @@
         </li>
 
         <li class="nav-menu__item">
-          <a href="/agendamentos/frontend/pages/conta.php">
+          <a href="/agendamentos/frontend/pages/conta.html">
             <div
               class="animacao"
               data-path="../assets/animations/users.json"
@@ -196,138 +196,8 @@
   }
 </style>
 
-<!-- JavaScript para alternar o menu mobile -->
-<script>
-  var theToggle = document.getElementById("toggle");
-  var menu = document.getElementById("menu");
-
-  theToggle.onclick = function (e) {
-    e.preventDefault();
-    this.classList.toggle("on"); // animação do botão
-    menu.classList.toggle("on"); // mostra/esconde o menu
-  };
-</script>
-
-<!-- JavaScript para animações mobile -->
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const animacoes = document.querySelectorAll(".animacao-mobile");
-
-    animacoes.forEach((animDiv) => {
-      // Inicializa a animação Lottie
-      const anim = lottie.loadAnimation({
-        container: animDiv,
-        renderer: "svg",
-        loop: true,
-        autoplay: true, // roda automaticamente
-        path: animDiv.dataset.path,
-      });
-
-      // Altera a cor de todos os paths para #ff8c00
-      anim.addEventListener("DOMLoaded", () => {
-        const paths = animDiv.querySelectorAll(
-          "path, circle, rect, polygon, line"
-        );
-        paths.forEach((p) => {
-          p.setAttribute("fill", "#ff8c00");
-          p.setAttribute("stroke", "#ff8c00");
-        });
-      });
-    });
-
-    // Ajuste visual do ícone de relatórios
-    setTimeout(() => {
-      const svg = document.querySelector(
-        ".sidebar-item:nth-child(3) .animacao-mobile svg"
-      );
-      if (svg) {
-        svg.style.transform = "scale(0.8)";
-        svg.style.transformOrigin = "center";
-      }
-    }, 500);
-
-    // Ajuste visual do último ícone (conta)
-    setTimeout(() => {
-      const svg = document.querySelector(
-        ".sidebar-item:last-child .animacao-mobile svg"
-      );
-      if (svg) {
-        svg.style.transform = "scale(0.7)";
-        svg.style.transformOrigin = "center";
-      }
-    }, 500);
-  });
-</script>
-
-<!-- JavaScript para Ícones animados desktop -->
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const animacoes = document.querySelectorAll(".animacao");
-
-    animacoes.forEach((animDiv) => {
-      const anim = lottie.loadAnimation({
-        container: animDiv,
-        renderer: "svg",
-        loop: true,
-        autoplay: false,
-        path: animDiv.dataset.path,
-      });
-
-      // Altera a cor de todos os paths
-      anim.addEventListener("DOMLoaded", () => {
-        const paths = animDiv.querySelectorAll(
-          "path, circle, rect, polygon, line"
-        );
-        paths.forEach((p) => {
-          p.setAttribute("fill", "#ff8c00");
-          p.setAttribute("stroke", "#ff8c00");
-        });
-      });
-
-      const menuItem = animDiv.closest(".nav-menu__item");
-      const link = menuItem.querySelector("a");
-
-      // Hover normal
-      menuItem.addEventListener("mouseover", () => anim.play());
-      menuItem.addEventListener("mouseout", () => {
-        if (!link.classList.contains("active-page")) {
-          anim.stop();
-        }
-      });
-
-      // Detecta se este item corresponde à página atual
-      if (link.getAttribute("href") === window.location.pathname) {
-        anim.play(); // animação ligada permanentemente
-        link.classList.add("active-page"); // adiciona classe para efeito de hover fixo
-      }
-    });
-  });
-
-  // Ajustes visuais
-  document.addEventListener("DOMContentLoaded", () => {
-    // Ajuste visual do ícone de relatórios
-    setTimeout(() => {
-      const svg = document.querySelector(
-        ".nav-menu__item:nth-child(3) .animacao svg"
-      );
-      if (svg) {
-        svg.style.transform = "scale(0.8)";
-        svg.style.transformOrigin = "center";
-      }
-    }, 500);
-
-    // Ajuste visual do último ícone (conta)
-    setTimeout(() => {
-      const svg = document.querySelector(
-        ".nav-menu__item:last-child .animacao svg"
-      );
-      if (svg) {
-        svg.style.transform = "scale(0.7)";
-        svg.style.transformOrigin = "center";
-      }
-    }, 500);
-  });
-</script>
+<!-- Javascript de header -->
+ <script src="/agendamentos/frontend/assets/js/header.js"></script>
 
 <!-- Adicionando Bootstrap Icons -->
 <link

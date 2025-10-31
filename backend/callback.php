@@ -162,7 +162,7 @@ try {
     $_SESSION['user_picture'] = $userInfo['picture'] ?? null;
 
     unset($_SESSION['oauth_error']); // Limpa erro anterior se houver
-    header('Location: ../frontend/pages/dashboard.php'); // Redireciona para dashboard
+    header('Location: ../frontend/pages/dashboard.html'); // Redireciona para dashboard
     exit;
 } catch (Throwable $e) { // Captura qualquer exceção
     sendErrorAndExit('Exceção disparada', [

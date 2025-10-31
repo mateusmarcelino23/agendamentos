@@ -7,7 +7,7 @@ require __DIR__ . '/backend/vendor/autoload.php';
 
 // Se já estiver logado, redirecionar para dashboard
 if (isset($_SESSION['user_id'])) {
-  header('Location: frontend/pages/dashboard.php');
+  header('Location: frontend/pages/dashboard.html');
   exit;
 }
 
@@ -31,6 +31,8 @@ $googleLoginUrl = GOOGLE_AUTH_URL . '?' . http_build_query($params); // Constant
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="frontend/assets/img/1748908346791.png">
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <!-- Lottie Animation Library -->
