@@ -53,6 +53,26 @@ function initHeader() {
     };
   }
 
+  // Conta Mobile
+  const contaMenuMobile = document.querySelector(".conta-menu-mobile");
+  if (contaMenuMobile) {
+    const contaDropdownMobile = contaMenuMobile.querySelector(
+      ".conta-dropdown-mobile"
+    );
+
+    contaMenuMobile.addEventListener("click", (e) => {
+      e.stopPropagation(); // evita fechar imediatamente
+      const aberto = contaDropdownMobile.style.display === "block";
+      contaDropdownMobile.style.display = aberto ? "none" : "block";
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!contaMenuMobile.contains(e.target)) {
+        contaDropdownMobile.style.display = "none";
+      }
+    });
+  }
+
   // ---- Header Desktop ----
   const animacoesDesktop = document.querySelectorAll(".animacao");
   animacoesDesktop.forEach((animDiv) => {
@@ -111,7 +131,15 @@ function initHeader() {
       svg.style.transformOrigin = "center";
     }
   }, 500);
-}
 
-// Executa imediatamente, caso o script seja carregado após o DOM
-// initHeader();
+  // ==== Conta Desktop ====
+  // O dropdown desktop já é controlado pelo Bootstrap, então não precisa de toggle manual.
+  // Mas podemos ajustar a cor do topo (foto/nome) dinamicamente se quiser.
+  const contaDesktop = document.querySelector(
+    ".conta-menu-desktop .conta-info"
+  );
+  if (contaDesktop) {
+    contaDesktop.style.userSelect = "none";
+    contaDesktop.style.pointerEvents = "none";
+  }
+}
