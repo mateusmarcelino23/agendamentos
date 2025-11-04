@@ -126,7 +126,7 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     transition: color 0.3s ease;
   }
 
-  .header-mobile-nav a:hover {
+  .header-mobile-nav a:focus, .header-mobile-nav a:active {
     color: #d4f5d4;
   }
 
@@ -167,10 +167,11 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     color: #ff8c00;
     border-radius: 10px;
     transition: all 0.3s ease;
+    overflow-y: auto;
   }
 
   /* Hover nos links */
-  .sidebar-item a:hover {
+  .sidebar-item a:focus, .sidebar-item a:active {
     background: rgba(255, 140, 0, 0.1);
     transform: translateY(-2px);
   }
@@ -292,23 +293,34 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     overflow: auto;
     width: 100%;
     background-color: #fff;
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-      sans-serif;
+    font-family:
+      "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   }
 }
 
-/* Tablets (>= 768px) */
-@media (min-width: 768px) {
+/* Tablets */
+@media (min-width: 690px) {
   .conta-dropdown-mobile {
     position: absolute;
-    top: 0;
-    left: -180px;
-    width: 170px;
+    top: 5px;
+    left: 200px;
+    width: 300px;
     height: auto;
-    padding: 1rem 0;
+    padding: 0rem 0;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     animation: fadeIn 0.25s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .conta-dropdown-mobile .conta-info {
@@ -316,6 +328,7 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     color: #fff;
     margin-bottom: 0.5rem;
     border-radius: 8px 8px 0 0;
+    padding: 12px 16px;
   }
 
   .conta-dropdown-mobile .foto-professor {
@@ -425,12 +438,24 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
   }
 
   .conta-menu-desktop .dropdown-menu {
-    min-width: 230px;
+    min-width: 290px;
     border: none;
     border-radius: 10px;
     padding: 0;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 0.25s ease;
+    animation: slideFadeIn 0.25s ease forwards;
+    transform-origin: top;
+  }
+
+  @keyframes slideFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px); /* começa um pouco acima */
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(60px); /* termina na posição correta */
+    }
   }
 
   /* Área de informações (não clicável) */
@@ -465,7 +490,7 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     align-items: center;
     gap: 10px;
     color: #333;
-    padding: 10px 16px;
+    padding: 15px 16px;
     font-size: 0.95rem;
     font-weight: 500;
     transition: all 0.3s ease;

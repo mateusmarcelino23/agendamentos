@@ -71,6 +71,29 @@ function initHeader() {
         contaDropdownMobile.style.display = "none";
       }
     });
+
+    // ======== FETCH PARA CARREGAR DADOS DO PROFESSOR ========
+    if (contaDropdownMobile) {
+      fetch("/agendamentos/backend/api/get_professor.php")
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.error) {
+            console.error(data.error);
+            return;
+          }
+
+          const fotoElement =
+            contaDropdownMobile.querySelector(".foto-professor");
+          const nomeElement =
+            contaDropdownMobile.querySelector(".nome-professor");
+
+          if (fotoElement) fotoElement.src = data.foto || "default.jpg";
+          if (nomeElement) nomeElement.textContent = data.nome;
+        })
+        .catch((err) =>
+          console.error("Erro ao buscar dados do professor:", err)
+        );
+    }
   }
 
   // ---- Header Desktop ----
@@ -133,13 +156,28 @@ function initHeader() {
   }, 500);
 
   // ==== Conta Desktop ====
-  // O dropdown desktop já é controlado pelo Bootstrap, então não precisa de toggle manual.
-  // Mas podemos ajustar a cor do topo (foto/nome) dinamicamente se quiser.
   const contaDesktop = document.querySelector(
     ".conta-menu-desktop .conta-info"
   );
   if (contaDesktop) {
     contaDesktop.style.userSelect = "none";
     contaDesktop.style.pointerEvents = "none";
+
+    // ======== FETCH PARA CARREGAR DADOS DO PROFESSOR ========
+    fetch("/agendamentos/backend/api/get_professor.php")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          console.error(data.error);
+          return;
+        }
+
+        const fotoElement = contaDesktop.querySelector(".foto-professor");
+        const nomeElement = contaDesktop.querySelector(".nome-professor");
+
+        if (fotoElement) fotoElement.src = data.foto || "caminho-da-foto.jpg";
+        if (nomeElement) nomeElement.textContent = data.nome;
+      })
+      .catch((err) => console.error("Erro ao buscar dados do professor:", err));
   }
 }
