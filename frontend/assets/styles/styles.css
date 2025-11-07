@@ -126,7 +126,8 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     transition: color 0.3s ease;
   }
 
-  .header-mobile-nav a:focus, .header-mobile-nav a:active {
+  .header-mobile-nav a:focus,
+  .header-mobile-nav a:active {
     color: #d4f5d4;
   }
 
@@ -157,6 +158,22 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     list-style: none;
   }
 
+  .sidebar-item {
+    opacity: 0;
+    transform: translateX(-10px); /* menor deslocamento */
+    transition: all 0.5s ease; /* transição mais lenta e suave */
+  }
+
+  .sidebar-item.on-show {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .sidebar-item.clicked {
+    transform: scale(0.97); /* leve efeito de clique */
+    transition: transform 0.2s;
+  }
+
   /* Itens do menu */
   .sidebar-item a {
     display: flex;
@@ -171,7 +188,8 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
   }
 
   /* Hover nos links */
-  .sidebar-item a:focus, .sidebar-item a:active {
+  .sidebar-item a:focus,
+  .sidebar-item a:active {
     background: rgba(255, 140, 0, 0.1);
     transform: translateY(-2px);
   }
@@ -209,7 +227,7 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
   .conta-dropdown-mobile {
     display: none;
     position: fixed;
-    top: 0;
+    top: -370px;
     left: 0;
     width: 100vw;
     height: 100vh;
@@ -293,8 +311,8 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     overflow: auto;
     width: 100%;
     background-color: #fff;
-    font-family:
-      "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+      sans-serif;
   }
 }
 

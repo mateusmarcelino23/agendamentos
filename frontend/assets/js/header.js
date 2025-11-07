@@ -42,17 +42,60 @@ function initHeader() {
     }
   }, 500);
 
+  // -------------------------------
   // Menu mobile
   const theToggle = document.getElementById("toggle");
   const menu = document.getElementById("menu");
+  const menuItems = document.querySelectorAll("#menu .sidebar-item"); // itens do menu
+
+  // Funções de animação em onda
+  function animarMenu() {
+    menuItems.forEach((item, index) => {
+      setTimeout(() => {
+        item.classList.add("on-show");
+      }, index * 100); // intervalo de 100ms entre itens
+    });
+  }
+
+  function resetAnimacaoMenu() {
+    menuItems.forEach((item) => item.classList.remove("on-show"));
+  }
+
   if (theToggle && menu) {
     theToggle.onclick = (e) => {
       e.preventDefault();
       theToggle.classList.toggle("on");
       menu.classList.toggle("on");
+
+      if (menu.classList.contains("on")) {
+        animarMenu(); // anima quando abre
+      } else {
+        resetAnimacaoMenu(); // reseta quando fecha
+      }
     };
   }
 
+  // -------------------------------
+  // Redirecionamento com delay
+  menuItems.forEach((item) => {
+    const link = item.querySelector("a");
+    if (link) {
+      link.addEventListener("click", (e) => {
+        // Ignora links que não têm href real
+        if (link.href === "#" || link.onclick) return;
+
+        e.preventDefault();
+        item.classList.add("clicked"); // efeito visual opcional
+        const href = link.href;
+
+        setTimeout(() => {
+          window.location.href = href;
+        }, 300); // espera animação
+      });
+    }
+  });
+
+  // -------------------------------
   // Conta Mobile
   const contaMenuMobile = document.querySelector(".conta-menu-mobile");
   if (contaMenuMobile) {

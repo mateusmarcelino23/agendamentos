@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
@@ -17,17 +17,39 @@
   <body>
     <div id="header"></div>
 
-    <div class="conteudo-principal">
-      <!-- Mensagem de boas vindas -->
+    <div class="conteudo-principal container-fluid">
+      <!-- Mensagem de boas-vindas -->
       <div class="row mb-4">
-        <div class="col-12">
-          <h1 class="text-center" id="bem-vindo">Bem-vindo(a)...</h1>
+        <div class="col-12 text-center">
+          <h1 id="bem-vindo">Bem-vindo(a)...</h1>
         </div>
       </div>
 
-      <!-- Cards de Resumo -->
+      <!-- Botões de atalhos -->
+      <div class="row mb-4 text-center">
+        <div class="col-md-3 mb-2">
+          <a href="../novo_agendamento/" class="btn btn-primary w-100"
+            >Novo Agendamento</a
+          >
+        </div>
+        <div class="col-md-3 mb-2">
+          <a href="../minha_atividade/" class="btn btn-secondary w-100"
+            >Minha Atividade</a
+          >
+        </div>
+        <div class="col-md-3 mb-2">
+          <a href="../calendario/" class="btn btn-info w-100">Ver Calendário</a>
+        </div>
+        <div class="col-md-3 mb-2">
+          <a href="../registros/" class="btn btn-dark w-100"
+            >Todos os Registros</a
+          >
+        </div>
+      </div>
+
+      <!-- Informações rápidas -->
       <div class="row mb-4">
-        <div class="col-md-3">
+        <div class="col-md-4">
           <div
             class="card text-white bg-primary mb-3"
             id="card-proximo-agendamento"
@@ -38,68 +60,76 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3">
-          <div
-            class="card text-white bg-success mb-3"
-            id="card-equipamentos-disponiveis"
-          >
+
+        <div class="col-md-4">
+          <div class="card text-white bg-success mb-3" id="card-total-semana">
             <div class="card-body">
-              <h5 class="card-title">Equipamentos Disponíveis</h5>
+              <h5 class="card-title">Agendamentos da Semana</h5>
               <p class="card-text">Carregando...</p>
             </div>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="card text-white bg-warning mb-3" id="card-pendencias">
+
+        <div class="col-md-4">
+          <div class="card text-white bg-info mb-3" id="card-total-professor">
             <div class="card-body">
-              <h5 class="card-title">Pendências</h5>
-              <p class="card-text">Carregando...</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card text-white bg-info mb-3" id="card-historico">
-            <div class="card-body">
-              <h5 class="card-title">Histórico de Uso</h5>
+              <h5 class="card-title">Meus Agendamentos</h5>
               <p class="card-text">Carregando...</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Últimos Agendamentos -->
+      <!-- Tabela de últimos agendamentos -->
       <div class="row mb-4">
         <div class="col-12">
           <h3>Últimos Agendamentos</h3>
-          <table class="table table-striped" id="tabela-ultimos-agendamentos">
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Aula</th>
-                <th>Equipamento</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="3">Carregando...</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table
+              class="table table-striped table-bordered align-middle"
+              id="tabela-ultimos-agendamentos"
+            >
+              <thead class="table-light">
+                <tr>
+                  <th>Professor</th>
+                  <th>Equipamento</th>
+                  <th>Data</th>
+                  <th>Aula / Período</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="4" class="text-center text-muted">
+                    Carregando...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Utilização atual -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h3>Utilização Atual</h3>
+          <div
+            id="utilizacao-atual"
+            class="p-3 border rounded bg-light text-muted"
+          >
+            Carregando informações de uso...
+          </div>
         </div>
       </div>
 
       <!-- Calendário -->
-      <div class="row">
-        <div class="col-12" id="calendar">
+      <div class="row mb-5">
+        <div class="col-12">
           <h3>Calendário de Agendamentos</h3>
           <div
-            id="calendar"
-            style="
-              height: 500px;
-              border: 1px solid #ddd;
-              border-radius: 5px;
-              padding: 10px;
-            "
+            id="calendario"
+            class="border rounded p-3"
+            style="min-height: 450px"
           >
             <p class="text-center text-muted mt-5">
               Calendário será exibido aqui
@@ -107,6 +137,13 @@
           </div>
         </div>
       </div>
+
+      <!-- Rodapé -->
+      <footer class="text-center text-muted py-3 border-top">
+        <small>
+          Sistema de Agendamento © 2025 — Desenvolvido para uso interno.
+        </small>
+      </footer>
     </div>
   </body>
 
