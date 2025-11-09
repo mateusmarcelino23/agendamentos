@@ -307,12 +307,7 @@ html {
   }
 
   /* Esconde o layout mobile */
-  .login-container,
-  .login-header,
-  .login-box,
-  #robozinho,
-  .about-link,
-  .login-footer {
+  .login-container {
     display: none;
   }
 }

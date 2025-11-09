@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
@@ -11,16 +11,93 @@
       rel="stylesheet"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.2/lottie.min.js"></script>
-    <title>Atividade</title>
+    <title>Minha Atividade</title>
   </head>
 
   <body>
     <div id="header"></div>
+
+    <div class="conteudo-principal container-fluid">
+      <!-- Mensagem de boas-vindas -->
+      <div class="row mb-4">
+        <div class="col-12 text-center">
+          <h1 id="bem-vindo">Atividade do Professor</h1>
+        </div>
+      </div>
+
+      <!-- Agendamento ativo agora -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h3>Agendamento Ativo</h3>
+          <div
+            id="agendamento-ativo"
+            class="p-3 border rounded bg-light text-muted"
+          >
+            Carregando informações de agendamento ativo...
+          </div>
+        </div>
+      </div>
+
+      <!-- Botões -->
+      <div class="row mb-4 text-center justify-content-center">
+        <div class="col-md-3 mb-2">
+          <a href="../novo_agendamento/" class="btn btn-primary w-100"
+            >Novo Agendamento</a
+          >
+        </div>
+        <div class="col-md-3 mb-2">
+          <a href="relatorios.html" class="btn btn-secondary w-100"
+            >Ver meus relatórios</a
+          >
+        </div>
+      </div>
+
+      <!-- Tabela de histórico mensal -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h3>Histórico Mensal de Agendamentos</h3>
+          <div class="table-responsive">
+            <table
+              class="table table-striped table-bordered align-middle"
+              id="tabela-historico-mensal"
+            >
+              <thead class="table-light">
+                <tr>
+                  <th>Data</th>
+                  <th>Aula / Período</th>
+                  <th>Equipamento</th>
+                  <th>Status</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="5" class="text-center text-muted">
+                    Carregando histórico mensal...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cards detalhados do professor -->
+      <div class="row mb-5" id="cards-detalhados">
+        <!-- Os cards serão inseridos dinamicamente pelo JS -->
+      </div>
+
+      <!-- Rodapé -->
+      <div id="rodape"></div>
+    </div>
   </body>
 
   <!-- Script para carregar o header -->
   <script src="/agendamentos/frontend/assets/js/carregar_header.js"></script>
-  <!-- Script para buscar dados -->
+  <!-- Script para carregar o footer -->
+  <script src="/agendamentos/frontend/assets/js/carregar_footer.js"></script>
+  <!-- Script da página de atividade -->
   <script src="../assets/js/atividade.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>

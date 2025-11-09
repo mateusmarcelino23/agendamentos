@@ -19,6 +19,14 @@ CREATE TABLE IF NOT EXISTS equipamentos (
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+INSERT INTO `equipamentos` (`id`, `nome`, `tipo`, `quantidade`) VALUES
+(1, 'Guardião 1', 'guardiao', 30),
+(2, 'Guardião 2', 'guardiao', 30),
+(3, 'Guardião 3', 'guardiao', 30),
+(4, 'Laboratório 1', 'laboratorio', 30),
+(5, 'Laboratório 2', 'laboratorio', 30),
+(6, 'Laboratório 3', 'laboratorio', 30);
+
 -- --------------------------------------------------------
 -- Tabela: professores
 -- --------------------------------------------------------
@@ -45,6 +53,7 @@ CREATE TABLE IF NOT EXISTS agendamentos (
     aula TINYINT UNSIGNED NOT NULL CHECK(aula BETWEEN 1 AND 6),
     periodo ENUM('manha','tarde','noite') NOT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status TINYINT(2) NOT NULL DEFAULT 0,
     PRIMARY KEY (id),
     CONSTRAINT fk_equipamento FOREIGN KEY (equipamento_id) REFERENCES equipamentos(id) ON DELETE CASCADE,
     CONSTRAINT fk_professor FOREIGN KEY (professor_id) REFERENCES professores(id) ON DELETE CASCADE,
