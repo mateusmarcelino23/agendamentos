@@ -36,7 +36,9 @@
         <div class="col-md-4">
           <div class="card shadow-sm">
             <div class="card-body">
-              <h5 class="card-title text-center">Top 5 Professores</h5>
+              <h5 class="card-title text-center">
+                Top 5 Professores com mais agendamentos
+              </h5>
               <ul id="ranking-professores" class="list-group list-group-flush">
                 <li class="list-group-item text-center text-muted">
                   Carregando...
@@ -49,7 +51,9 @@
         <div class="col-md-4">
           <div class="card shadow-sm">
             <div class="card-body">
-              <h5 class="card-title text-center">Top 5 Equipamentos</h5>
+              <h5 class="card-title text-center">
+                Top 5 Equipamentos mais utilizados
+              </h5>
               <ul id="ranking-equipamentos" class="list-group list-group-flush">
                 <li class="list-group-item text-center text-muted">
                   Carregando...
@@ -62,7 +66,7 @@
         <div class="col-md-4">
           <div class="card shadow-sm">
             <div class="card-body">
-              <h5 class="card-title text-center">Top Períodos</h5>
+              <h5 class="card-title text-center">Top Períodos mais ativos</h5>
               <ul id="ranking-turnos" class="list-group list-group-flush">
                 <li class="list-group-item text-center text-muted">
                   Carregando...
@@ -237,10 +241,13 @@
     </div>
   </body>
 
-  <!-- Scripts -->
-  <script src="/agendamentos/frontend/assets/js/carregar_header.js"></script>
-  <script src="../assets/js/relatorios.js"></script>
-  <script src="/agendamentos/frontend/assets/js/carregar_footer.js"></script>
+  <!-- Script para carregar o header -->
+  <script src="../js/ui/carregar_header.js"></script>
+  <!-- Script para carregar o footer -->
+  <script src="../js/ui/carregar_footer.js"></script>
+  <!-- API da página de relatórios -->
+  <script src="../js/api/relatorios.js"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
   <script
     type="text/javascript"

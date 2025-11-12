@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Carrega o JS do header dinamicamente
       const script = document.createElement("script");
-      script.src = "/agendamentos/frontend/assets/js/header.js";
+      script.src = "/agendamentos/frontend/js/ui/header.js";
       script.onload = () => {
         // Opcional: podemos disparar alguma função de inicialização se header.js tiver
         if (typeof initHeader === "function") {
