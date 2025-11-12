@@ -18,15 +18,69 @@
     <div id="header"></div>
 
     <div class="conteudo-principal container-fluid">
-      <!-- Título -->
+      <!-- Título principal -->
       <div class="row mb-4">
         <div class="col-12 text-center">
           <h1>Relatórios do Mês</h1>
         </div>
       </div>
 
-      <!-- Cards de resumo -->
-      <div class="row mb-4 text-center">
+      <!-- ===============================
+         🏆 RANKINGS
+    ================================ -->
+      <div class="row mb-5">
+        <div class="col-12 text-center mb-3">
+          <h3>Rankings do Mês</h3>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title text-center">Top 5 Professores</h5>
+              <ul id="ranking-professores" class="list-group list-group-flush">
+                <li class="list-group-item text-center text-muted">
+                  Carregando...
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title text-center">Top 5 Equipamentos</h5>
+              <ul id="ranking-equipamentos" class="list-group list-group-flush">
+                <li class="list-group-item text-center text-muted">
+                  Carregando...
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title text-center">Top Períodos</h5>
+              <ul id="ranking-turnos" class="list-group list-group-flush">
+                <li class="list-group-item text-center text-muted">
+                  Carregando...
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===============================
+         📈 GRÁFICOS DO SISTEMA
+    ================================ -->
+      <div class="row mb-5">
+        <div class="col-12 text-center mb-3">
+          <h3>Relatórios Gerais do Sistema</h3>
+        </div>
+
         <div class="col-md-3 mb-2">
           <div class="card text-white bg-primary mb-3">
             <div class="card-body">
@@ -62,26 +116,119 @@
             </div>
           </div>
         </div>
+
+        <div class="col-md-6 mb-4">
+          <div
+            id="grafico-status-sistema"
+            class="border rounded p-3"
+            style="height: 350px"
+          >
+            Carregando gráfico...
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div
+            id="grafico-tipo-sistema"
+            class="border rounded p-3"
+            style="height: 350px"
+          >
+            Carregando gráfico...
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+          <div
+            id="grafico-periodos-sistema"
+            class="border rounded p-3"
+            style="height: 350px"
+          >
+            Carregando gráfico...
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div
+            id="grafico-evolucao"
+            class="border rounded p-3"
+            style="height: 350px"
+          >
+            Carregando gráfico...
+          </div>
+        </div>
       </div>
 
-      <!-- Gráficos -->
-      <div class="row mb-4">
-        <div class="col-md-6 mb-4">
-          <div id="grafico-equipamentos" class="border rounded p-3" style="height: 350px;">Carregando gráfico...</div>
-        </div>
-        <div class="col-md-6 mb-4">
-          <div id="grafico-professores" class="border rounded p-3" style="height: 350px;">Carregando gráfico...</div>
+      <!-- ===============================
+         👨‍🏫 RELATÓRIOS DO PROFESSOR
+    ================================ -->
+      <div class="row mb-4" id="meus-relatorios">
+        <div class="col-12 text-center mb-3">
+          <h3>Meus Relatórios do Mês</h3>
         </div>
 
+        <!-- Cards pessoais -->
+        <div class="col-md-3 mb-2">
+          <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Total</h5>
+              <p class="card-text" id="meus-total">Carregando...</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3 mb-2">
+          <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Concluídos</h5>
+              <p class="card-text" id="meus-concluidos">Carregando...</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3 mb-2">
+          <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Cancelados</h5>
+              <p class="card-text" id="meus-cancelados">Carregando...</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3 mb-2">
+          <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Equipamento Mais Usado</h5>
+              <p class="card-text" id="meu-equipamento">Carregando...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráficos pessoais -->
         <div class="col-md-6 mb-4">
-          <div id="grafico-periodos" class="border rounded p-3" style="height: 350px;">Carregando gráfico...</div>
+          <div
+            id="grafico-status-professor"
+            class="border rounded p-3"
+            style="height: 350px"
+          >
+            Carregando gráfico...
+          </div>
         </div>
         <div class="col-md-6 mb-4">
-          <div id="grafico-tipo" class="border rounded p-3" style="height: 350px;">Carregando gráfico...</div>
+          <div
+            id="grafico-equip-professor"
+            class="border rounded p-3"
+            style="height: 350px"
+          >
+            Carregando gráfico...
+          </div>
         </div>
 
         <div class="col-12 mb-4">
-          <div id="grafico-status" class="border rounded p-3" style="height: 350px;">Carregando gráfico...</div>
+          <div
+            id="grafico-periodos-professor"
+            class="border rounded p-3"
+            style="height: 350px"
+          >
+            Carregando gráfico...
+          </div>
         </div>
       </div>
 
@@ -95,5 +242,8 @@
   <script src="../assets/js/relatorios.js"></script>
   <script src="/agendamentos/frontend/assets/js/carregar_footer.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script
+    type="text/javascript"
+    src="https://www.gstatic.com/charts/loader.js"
+  ></script>
 </html>

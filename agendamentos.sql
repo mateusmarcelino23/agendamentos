@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS equipamentos (
     nome VARCHAR(100) NOT NULL,
     tipo ENUM('laboratorio', 'guardiao') NOT NULL,
     quantidade INT DEFAULT 0,
+    status ENUM('disponivel', 'em_uso', 'em_manutencao') DEFAULT 'disponivel',
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -61,5 +62,51 @@ CREATE TABLE IF NOT EXISTS agendamentos (
     INDEX idx_equipamento (equipamento_id),
     INDEX idx_professor (professor_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+-- Tabela: alertas_equipamentos
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS alertas_equipamentos (
+    id INT NOT NULL AUTO_INCREMENT,
+    equipamento_id INT NOT NULL,
+    professor_id INT NOT NULL,
+    descricao TEXT NOT NULL,
+    status ENUM('novo','em_analise','resolvido') DEFAULT 'novo',
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_alerta_equipamento FOREIGN KEY (equipamento_id) REFERENCES equipamentos(id) ON DELETE CASCADE,
+    CONSTRAINT fk_alerta_professor FOREIGN KEY (professor_id) REFERENCES professores(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+-- Tabela: mensagens_admin
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS mensagens_admin (
+    id INT NOT NULL AUTO_INCREMENT,
+    professor_id INT NOT NULL,
+    titulo VARCHAR(100) NOT NULL,
+    mensagem TEXT NOT NULL,
+    lida TINYINT(1) DEFAULT 0,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id),
+    CONSTRAINT fk_msg_admin_professor FOREIGN KEY(professor_id)
+        REFERENCES professores(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+-- Tabela: mensagens_professores
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS mensagens_professores (
+    id INT NOT NULL AUTO_INCREMENT,
+    professor_id INT NOT NULL,
+    titulo VARCHAR(100) NOT NULL,
+    mensagem TEXT NOT NULL,
+    status ENUM('novo','lida','resolvida') DEFAULT 'novo',
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id),
+    CONSTRAINT fk_msg_professor FOREIGN KEY(professor_id)
+        REFERENCES professores(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 COMMIT;

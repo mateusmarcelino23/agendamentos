@@ -1,129 +1,235 @@
-// Função principal para carregar os dados do relatório
+// Função principal que carrega todos os dados do relatório
 async function carregarRelatorios() {
   try {
+    // Faz a requisição AJAX para o backend (relatorios.php)
     const response = await fetch("../../backend/api/relatorios.php", {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     });
 
+    // Converte a resposta em JSON
     const data = await response.json();
 
+    // Se o usuário não estiver autenticado, redireciona para o login
     if (data.error === "Usuário não autenticado") {
       window.location.href = "../../";
       return;
     }
 
-    // Atualiza os cards do topo
-    atualizarCards(data.cards);
+    // Atualiza os cards gerais do sistema
+    atualizarCardsSistema(data.sistema.cards);
 
-    // Carrega os gráficos do Google Charts
+    // Atualiza os cards específicos do professor logado
+    atualizarCardsProfessor(data.professor.cards);
+
+    // Atualiza os rankings (professores, equipamentos e turnos)
+    atualizarRankings(data.rankings);
+
+    // Carrega as bibliotecas do Google Charts
     google.charts.load("current", { packages: ["corechart", "bar"] });
+
+    // Quando o Google Charts estiver pronto, desenha os gráficos
     google.charts.setOnLoadCallback(() => {
-      desenharGraficos(data.graficos);
+      desenharGraficosSistema(data.sistema.graficos);
+      desenharGraficosProfessor(data.professor.graficos);
     });
   } catch (error) {
     console.error("Erro ao carregar relatórios:", error);
   }
 }
 
-// Atualiza os 4 cards do topo
-function atualizarCards(cards) {
-  const cardTotal = document.getElementById("card-total-mes");
-  const cardConcluidos = document.getElementById("card-concluidos");
-  const cardCancelados = document.getElementById("card-cancelados");
-  const cardEquipamento = document.getElementById("card-equipamento");
-
-  if (cardTotal) cardTotal.textContent = cards.totalMes || 0;
-  if (cardConcluidos) cardConcluidos.textContent = cards.concluidos || 0;
-  if (cardCancelados) cardCancelados.textContent = cards.cancelados || 0;
-  if (cardEquipamento)
-    cardEquipamento.textContent = `${cards.equipamentoMaisUsado.nome} (${cards.equipamentoMaisUsado.total})`;
+// Atualiza os cards de resumo do sistema
+function atualizarCardsSistema(cards) {
+  document.getElementById("card-total-mes").textContent = cards.totalMes || 0;
+  document.getElementById("card-concluidos").textContent =
+    cards.concluidos || 0;
+  document.getElementById("card-cancelados").textContent =
+    cards.cancelados || 0;
+  document.getElementById("card-equipamento").textContent = `${
+    cards.equipamentoMaisUsado.nome || "-"
+  } (${cards.equipamentoMaisUsado.total || 0})`;
 }
 
-// Desenha todos os gráficos
-function desenharGraficos(graficos) {
+// Atualiza os cards de resumo pessoais do professor logado
+function atualizarCardsProfessor(cards) {
+  document.getElementById("meus-total").textContent = cards.total || 0;
+  document.getElementById("meus-concluidos").textContent =
+    cards.concluidos || 0;
+  document.getElementById("meus-cancelados").textContent =
+    cards.cancelados || 0;
+  document.getElementById("meu-equipamento").textContent = `${
+    cards.equipamentoMaisUsado.nome || "-"
+  } (${cards.equipamentoMaisUsado.total || 0})`;
+}
+
+// Atualiza as listas de rankings no HTML
+function atualizarRankings(rankings) {
+  // Ranking de professores
+  const listaProfs = document.getElementById("ranking-professores");
+  listaProfs.innerHTML = "";
+  rankings.professores.forEach((p, i) => {
+    const li = document.createElement("li");
+    li.textContent = `${i + 1}. ${p.nome} — ${p.total}`;
+    listaProfs.appendChild(li);
+  });
+
+  // Ranking de equipamentos
+  const listaEquip = document.getElementById("ranking-equipamentos");
+  listaEquip.innerHTML = "";
+  rankings.equipamentos.forEach((e, i) => {
+    const li = document.createElement("li");
+    li.textContent = `${i + 1}. ${e.nome} — ${e.total}`;
+    listaEquip.appendChild(li);
+  });
+
+  // Ranking de turnos
+  const listaTurnos = document.getElementById("ranking-turnos");
+  listaTurnos.innerHTML = "";
+  rankings.turnos.forEach((t, i) => {
+    const li = document.createElement("li");
+    li.textContent = `${i + 1}. ${
+      t.periodo.charAt(0).toUpperCase() + t.periodo.slice(1)
+    } — ${t.total}`;
+    listaTurnos.appendChild(li);
+  });
+}
+
+// Desenha todos os gráficos do sistema (dados globais)
+function desenharGraficosSistema(graficos) {
   if (!graficos) return;
 
-  // 1️⃣ Equipamentos mais usados - gráfico de barras
-  const dataEquip = new google.visualization.DataTable();
-  dataEquip.addColumn("string", "Equipamento");
-  dataEquip.addColumn("number", "Agendamentos");
-  graficos.equipamentosRanking.forEach((e) => {
-    dataEquip.addRow([e.nome, parseInt(e.total)]);
-  });
-  const chartEquip = new google.visualization.ColumnChart(
-    document.getElementById("grafico-equipamentos")
+  // Gráfico de status geral do sistema
+  desenharPizza(
+    "grafico-status-sistema",
+    graficos.status,
+    "Agendamentos por Status"
   );
-  chartEquip.draw(dataEquip, {
-    title: "Equipamentos mais usados",
-    height: 300,
+
+  // Gráfico por tipo de equipamento (laboratório ou guardião)
+  desenharPizza(
+    "grafico-tipo-sistema",
+    graficos.tipoEquipamento,
+    "Agendamentos por Tipo de Equipamento",
+    "tipo"
+  );
+
+  // Gráfico de agendamentos por período (manhã, tarde, noite)
+  desenharPizza(
+    "grafico-periodos-sistema",
+    graficos.periodos,
+    "Agendamentos por Período",
+    "periodo"
+  );
+
+  // Gráfico de linha mostrando evolução diária de agendamentos
+  desenharLinha(
+    "grafico-evolucao",
+    graficos.evolucao,
+    "Evolução Diária dos Agendamentos"
+  );
+}
+
+// Desenha os gráficos pessoais do professor logado
+function desenharGraficosProfessor(graficos) {
+  if (!graficos) return;
+
+  // Gráfico de status dos agendamentos do professor
+  desenharPizza(
+    "grafico-status-professor",
+    graficos.status,
+    "Meus Agendamentos por Status"
+  );
+
+  // Gráfico de barras com os equipamentos mais usados pelo professor
+  desenharBarras(
+    "grafico-equip-professor",
+    graficos.equipamentos,
+    "Meus Equipamentos Mais Usados"
+  );
+
+  // Gráfico de pizza com a distribuição dos turnos do professor
+  desenharPizza(
+    "grafico-periodos-professor",
+    graficos.periodos,
+    "Meus Agendamentos por Período",
+    "periodo"
+  );
+}
+
+// Desenha gráfico de pizza com base nos dados fornecidos
+function desenharPizza(elementId, dados, titulo, chave = "status") {
+  const mapStatus = { 0: "Pendente", 1: "Concluído", 2: "Cancelado" };
+
+  const dataTable = new google.visualization.DataTable();
+  dataTable.addColumn("string", "Categoria");
+  dataTable.addColumn("number", "Total");
+
+  dados.forEach((d) => {
+    let nome = d[chave];
+    if (chave === "status") nome = mapStatus[d.status] || "Outro";
+    if (nome) dataTable.addRow([nome, parseInt(d.total)]);
   });
 
-  // 2️⃣ Professores mais ativos - gráfico de barras horizontais
-  const dataProf = new google.visualization.DataTable();
-  dataProf.addColumn("string", "Professor");
-  dataProf.addColumn("number", "Agendamentos");
-  graficos.professoresRanking.forEach((p) => {
-    dataProf.addRow([p.nome, parseInt(p.total)]);
-  });
-  const chartProf = new google.visualization.BarChart(
-    document.getElementById("grafico-professores")
+  const chart = new google.visualization.PieChart(
+    document.getElementById(elementId)
   );
-  chartProf.draw(dataProf, {
-    title: "Professores mais ativos",
+  chart.draw(dataTable, {
+    title: titulo,
     height: 300,
-    bars: "horizontal",
-  });
-
-  // 3️⃣ Agendamentos por período - gráfico de pizza
-  const dataPeriodo = new google.visualization.DataTable();
-  dataPeriodo.addColumn("string", "Período");
-  dataPeriodo.addColumn("number", "Total");
-  graficos.periodos.forEach((p) => {
-    dataPeriodo.addRow([
-      p.periodo.charAt(0).toUpperCase() + p.periodo.slice(1),
-      parseInt(p.total),
-    ]);
-  });
-  const chartPeriodo = new google.visualization.PieChart(
-    document.getElementById("grafico-periodos")
-  );
-  chartPeriodo.draw(dataPeriodo, {
-    title: "Agendamentos por período",
-    height: 300,
-  });
-
-  // 4️⃣ Agendamentos por tipo de equipamento - gráfico de pizza
-  const dataTipo = new google.visualization.DataTable();
-  dataTipo.addColumn("string", "Tipo");
-  dataTipo.addColumn("number", "Total");
-  graficos.tipoEquipamento.forEach((t) => {
-    const tipo = t.tipo.charAt(0).toUpperCase() + t.tipo.slice(1);
-    dataTipo.addRow([tipo, parseInt(t.total)]);
-  });
-  const chartTipo = new google.visualization.PieChart(
-    document.getElementById("grafico-tipo")
-  );
-  chartTipo.draw(dataTipo, {
-    title: "Agendamentos por tipo de equipamento",
-    height: 300,
-  });
-
-  // 5️⃣ Agendamentos por status - gráfico de pizza
-  const dataStatus = new google.visualization.DataTable();
-  dataStatus.addColumn("string", "Status");
-  dataStatus.addColumn("number", "Total");
-  const statusMap = { 0: "Pendente", 1: "Concluído", 2: "Cancelado" };
-  graficos.statusAgendamentos.forEach((s) => {
-    dataStatus.addRow([statusMap[s.status] || "Outro", parseInt(s.total)]);
-  });
-  const chartStatus = new google.visualization.PieChart(
-    document.getElementById("grafico-status")
-  );
-  chartStatus.draw(dataStatus, {
-    title: "Agendamentos por status",
-    height: 300,
+    animation: { startup: true, duration: 800, easing: "out" }, // animação de entrada
   });
 }
 
-// Executa ao carregar a página
+// Desenha gráfico de barras verticais
+function desenharBarras(elementId, dados, titulo) {
+  const dataTable = new google.visualization.DataTable();
+  dataTable.addColumn("string", "Nome");
+  dataTable.addColumn("number", "Total");
+  dados.forEach((d) => dataTable.addRow([d.nome, parseInt(d.total)]));
+
+  const chart = new google.visualization.ColumnChart(
+    document.getElementById(elementId)
+  );
+  chart.draw(dataTable, {
+    title: titulo,
+    height: 300,
+    animation: { startup: true, duration: 800, easing: "out" },
+  });
+}
+
+// Desenha gráfico de linha para exibir evolução ao longo dos dias
+function desenharLinha(elementId, dados, titulo) {
+  const dataTable = new google.visualization.DataTable();
+  dataTable.addColumn("string", "Dia");
+  dataTable.addColumn("number", "Agendamentos");
+  dados.forEach((d) => dataTable.addRow([`Dia ${d.dia}`, parseInt(d.total)]));
+
+  const chart = new google.visualization.LineChart(
+    document.getElementById(elementId)
+  );
+  chart.draw(dataTable, {
+    title: titulo,
+    height: 300,
+    curveType: "function",
+    legend: { position: "bottom" },
+    animation: { startup: true, duration: 1000, easing: "out" },
+  });
+}
+
+// Executa automaticamente quando o DOM estiver carregado
 document.addEventListener("DOMContentLoaded", carregarRelatorios);
+
+// Faz rolar até a seção da âncora após o carregamento
+window.addEventListener("load", () => {
+  // Só rola se a navegação NÃO for um reload
+  const navEntries = performance.getEntriesByType("navigation");
+  const isReload = navEntries.length > 0 && navEntries[0].type === "reload";
+
+  if (!isReload && window.location.hash) {
+    const destino = document.querySelector(window.location.hash);
+    if (destino) {
+      setTimeout(() => {
+        destino.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 600); // ajusta o delay conforme o carregamento da página
+    }
+  }
+});
