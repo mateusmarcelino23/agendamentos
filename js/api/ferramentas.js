@@ -1,7 +1,7 @@
 // Função principal para carregar os dados da página de ferramentas
 async function carregarFerramentas() {
   try {
-    const response = await fetch("https://saee.free.nf/api/ferramentas.php", {
+    const response = await fetch("/.netlify/functions/api-proxy/api/ferramentas.php", {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     });
 

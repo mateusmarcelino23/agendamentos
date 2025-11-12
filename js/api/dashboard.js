@@ -1,7 +1,7 @@
 // Função principal para carregar os dados do dashboard
 async function carregarDashboard() {
   try {
-    const response = await fetch("https://saee.free.nf/api/dashboard.php", {
+    const response = await fetch("/.netlify/functions/api-proxy/api/dashboard.php", {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     });
 
