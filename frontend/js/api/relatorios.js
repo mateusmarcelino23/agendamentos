@@ -2,7 +2,7 @@
 async function carregarRelatorios() {
   try {
     // Faz a requisição AJAX para o backend (relatorios.php)
-    const response = await fetch("../../backend/api/relatorios.php", {
+    const response = await fetch("https://saee.free.nf/api/relatorios.php", {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     });
 
