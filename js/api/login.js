@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Realiza a requisição ao backend para verificar o status de login
   fetch("/.netlify/functions/api-proxy/api/login.php", {
+    method: "GET",
+    credentials: "include",
     headers: { "X-Requested-With": "XMLHttpRequest" },
   })
     .then((res) => res.json()) // Converte a resposta em JSON
