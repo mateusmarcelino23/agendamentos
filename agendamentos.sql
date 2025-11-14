@@ -109,4 +109,3 @@ CREATE TABLE IF NOT EXISTS mensagens_professores (
         REFERENCES professores(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-COMMIT;
