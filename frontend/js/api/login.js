@@ -18,7 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnDesktop) btnDesktop.classList.add("loading");
 
   // Realiza a requisição ao backend para verificar o status de login
-  fetch("backend/api/login.php", {
+  fetch("/agendamentos/backend/api/login.php", {
+    method: "GET",
+    credentials: "include",
     headers: { "X-Requested-With": "XMLHttpRequest" },
   })
     .then((res) => res.json()) // Converte a resposta em JSON

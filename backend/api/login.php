@@ -7,7 +7,7 @@ require __DIR__ . '/../vendor/autoload.php';
 if (isset($_SESSION['user_id'])) {
     echo json_encode([
         'logged_in' => true,
-        'redirect' => '../../frontend/pages/dashboard.html'
+        'redirect' => '/agendamentos/frontend/pages/dashboard.html'
     ]);
     exit;
 }

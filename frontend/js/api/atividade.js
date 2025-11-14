@@ -1,14 +1,14 @@
 // Função principal para carregar os dados da página de atividade
 async function carregarAtividade() {
   try {
-    const response = await fetch("../../backend/api/atividade.php", {
+    const response = await fetch("/agendamentos/backend/api/atividade.php", {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     });
 
     const data = await response.json();
 
     if (data.error === "Usuário não autenticado") {
-      window.location.href = "../../";
+      window.location.href = "/agendamentos/";
       return;
     }
 

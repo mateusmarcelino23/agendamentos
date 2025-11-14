@@ -1,7 +1,7 @@
 // Função principal para carregar os dados do dashboard
 async function carregarDashboard() {
   try {
-    const response = await fetch("../../backend/api/dashboard.php", {
+    const response = await fetch("/agendamentos/backend/api/dashboard.php", {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     });
 
@@ -9,7 +9,7 @@ async function carregarDashboard() {
 
     // Se o usuário não estiver autenticado, redireciona
     if (data.error === "Usuário não autenticado") {
-      window.location.href = "../../";
+      window.location.href = "/agendamentos/";
       return;
     }
 

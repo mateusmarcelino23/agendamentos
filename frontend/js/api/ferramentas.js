@@ -1,14 +1,14 @@
 // Função principal para carregar os dados da página de ferramentas
 async function carregarFerramentas() {
   try {
-    const response = await fetch("../../backend/api/ferramentas.php", {
+    const response = await fetch("/agendamentos/backend/api/ferramentas.php", {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     });
 
     const data = await response.json();
 
     if (data.error === "Usuário não autenticado") {
-      window.location.href = "../../";
+      window.location.href = "/agendamentos/";
       return;
     }
 
