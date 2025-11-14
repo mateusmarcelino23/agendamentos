@@ -188,6 +188,12 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
   }
 
   /* Hover nos links */
+  .sidebar-item a:hover {
+    background: rgba(255, 140, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  /* Ao clicar nos links */
   .sidebar-item a:focus,
   .sidebar-item a:active {
     background: rgba(255, 140, 0, 0.1);
