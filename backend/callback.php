@@ -42,7 +42,7 @@ function sendErrorAndExit($title, $meta = [])
         ]
     ];
     $_SESSION['oauth_error'] = $payload; // Armazena o payload na sessão
-    header('Location: /agendamentos/error.php'); // Redireciona para página de erro
+    header('Location: /agendamentos/backend/views/error.php'); // Redireciona para página de erro
     exit; // Interrompe o script
 }
 
