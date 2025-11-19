@@ -316,6 +316,7 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     height: 100vh;
     overflow: auto;
     width: 100%;
+    z-index: 0;
     background-color: #fff;
     font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
       sans-serif;
