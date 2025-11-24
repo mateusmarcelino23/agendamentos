@@ -14,7 +14,7 @@ USE agendamentos;
 CREATE TABLE IF NOT EXISTS equipamentos (
     id INT NOT NULL AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
-    tipo ENUM('laboratorio', 'guardiao') NOT NULL,
+    tipo ENUM('informatica', 'guardiao') NOT NULL,
     quantidade INT DEFAULT 0,
     status ENUM('disponivel', 'em_uso', 'em_manutencao') DEFAULT 'disponivel',
     PRIMARY KEY (id)
@@ -24,9 +24,9 @@ INSERT INTO `equipamentos` (`id`, `nome`, `tipo`, `quantidade`) VALUES
 (1, 'Guardião 1', 'guardiao', 30),
 (2, 'Guardião 2', 'guardiao', 30),
 (3, 'Guardião 3', 'guardiao', 30),
-(4, 'Laboratório 1', 'laboratorio', 30),
-(5, 'Laboratório 2', 'laboratorio', 30),
-(6, 'Laboratório 3', 'laboratorio', 30);
+(4, 'Informática 1', 'informatica', 30),
+(5, 'Informática 2', 'informatica', 30),
+(6, 'Informática 3', 'informatica', 30);
 
 -- --------------------------------------------------------
 -- Tabela: professores
@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS agendamentos (
     data DATE NOT NULL,
     aula TINYINT UNSIGNED NOT NULL CHECK(aula BETWEEN 1 AND 6),
     periodo ENUM('manha','tarde','noite') NOT NULL,
+    quantidade INT NOT NULL DEFAULT 1,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status TINYINT(2) NOT NULL DEFAULT 0,
     PRIMARY KEY (id),

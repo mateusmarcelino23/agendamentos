@@ -143,5 +143,69 @@ function formatarData(isoDate) {
   });
 }
 
+async function verificarAgendamentoAtivo() {
+  try {
+    const res = await fetch(
+      "/agendamentos/backend/api/verificar_agendamento_ativo.php",
+      {
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      }
+    );
+    const agendamento = await res.json();
+    const container = document.getElementById("mensagem-agendamento");
+
+    if (!agendamento) {
+      container.classList.add("d-none");
+      return;
+    }
+
+    container.classList.remove("d-none");
+    container.innerHTML = `
+      <p>Você tem um agendamento para <strong>${agendamento.equipamento}</strong> na aula ${agendamento.aula} agora.</p>
+      <button onclick="usarEquipamento(${agendamento.id}, 'irei')" class="btn btn-primary me-2">Irei utilizar</button>
+      <button onclick="usarEquipamento(${agendamento.id}, 'em_uso')" class="btn btn-success me-2">Estou utilizando</button>
+      <button onclick="usarEquipamento(${agendamento.id}, 'cancelar')" class="btn btn-danger">Cancelar</button>
+    `;
+  } catch (err) {
+    console.error("Erro ao verificar agendamento ativo:", err);
+  }
+}
+
+// Adicione isso junto com o carregarDashboard
+document.addEventListener("DOMContentLoaded", () => {
+  carregarDashboard();
+  verificarAgendamentoAtivo();
+});
+
+async function usarEquipamento(agendamentoId, acao) {
+  try {
+    const formData = new FormData();
+    formData.append("agendamento_id", agendamentoId);
+    formData.append("acao", acao);
+
+    const res = await fetch(
+      "/agendamentos/backend/api/atualizar_equipamento.php",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const result = await res.json();
+    if (result.success) {
+      alert("Status do equipamento atualizado!");
+      // Recarrega a utilização atual
+      carregarDashboard();
+      verificarAgendamentoAtivo(); // Atualiza o container
+    } else {
+      alert("Erro ao atualizar equipamento.");
+    }
+  } catch (err) {
+    console.error("Erro ao atualizar equipamento:", err);
+  }
+}
+
+
+
 // Executa assim que a página carregar
 document.addEventListener("DOMContentLoaded", carregarDashboard);

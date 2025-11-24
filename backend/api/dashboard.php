@@ -97,9 +97,9 @@ try {
   $periodoAtual = null;
 
   // Define o período atual com base na hora
-  if ($horaAtual >= '07:00' && $horaAtual <= '11:59') {
+  if ($horaAtual >= '07:00' && $horaAtual <= '12:20') {
     $periodoAtual = 'manha';
-  } elseif ($horaAtual >= '12:00' && $horaAtual <= '17:59') {
+  } elseif ($horaAtual >= '13:00' && $horaAtual <= '17:30') {
     $periodoAtual = 'tarde';
   } elseif ($horaAtual >= '18:00' && $horaAtual <= '22:30') {
     $periodoAtual = 'noite';

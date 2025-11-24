@@ -41,7 +41,7 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     justify-content: center;
     /* Centraliza o conteúdo (logo) */
     position: relative;
-    height: 75px;
+    height: 65px;
   }
 
   /* Botão do menu (fica à esquerda) */
@@ -133,7 +133,7 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
 
   #menu {
     position: fixed;
-    top: 75px;
+    top: 65px;
     left: -310px;
     /* escondido fora da tela */
     width: 300px;
@@ -311,7 +311,7 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
   }
 
   .conteudo-principal {
-    padding-top: 100px;
+    padding-top: 80px;
     border-top: 20px;
     height: 100vh;
     overflow: auto;
@@ -367,8 +367,8 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
   }
 }
 
-/* Notebooks pequenos (>= 1024px) */
-@media (min-width: 951px) {
+/* Notebooks pequenos (>= 1240px) */
+@media (min-width: 1240px) {
   /* Header principal */
   .header-desktop__nav {
     width: 100%;

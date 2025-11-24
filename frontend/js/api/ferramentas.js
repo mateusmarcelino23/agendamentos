@@ -20,6 +20,10 @@ async function carregarFerramentas() {
 
     // Preenche chat dos professores
     preencherChatProfessores(data.chatProfessores);
+
+    // Atualiza botão de alertas
+    atualizarAlertas(data.alertas, data.alertasNaoLidas);
+
   } catch (error) {
     console.error("Erro ao carregar ferramentas:", error);
   }
@@ -73,7 +77,7 @@ async function enviarAlertaProblema() {
     formData.append("equipamento_id", equipamentoId);
     formData.append("descricao", descricao);
 
-    const response = await fetch("../../backend/api/ferramentas.php", {
+    const response = await fetch("/agendamentos/backend/api/ferramentas.php", {
       method: "POST",
       body: formData,
       headers: { "X-Requested-With": "XMLHttpRequest" },
@@ -172,7 +176,7 @@ async function enviarMensagemProfessor() {
     formData.append("titulo", titulo);
     formData.append("mensagem", mensagem);
 
-    const response = await fetch("../../backend/api/ferramentas.php", {
+    const response = await fetch("/agendamentos/backend/api/ferramentas.php", {
       method: "POST",
       body: formData,
       headers: { "X-Requested-With": "XMLHttpRequest" },
