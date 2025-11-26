@@ -61,37 +61,74 @@ function atualizarCardsProfessor(cards) {
   } (${cards.equipamentoMaisUsado.total || 0})`;
 }
 
-// Atualiza as listas de rankings no HTML
+function criarLi(rank, texto, isLoading = false) {
+  const li = document.createElement("li");
+  li.classList.add("ranking-item");
+  if (isLoading) {
+    li.classList.add("loading");
+    li.textContent = texto;
+    return li;
+  }
+
+  // atributo para estilizar com [data-rank="1"], :first-child etc.
+  li.setAttribute("data-rank", String(rank));
+
+  // estrutura interna para facilitar estilos (posição, conteúdo, total)
+  const spanPos = document.createElement("span");
+  spanPos.className = "ranking-pos";
+  spanPos.textContent = `${rank}.`;
+
+  const spanContent = document.createElement("span");
+  spanContent.className = "ranking-content";
+  spanContent.textContent = texto;
+
+  li.appendChild(spanPos);
+  li.appendChild(spanContent);
+
+  return li;
+}
+
 function atualizarRankings(rankings) {
-  // Ranking de professores
-  const listaProfs = document.getElementById("ranking-professores");
-  listaProfs.innerHTML = "";
-  rankings.professores.forEach((p, i) => {
-    const li = document.createElement("li");
-    li.textContent = `${i + 1}. ${p.nome} — ${p.total}`;
-    listaProfs.appendChild(li);
+  // helper para popular lista
+  function popularLista(containerId, items, formatter) {
+    const ul = document.getElementById(containerId);
+    if (!ul) return;
+
+    ul.innerHTML = ""; // limpa
+
+    if (!items || items.length === 0) {
+      // mostra um placeholder elegante (mantendo a classe loading)
+      ul.appendChild(criarLi(0, "Carregando...", true));
+      return;
+    }
+
+    items.forEach((item, i) => {
+      const pos = i + 1;
+      const texto = formatter(item, pos);
+      const li = criarLi(pos, texto, false);
+      ul.appendChild(li);
+    });
+  }
+
+  // Professores
+  popularLista("ranking-professores", rankings.professores, (p, pos) => {
+    return `${p.nome} — ${p.total}`;
   });
 
-  // Ranking de equipamentos
-  const listaEquip = document.getElementById("ranking-equipamentos");
-  listaEquip.innerHTML = "";
-  rankings.equipamentos.forEach((e, i) => {
-    const li = document.createElement("li");
-    li.textContent = `${i + 1}. ${e.nome} — ${e.total}`;
-    listaEquip.appendChild(li);
+  // Equipamentos
+  popularLista("ranking-equipamentos", rankings.equipamentos, (e, pos) => {
+    return `${e.nome} — ${e.total}`;
   });
 
-  // Ranking de turnos
-  const listaTurnos = document.getElementById("ranking-turnos");
-  listaTurnos.innerHTML = "";
-  rankings.turnos.forEach((t, i) => {
-    const li = document.createElement("li");
-    li.textContent = `${i + 1}. ${
-      t.periodo.charAt(0).toUpperCase() + t.periodo.slice(1)
-    } — ${t.total}`;
-    listaTurnos.appendChild(li);
+  // Turnos
+  popularLista("ranking-turnos", rankings.turnos, (t, pos) => {
+    const periodo = t.periodo
+      ? t.periodo.charAt(0).toUpperCase() + t.periodo.slice(1)
+      : "";
+    return `${periodo} — ${t.total}`;
   });
 }
+
 
 // Desenha todos os gráficos do sistema (dados globais)
 function desenharGraficosSistema(graficos) {

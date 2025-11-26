@@ -171,11 +171,19 @@ function formatarStatus(status) {
 
 // Formata a data em padrão brasileiro
 function formatarData(isoDate) {
-  const date = new Date(isoDate);
-  return date.toLocaleDateString("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
+  if (!isoDate) return '';
+
+  // Quebra a string "YYYY-MM-DD" em partes
+  const [year, month, day] = isoDate.split('-').map(Number);
+
+  // Cria uma data no fuso local
+  const date = new Date(year, month - 1, day); // meses vão de 0 a 11
+
+  // Formata para "seg, 25/11"
+  return date.toLocaleDateString('pt-BR', {
+    weekday: 'short',
+    day: '2-digit',
+    month: '2-digit',
   });
 }
 

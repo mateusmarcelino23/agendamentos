@@ -7,9 +7,20 @@ document.addEventListener("DOMContentLoaded", () => {
       // Insere o modal no DOM
       document.body.insertAdjacentHTML("beforeend", html);
 
-      // Agora que o HTML foi carregado, carregamos o JS funcional
+      // Carrega o JS funcional do modal
       const script = document.createElement("script");
       script.src = "/agendamentos/frontend/js/api/criar_agendamento.js";
+      script.onload = () => {
+        // ---------- RESET AUTOMÁTICO AO FECHAR ----------
+        const modal = document.getElementById("modalAgendamento");
+        if (modal) {
+          modal.addEventListener("hidden.bs.modal", () => {
+            if (typeof window.resetAgendamentoWizard === "function") {
+              window.resetAgendamentoWizard();
+            }
+          });
+        }
+      };
       document.body.appendChild(script);
     })
     .catch((err) => {

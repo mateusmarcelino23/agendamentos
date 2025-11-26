@@ -59,10 +59,10 @@ function initCriarAgendamento() {
         showAlert("Selecione uma data!");
         return false;
       }
-      // opcional: validar se a data não é passada
-      const hoje = new Date();
-      const sel = new Date(ag_data.value + "T00:00:00");
-      if (sel < new Date(hoje.toDateString())) {
+      // validar se a data não é passada
+      const hojeStr = new Date().toISOString().split("T")[0];
+
+      if (ag_data.value < hojeStr) {
         showAlert("Data inválida (passada).");
         return false;
       }
@@ -259,6 +259,21 @@ function initCriarAgendamento() {
     showAlert("Agendamento criado com sucesso!", "success"); // confirma sucesso
     step = 5; // vai para tela de conclusão
     mostrarPasso(step);
+  });
+
+  /* ---------- FUNÇÃO PARA RESETAR O WIZARD ---------- */
+  window.resetAgendamentoWizard = function () {
+    form.reset();
+    step = 1;
+    alertBox.innerHTML = "";
+    resumoLista.innerHTML = "";
+    mostrarPasso(step);
+  };
+
+  /* ---------- EVENTO PARA RESETAR AO FECHAR MODAL ---------- */
+  const modal = document.getElementById("modalAgendamento"); // obtém o modal
+  modal.addEventListener("hidden.bs.modal", () => { 
+    window.resetAgendamentoWizard(); // reseta o wizard ao fechar
   });
 
   /* ---------- INICIALIZAÇÃO ---------- */

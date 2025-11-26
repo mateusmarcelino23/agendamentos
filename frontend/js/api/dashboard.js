@@ -133,15 +133,24 @@ function abrirDetalhesDoDia(dataSelecionada) {
   // window.location.href = `/frontend/novo_agendamento.php?data=${dataSelecionada}`;
 }
 
-// Formata a data em padrão brasileiro
+// Formata a data em padrão brasileiro sem problemas de fuso horário
 function formatarData(isoDate) {
-  const date = new Date(isoDate);
-  return date.toLocaleDateString("pt-BR", {
-    weekday: "short",
-    day: "2-digit",
-    month: "2-digit",
+  if (!isoDate) return '';
+
+  // Quebra a string "YYYY-MM-DD" em partes
+  const [year, month, day] = isoDate.split('-').map(Number);
+
+  // Cria uma data no fuso local
+  const date = new Date(year, month - 1, day); // meses vão de 0 a 11
+
+  // Formata para "seg, 25/11"
+  return date.toLocaleDateString('pt-BR', {
+    weekday: 'short',
+    day: '2-digit',
+    month: '2-digit',
   });
 }
+
 
 async function verificarAgendamentoAtivo() {
   try {

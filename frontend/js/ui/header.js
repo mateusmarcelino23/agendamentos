@@ -90,7 +90,7 @@ function initHeader() {
 
         setTimeout(() => {
           window.location.href = href;
-        }, 300); // espera animação
+        }, 800); // espera animação
       });
     }
   });

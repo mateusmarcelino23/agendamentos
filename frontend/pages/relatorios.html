@@ -28,51 +28,41 @@
       <!-- ===============================
          🏆 RANKINGS
     ================================ -->
-      <div class="row mb-5">
-        <div class="col-12 text-center mb-3">
-          <h3>Rankings do Mês</h3>
+      <div class="row mb-5 rankings-container">
+        <div class="col-12 text-center mb-4">
+          <h3 class="rankings-title">Rankings do Mês</h3>
         </div>
 
         <div class="col-md-4">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title text-center">
-                Top 5 Professores com mais agendamentos
-              </h5>
-              <ul id="ranking-professores" class="list-group list-group-flush">
-                <li class="list-group-item text-center text-muted">
-                  Carregando...
-                </li>
-              </ul>
+          <div class="ranking-card ranking-professores-card">
+            <div class="ranking-header gradient-header">
+              Top 5 Professores com mais agendamentos
             </div>
+            <ul id="ranking-professores" class="ranking-list">
+              <li class="ranking-item loading">Carregando...</li>
+            </ul>
           </div>
         </div>
 
         <div class="col-md-4">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title text-center">
-                Top 5 Equipamentos mais utilizados
-              </h5>
-              <ul id="ranking-equipamentos" class="list-group list-group-flush">
-                <li class="list-group-item text-center text-muted">
-                  Carregando...
-                </li>
-              </ul>
+          <div class="ranking-card ranking-equipamentos-card">
+            <div class="ranking-header gradient-header">
+              Top 5 Equipamentos mais utilizados
             </div>
+            <ul id="ranking-equipamentos" class="ranking-list">
+              <li class="ranking-item loading">Carregando...</li>
+            </ul>
           </div>
         </div>
 
         <div class="col-md-4">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title text-center">Top Períodos mais ativos</h5>
-              <ul id="ranking-turnos" class="list-group list-group-flush">
-                <li class="list-group-item text-center text-muted">
-                  Carregando...
-                </li>
-              </ul>
+          <div class="ranking-card ranking-turnos-card">
+            <div class="ranking-header gradient-header">
+              Top Períodos mais ativos
             </div>
+            <ul id="ranking-turnos" class="ranking-list">
+              <li class="ranking-item loading">Carregando...</li>
+            </ul>
           </div>
         </div>
       </div>
