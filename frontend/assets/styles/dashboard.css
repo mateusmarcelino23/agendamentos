@@ -156,7 +156,7 @@
 }
 
 #card-total-professor .card-header-custom {
-  background: linear-gradient(135deg, #17a2b8, #54d3e8);
+  background: linear-gradient(135deg, #8b0e97, #e854a5);
 }
 
 .titulo-agendamentos {
@@ -259,6 +259,7 @@
   justify-content: center; /* Centraliza horizontalmente o conteúdo */
   text-align: center; /* Centraliza textos multilinha */
   font-size: 0.95rem; /* Tamanho de fonte inicial */
+  margin-bottom: 3rem; /* Espaço inferior entre caixas */
 }
 
 /* Efeito de hover da caixa */

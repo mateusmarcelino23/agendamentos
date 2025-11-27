@@ -111,19 +111,7 @@ function mostrarUtilizacaoAtual(utilizacoes) {
 
 // Preenche o calendário do mês atual
 function preencherCalendario(datas) {
-  const calendario = document.querySelector("#calendario");
-  if (!calendario) return;
-
-  // Exemplo simples: marca os dias com agendamentos
-  datas.forEach((d) => {
-    const dia = new Date(d.data).getDate();
-    const celula = calendario.querySelector(`[data-dia="${dia}"]`);
-    if (celula) {
-      celula.classList.add("tem-agendamento");
-      celula.title = `${d.total} agendamento(s) neste dia`;
-      celula.addEventListener("click", () => abrirDetalhesDoDia(d.data));
-    }
-  });
+  inicializarCalendario(datas);
 }
 
 // Quando o dia é clicado no calendário
@@ -180,7 +168,6 @@ async function verificarAgendamentoAtivo() {
   }
 }
 
-// Adicione isso junto com o carregarDashboard
 document.addEventListener("DOMContentLoaded", () => {
   carregarDashboard();
   verificarAgendamentoAtivo();
@@ -214,7 +201,59 @@ async function usarEquipamento(agendamentoId, acao) {
   }
 }
 
+let calendarioInstance;
 
+function inicializarCalendario(datasComAgendamento) {
+  const calendarioEl = document.getElementById("calendario");
+  if (!calendarioEl) return;
+
+  const eventos = datasComAgendamento.map((d) => ({
+    title: `${d.total} agendamento(s)`,
+    start: d.data,
+    allDay: true,
+    extendedProps: { detalhes: d.detalhes }, // aqui você passa os professores e aulas
+  }));
+
+  calendarioInstance = new FullCalendar.Calendar(calendarioEl, {
+    locale: "pt-br",
+    initialView: "dayGridMonth",
+    height: 500,
+    events: eventos,
+    eventClick: function (info) {
+      abrirDetalhesDoDia(
+        info.event.startStr,
+        info.event.extendedProps.detalhes
+      );
+    },
+  });
+
+  calendarioInstance.render();
+}
+
+function abrirDetalhesDoDia(dataSelecionada, detalhes) {
+  const container = document.getElementById("utilizacao-atual");
+  container.innerHTML = ""; // limpa antes
+
+  if (detalhes && detalhes.length > 0) {
+    detalhes.forEach((u) => {
+      const p = document.createElement("p");
+      p.innerHTML = `<strong>${u.professor}</strong> está usando <em>${u.equipamento}</em> (Aula ${u.aula}, ${u.periodo}).`;
+      container.appendChild(p);
+    });
+
+    const btn = document.createElement("button");
+    btn.className = "btn btn-primary mt-2";
+    btn.textContent = "Agendar também neste dia";
+    btn.onclick = () => alert(`Abrir modal para agendar em ${dataSelecionada}`);
+    container.appendChild(btn);
+  } else {
+    const btn = document.createElement("button");
+    btn.className = "btn btn-success mt-2";
+    btn.textContent = "Agendar neste dia";
+    btn.onclick = () => alert(`Abrir modal para agendar em ${dataSelecionada}`);
+    container.appendChild(btn);
+  }
+}
 
 // Executa assim que a página carregar
 document.addEventListener("DOMContentLoaded", carregarDashboard);
