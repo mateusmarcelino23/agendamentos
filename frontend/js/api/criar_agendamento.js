@@ -6,15 +6,14 @@ function initCriarAgendamento() {
   let step = 1; // controla etapa atual do wizard
 
   const steps = document.querySelectorAll(".step"); // nó-lista de todas as sections de etapa
-  const btnProximo = document.getElementById("btn-proximo"); // botão próximo usado para avançar passos
-  const btnVoltar = document.getElementById("btn-voltar"); // botão voltar para retroceder passo
-  const btnFinalizar = document.getElementById("btn-finalizar"); // botão finalizar visível no passo 4
-  const btnNovo = document.getElementById("btn-novo"); // botão para reiniciar após sucesso
-  const btnFecharFinal = document.getElementById("btn-fechar-final"); // botão para fechar + recarregar após sucesso
-  const alertBox = document.getElementById("alert-agendamento"); // área para exibir mensagens
-  const form = document.getElementById("form-criar-agendamento"); // form que contém os campos
+  const btnProximo = document.getElementById("btn-proximo");
+  const btnVoltar = document.getElementById("btn-voltar");
+  const btnFinalizar = document.getElementById("btn-finalizar");
+  const btnNovo = document.getElementById("btn-novo");
+  const btnFecharFinal = document.getElementById("btn-fechar-final");
+  const alertBox = document.getElementById("alert-agendamento");
+  const form = document.getElementById("form-criar-agendamento");
 
-  /* Inputs específicos obtidos por ID para evitar reliance em variáveis globais do navegador */
   const ag_data = document.getElementById("ag_data");
   const ag_equipamento = document.getElementById("ag_equipamento");
   const ag_quantidade = document.getElementById("ag_quantidade");
@@ -24,96 +23,107 @@ function initCriarAgendamento() {
 
   /* ---------- HELPERS ---------- */
   function showAlert(msg, type = "danger") {
-    // exibe mensagem breve na área de alertas
     alertBox.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
   }
 
   function mostrarPasso(n) {
-    // exibe somente a etapa 'n' e ajusta visibilidade dos botões
-    steps.forEach((s) => s.classList.add("d-none")); // esconde todas as etapas
-    const el = document.getElementById(`step-${n}`); // pega a etapa atual
-    if (el) el.classList.remove("d-none"); // exibe a etapa atual se existir
+    steps.forEach((s) => s.classList.add("d-none"));
+    const el = document.getElementById(`step-${n}`);
+    if (el) el.classList.remove("d-none");
 
-    btnVoltar.disabled = n === 1; // desabilita voltar no primeiro passo
-    btnProximo.classList.toggle("d-none", n >= 4); // esconde "Próximo" nos passos 4 e 5
-    btnFinalizar.classList.toggle("d-none", n !== 4); // mostra "Finalizar" somente no passo 4
-    btnNovo.classList.toggle("d-none", n !== 5); // mostra "Fazer outro" somente no passo 5
-    btnFecharFinal.classList.toggle("d-none", n !== 5); // mostra "Fechar" somente no passo 5
+    btnVoltar.disabled = n === 1;
+    btnProximo.classList.toggle("d-none", n >= 4);
+    btnFinalizar.classList.toggle("d-none", n !== 4);
+    btnNovo.classList.toggle("d-none", n !== 5);
+    btnFecharFinal.classList.toggle("d-none", n !== 5);
+
     if (n === 5) {
-      btnVoltar.classList.add("d-none"); // esconde botão Voltar
-      document.getElementById("btn-cancelar-modal").classList.add("d-none"); // esconde botão Cancelar
-      btnNovo.classList.remove("d-none"); // mostra botão "Fazer outro"
-      btnFecharFinal.classList.remove("d-none"); // mostra botão "Fechar"
+      btnVoltar.classList.add("d-none");
+      document.getElementById("btn-cancelar-modal").classList.add("d-none");
+      btnNovo.classList.remove("d-none");
+      btnFecharFinal.classList.remove("d-none");
     } else {
-      btnVoltar.classList.remove("d-none"); // mostra botão Voltar nos outros passos
-      document.getElementById("btn-cancelar-modal").classList.remove("d-none"); // mostra botão Cancelar
-      btnNovo.classList.add("d-none"); // esconde botão "Fazer outro"
-      btnFecharFinal.classList.add("d-none"); // esconde botão "Fechar"
+      btnVoltar.classList.remove("d-none");
+      document.getElementById("btn-cancelar-modal").classList.remove("d-none");
+      btnNovo.classList.add("d-none");
+      btnFecharFinal.classList.add("d-none");
     }
   }
 
-  /* validações específicas de cada passo; evita avançar sem preencher campos necessários */
   function validarPasso(n) {
     if (n === 1) {
       if (!ag_data.value) {
         showAlert("Selecione uma data!");
         return false;
       }
-      // validar se a data não é passada
       const hojeStr = new Date().toISOString().split("T")[0];
-
       if (ag_data.value < hojeStr) {
         showAlert("Data inválida (passada).");
         return false;
       }
     }
     if (n === 2) {
-      if (!ag_equipamento.value) {
-        showAlert("Selecione um equipamento!");
-        return false;
-      }
-      if (!ag_quantidade.value || Number(ag_quantidade.value) < 1) {
-        showAlert("Informe uma quantidade válida!");
+      // passo 2 agora valida período e aula antes de mostrar equipamentos
+      if (!ag_periodo.value || !ag_aula.value) {
+        showAlert("Selecione período e aula primeiro!");
         return false;
       }
     }
     if (n === 3) {
-      if (!ag_periodo.value || !ag_aula.value) {
-        showAlert("Selecione período e aula!");
+      if (!ag_quantidade.value || Number(ag_quantidade.value) < 1) {
+        showAlert("Informe uma quantidade válida!");
         return false;
       }
     }
     return true;
   }
 
-  /* ---------- CARREGA EQUIPAMENTOS DINAMICAMENTE ---------- */
-  async function carregarEquipamentos() {
-    // busca equipamentos atualizados do backend
+  /* ---------- CARREGA EQUIPAMENTOS DISPONÍVEIS ---------- */
+  async function carregarEquipamentosDisponiveis(data, periodo, aula) {
     try {
+      // busca todos os equipamentos cadastrados
       const resp = await fetch(
         "/agendamentos/backend/api/listar_equipamentos.php"
-      ); // endpoint que retorna JSON de equipamentos
+      );
       const json = await resp.json();
       ag_equipamento.innerHTML = `<option value="">Selecione...</option>`;
-      if (json && Array.isArray(json.equipamentos)) {
-        json.equipamentos.forEach((e) => {
-          const opt = document.createElement("option");
-          opt.value = e.id;
-          opt.textContent = `${e.nome} (${e.quantidade})`;
-          ag_equipamento.appendChild(opt);
-        });
-      } else {
+
+      if (!json || !Array.isArray(json.equipamentos)) {
         showAlert("Erro ao carregar equipamentos", "warning");
+        return;
+      }
+
+      // Para cada equipamento, consulta a disponibilidade no horário selecionado
+      for (const e of json.equipamentos) {
+        const dispResp = await fetch(
+          `/agendamentos/backend/api/disponibilidade.php?data=${encodeURIComponent(
+            data
+          )}&equipamento_id=${encodeURIComponent(
+            e.id
+          )}&periodo=${encodeURIComponent(periodo)}&aula=${encodeURIComponent(
+            aula
+          )}`
+        );
+        const disp = await dispResp.json();
+
+        const disponivel = disp.disponivel ?? 0; // quantidade disponível no horário
+        const opt = document.createElement("option");
+        opt.value = e.id;
+
+        // mostra somente equipamentos com quantidade > 0
+        if (disponivel > 0) {
+          opt.textContent = `${e.nome} (Disponível: ${disponivel})`;
+          ag_equipamento.appendChild(opt);
+        }
       }
     } catch (err) {
-      console.error("Erro listar_equipamentos:", err); // log para debug
+      console.error("Erro carregar equipamentos disponíveis:", err);
       showAlert("Falha ao carregar equipamentos do servidor.");
     }
   }
 
-  /* ---------- RESUMO DO AGENDAMENTO (PASSO 4) ---------- */
+  /* ---------- RESUMO DO AGENDAMENTO ---------- */
   function preencherResumo() {
-    // monta o resumo exibido no passo 4
     resumoLista.innerHTML = "";
     const items = [
       { label: "Data", value: ag_data.value },
@@ -135,7 +145,6 @@ function initCriarAgendamento() {
 
   /* ---------- CONSULTA DE DISPONIBILIDADE ---------- */
   async function consultarDisponibilidade(data, equipamento_id, periodo, aula) {
-    // consulta se já existe conflito no backend
     const url = `/agendamentos/backend/api/disponibilidade.php?data=${encodeURIComponent(
       data
     )}&equipamento_id=${encodeURIComponent(
@@ -150,13 +159,12 @@ function initCriarAgendamento() {
     }
   }
 
-  /* ---------- CRIAÇÃO DO AGENDAMENTO (POST JSON) ---------- */
+  /* ---------- CRIAÇÃO DO AGENDAMENTO ---------- */
   async function criarAgendamento(payload) {
-    // envia JSON ao endpoint de criação
     try {
       const resp = await fetch("/agendamentos/backend/api/create.php", {
         method: "POST",
-        headers: { "Content-Type": "application/json" }, // indica JSON para backend
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
       return await resp.json();
@@ -168,42 +176,30 @@ function initCriarAgendamento() {
 
   /* ---------- HANDLERS DE NAVEGAÇÃO ---------- */
   btnProximo.addEventListener("click", async () => {
-    // avança do passo atual para o próximo
-    alertBox.innerHTML = ""; // limpa alertas anteriores
-    if (!validarPasso(step)) return; // impede avançar sem validar
+    alertBox.innerHTML = "";
+    if (!validarPasso(step)) return;
 
-    // comportamento extra: antes de avançar do passo 3 para 4, podemos checar disponibilidade
-    if (step === 3) {
-      // checar disponibilidade antes de permitir ir para confirmação
-      const d = ag_data.value,
-        eq = ag_equipamento.value,
-        p = ag_periodo.value,
-        a = ag_aula.value;
-      const disp = await consultarDisponibilidade(d, eq, p, a);
-      if (disp.error) {
-        showAlert(disp.error);
-        return;
-      }
-      if (disp.ocupado) {
-        showAlert("Este horário já está ocupado para este equipamento.");
-        return;
-      }
+    if (step === 2) {
+      // quando usuário avançar do passo 2 -> 3, carrega equipamentos disponíveis
+      await carregarEquipamentosDisponiveis(
+        ag_data.value,
+        ag_periodo.value,
+        ag_aula.value
+      );
     }
 
     step++;
-    if (step === 4) preencherResumo(); // preparar resumo ao entrar no passo 4
-    mostrarPasso(step); // atualizar UI
+    if (step === 4) preencherResumo();
+    mostrarPasso(step);
   });
 
   btnVoltar.addEventListener("click", () => {
-    // retrocede uma etapa
     alertBox.innerHTML = "";
     if (step > 1) step--;
     mostrarPasso(step);
   });
 
   btnNovo.addEventListener("click", () => {
-    // reinicia wizard mantendo modal aberto
     form.reset();
     step = 1;
     alertBox.innerHTML = "";
@@ -211,39 +207,34 @@ function initCriarAgendamento() {
   });
 
   btnFecharFinal.addEventListener("click", () => {
-    // fecha e recarrega para forçar atualização da lista de agendamentos
     location.reload();
   });
 
-  /* ---------- SUBMIT: FINALIZAÇÃO DO AGENDAMENTO ---------- */
   form.addEventListener("submit", async (e) => {
-    e.preventDefault(); // impede comportamento padrão do form
-
-    // coleta valores
+    e.preventDefault();
     const d = ag_data.value,
       eq = ag_equipamento.value,
       q = Number(ag_quantidade.value),
       p = ag_periodo.value,
       a = ag_aula.value;
 
-    // valida novamente no submit por segurança
     if (!d || !eq || !q || !p || !a) {
       showAlert("Dados incompletos");
       return;
     }
 
-    // verifica disponibilidade antes de criar (duplicidade de checagem é intencional)
     const disp = await consultarDisponibilidade(d, eq, p, a);
     if (disp.error) {
       showAlert(disp.error);
       return;
     }
-    if (disp.ocupado) {
-      showAlert("Este horário já está ocupado para este equipamento.");
+    if ((disp.disponivel ?? 0) < q) {
+      showAlert(
+        `Somente ${disp.disponivel ?? 0} unidade(s) disponíveis neste horário.`
+      );
       return;
     }
 
-    // envia criação
     const res = await criarAgendamento({
       data: d,
       equipamento_id: eq,
@@ -256,12 +247,11 @@ function initCriarAgendamento() {
       return;
     }
 
-    showAlert("Agendamento criado com sucesso!", "success"); // confirma sucesso
-    step = 5; // vai para tela de conclusão
+    showAlert("Agendamento criado com sucesso!", "success");
+    step = 5;
     mostrarPasso(step);
   });
 
-  /* ---------- FUNÇÃO PARA RESETAR O WIZARD ---------- */
   window.resetAgendamentoWizard = function () {
     form.reset();
     step = 1;
@@ -270,22 +260,16 @@ function initCriarAgendamento() {
     mostrarPasso(step);
   };
 
-  /* ---------- EVENTO PARA RESETAR AO FECHAR MODAL ---------- */
-  const modal = document.getElementById("modalAgendamento"); // obtém o modal
-  modal.addEventListener("hidden.bs.modal", () => { 
-    window.resetAgendamentoWizard(); // reseta o wizard ao fechar
+  const modal = document.getElementById("modalAgendamento");
+  modal.addEventListener("hidden.bs.modal", () => {
+    window.resetAgendamentoWizard();
   });
 
   /* ---------- INICIALIZAÇÃO ---------- */
-  mostrarPasso(step); // mostra passo inicial
-  carregarEquipamentos(); // carrega equipamentos ao iniciar
+  mostrarPasso(step);
 }
-
-/* Compatibilidade com carregamento dinâmico: executa init imediatamente se DOM já estiver pronto */
 if (document.readyState === "loading") {
-  // se DOM ainda não pronto, aguarda evento
   document.addEventListener("DOMContentLoaded", initCriarAgendamento);
 } else {
-  // se DOM já carregado (script injetado depois), inicia imediatamente
   initCriarAgendamento();
 }

@@ -1,77 +1,75 @@
 <?php
-// Garante sessão ativa antes de acessar dados do usuário.
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Carrega dependências de banco.
 require_once('../config/database.php');
-
-// Define saída JSON.
 header('Content-Type: application/json');
 
-// Verifica autenticação básica.
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
     echo json_encode(['error' => 'Usuário não autenticado']);
     exit;
 }
 
-// Aceita apenas requisições GET.
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(405);
     echo json_encode(['error' => 'Método não permitido']);
     exit;
 }
 
-// Extrai os parâmetros enviados pelo frontend.
 $data = $_GET['data'] ?? null;
 $equipamento = $_GET['equipamento_id'] ?? null;
 $aula = $_GET['aula'] ?? null;
 $periodo = $_GET['periodo'] ?? null;
 
-// Valida presença de todos os parâmetros obrigatórios.
 if (!$data || !$equipamento || !$aula || !$periodo) {
     echo json_encode(['error' => 'Parâmetros inválidos']);
     exit;
 }
 
 try {
-    // Abre conexão.
     $conn = getConnection();
 
-    // Verifica se existe algum agendamento no mesmo horário para o mesmo equipamento.
-    $stmt = $conn->prepare("
-        SELECT COUNT(*) AS total
-        FROM agendamentos
-        WHERE data = :data
-          AND equipamento_id = :equip
-          AND aula = :aula
-          AND periodo = :periodo
-    ");
+    // 1) Obtém quantidade total do equipamento
+    $stmt = $conn->prepare("SELECT quantidade FROM equipamentos WHERE id = :id");
+    $stmt->execute([':id' => $equipamento]);
+    $equipInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Executa consulta usando parâmetros nomeados para segurança.
+    if (!$equipInfo) {
+        echo json_encode(['error' => 'Equipamento não encontrado']);
+        exit;
+    }
+
+    $quantidadeTotal = (int)$equipInfo['quantidade'];
+
+    // 2) Soma quantas unidades já foram reservadas para o horário
+    $stmt = $conn->prepare("
+        SELECT SUM(quantidade) AS total_agendado
+        FROM agendamentos
+        WHERE equipamento_id = :equip
+          AND data = :data
+          AND periodo = :periodo
+          AND aula = :aula
+    ");
     $stmt->execute([
-        ':data' => $data,
         ':equip' => $equipamento,
-        ':aula' => $aula,
-        ':periodo' => $periodo
+        ':data' => $data,
+        ':periodo' => $periodo,
+        ':aula' => $aula
     ]);
 
-    // Obtém total de conflitos encontrados.
-    $total = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    $totalAgendado = (int)($stmt->fetch(PDO::FETCH_ASSOC)['total_agendado'] ?? 0);
 
-    // Retorna somente o que o frontend precisa.
+    // 3) Calcula unidades disponíveis
+    $disponivel = $quantidadeTotal - $totalAgendado;
+
     echo json_encode([
-        // Indica se já existe conflito.
-        'ocupado' => $total > 0
+        'disponivel' => $disponivel,
+        'ocupado' => $disponivel <= 0
     ]);
 } catch (Exception $e) {
-
-    // Registra erro interno.
     http_response_code(500);
     error_log("Erro disponibilidade: " . $e->getMessage());
-
-    // Retorna erro genérico para o frontend.
     echo json_encode(['error' => 'Erro ao verificar disponibilidade']);
 }
