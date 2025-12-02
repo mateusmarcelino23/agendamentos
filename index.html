@@ -24,129 +24,21 @@
   </head>
 
   <body>
-    <!-- Versão para mobile -->
-
-    <div class="login-container">
-      <!-- Cabeçalho com logos -->
-      <div class="login-header">
-        <img
-          src="frontend/assets/img/logo_escola.png"
-          alt="Logo Miguel Vicente Cury"
-          class="logo"
-        />
-        <img
-          src="frontend/assets/img/saeelogo.png"
-          alt="Logo SAEE"
-          class="logo saee-logo"
-        />
-        <img
-          src="frontend/assets/img/logo_seduc.png"
-          alt="Secretaria de Educação"
-          class="logo"
-        />
-      </div>
-
-      <!-- Animação do robozinho dando oi -->
-      <div id="robozinho"></div>
-
-      <!-- Caixa de login -->
-      <div class="login-box">
-        <!-- Botão de Login com Google -->
-        <a id="google-login-btn" href="#" class="google-btn">
-          <svg width="18" height="18" viewBox="0 0 18 18">
-            <path
-              fill="#4285F4"
-              d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"
-            />
-            <path
-              fill="#34A853"
-              d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"
-            />
-            <path
-              fill="#FBBC05"
-              d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"
-            />
-            <path
-              fill="#EA4335"
-              d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"
-            />
-          </svg>
-          Login do Professor
-          <!-- Ícone de seta Bootstrap -->
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="26"
-            height="26"
-            fill="currentColor"
-            class="bi bi-arrow-right-circle"
-            viewBox="0 0 16 16"
-            style="margin-right: 8px"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"
-            />
-          </svg>
-        </a>
-      </div>
-
-      <!-- Link de Sobre abaixo -->
-      <div style="text-align: center">
-        <u
-          class="about-link"
-          onclick="window.location.href='frontend/pages/sobre.php'"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-info-circle"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
-            />
-            <path
-              d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"
-            />
-          </svg>
-          Sobre o SAEE (PDF)
-        </u>
-      </div>
-    </div>
-
-    <!-- Versão para desktop -->
-
-    <!-- Container da versão desktop -->
-    <div class="desktop-login-container">
-      <!-- Lado esquerdo: formulário -->
-      <div class="desktop-left-side">
-        <!-- Cabeçalho com logos (versão desktop) -->
-        <div class="desktop-header">
-          <img
-            src="frontend/assets/img/logo_escola.png"
-            alt="Logo Miguel Vicente Cury"
-            class="desktop-logo"
-          />
-          <img
-            src="frontend/assets/img/saeelogo.png"
-            alt="Logo SAEE"
-            class="desktop-logo saee-logo-desktop"
-          />
-          <img
-            src="frontend/assets/img/logo_seduc.png"
-            alt="Secretaria de Educação"
-            class="desktop-logo"
-          />
+    <div class="login-layout">
+      <div class="login-side">
+        <!-- Cabeçalho com logos -->
+        <div class="login-header">
+          <img src="frontend/assets/img/logo_escola.png" class="logo" />
+          <img src="frontend/assets/img/saeelogo.png" class="logo saee-logo" />
+          <img src="frontend/assets/img/logo_seduc.png" class="logo" />
         </div>
 
-        <!-- Animação do robozinho -->
-        <div id="desktop-robozinho"></div>
+        <!-- Robozinho -->
+        <div id="robozinho"></div>
 
-        <!-- Caixa de login -->
-        <div class="desktop-login-box">
-          <a id="google-login-btn-desktop" href="#" class="desktop-google-btn">
+        <!-- Botão de login -->
+        <div class="login-box">
+          <a id="google-login-btn" href="#" class="google-btn">
             <svg width="18" height="18" viewBox="0 0 18 18">
               <path
                 fill="#4285F4"
@@ -183,50 +75,43 @@
           </a>
         </div>
 
-        <!-- Link de Sobre -->
-        <div class="desktop-about-link-container">
-          <u
-            class="desktop-about-link"
-            onclick="window.location.href='frontend/pages/sobre.php'"
+        <!-- Link sobre -->
+        <u
+          class="about-link"
+          onclick="window.location.href='frontend/pages/sobre.php'"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-info-circle"
+            viewBox="0 0 16 16"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-info-circle"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
-              />
-              <path
-                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"
-              />
-            </svg>
-            Sobre o SAEE (PDF)
-          </u>
-        </div>
+            <path
+              d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
+            />
+            <path
+              d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"
+            />
+          </svg>
+          Sobre o SAEE (PDF)
+        </u>
       </div>
 
-      <!-- Lado direito: vídeo + frase -->
-      <div class="desktop-right-side">
-        <video autoplay muted loop class="desktop-background-video">
+      <!-- LADO DO VÍDEO (some em telas pequenas) -->
+      <div class="media-side">
+        <video autoplay muted loop class="background-video">
           <source
             src="frontend/assets/animations/200522-SpeedLineAnimeHol.mp4"
             type="video/mp4"
           />
         </video>
-        <div class="desktop-overlay-text">
+
+        <div class="overlay-text">
           <h1>Educação é o futuro sendo escrito hoje.</h1>
         </div>
       </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="login-footer">
-      &copy; <span id="year-desktop"></span> Mateus Marcelino dos Santos - Todos
-      os direitos reservados.
     </div>
   </body>
 

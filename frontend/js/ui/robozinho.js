@@ -12,6 +12,5 @@ function carregarRobo(containerId) {
   });
 }
 
-// Carrega os dois robozinhos
+// Carrega o robozinho
 carregarRobo("robozinho");
-carregarRobo("desktop-robozinho");
