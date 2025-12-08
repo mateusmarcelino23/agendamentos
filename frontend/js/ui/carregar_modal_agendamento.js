@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
       // Insere o modal no DOM
       document.body.insertAdjacentHTML("beforeend", html);
 
-      // Carrega o JS funcional do modal
+      // Carrega o JS funcional do modal com cache-busting
       const script = document.createElement("script");
-      script.src = "/agendamentos/frontend/js/api/criar_agendamento.js";
+      script.src = `/agendamentos/frontend/js/api/criar_agendamento.js?ts=${Date.now()}`;
       script.onload = () => {
         // ---------- RESET AUTOMÁTICO AO FECHAR ----------
         const modal = document.getElementById("modalAgendamento");

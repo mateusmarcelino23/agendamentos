@@ -201,35 +201,6 @@ async function usarEquipamento(agendamentoId, acao) {
   }
 }
 
-let calendarioInstance;
-
-function inicializarCalendario(datasComAgendamento) {
-  const calendarioEl = document.getElementById("calendario");
-  if (!calendarioEl) return;
-
-  const eventos = datasComAgendamento.map((d) => ({
-    title: `${d.total} agendamento(s)`,
-    start: d.data,
-    allDay: true,
-    extendedProps: { detalhes: d.detalhes }, // aqui você passa os professores e aulas
-  }));
-
-  calendarioInstance = new FullCalendar.Calendar(calendarioEl, {
-    locale: "pt-br",
-    initialView: "dayGridMonth",
-    height: 500,
-    events: eventos,
-    eventClick: function (info) {
-      abrirDetalhesDoDia(
-        info.event.startStr,
-        info.event.extendedProps.detalhes
-      );
-    },
-  });
-
-  calendarioInstance.render();
-}
-
 function abrirDetalhesDoDia(dataSelecionada, detalhes) {
   const container = document.getElementById("utilizacao-atual");
   container.innerHTML = ""; // limpa antes

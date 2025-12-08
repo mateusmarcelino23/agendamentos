@@ -1,37 +1,37 @@
-/* Função principal de inicialização: cria handlers e estado do wizard */
+/* Função principal de inicialização do wizard */
 function initCriarAgendamento() {
-  // inicializa todo o comportamento do formulário e wizard
+  /* ---------- ESTADO ---------- */
+  let step = 1; // etapa atual do wizard
+  const MAX_AULAS = 6; // limite de aulas por turno
 
-  /* ---------- ESTADO E ELEMENTOS ---------- */
-  let step = 1; // controla etapa atual do wizard
-
-  const steps = document.querySelectorAll(".step"); // nó-lista de todas as sections de etapa
-  const btnProximo = document.getElementById("btn-proximo");
-  const btnVoltar = document.getElementById("btn-voltar");
-  const btnFinalizar = document.getElementById("btn-finalizar");
-  const btnNovo = document.getElementById("btn-novo");
-  const btnFecharFinal = document.getElementById("btn-fechar-final");
-  const alertBox = document.getElementById("alert-agendamento");
-  const form = document.getElementById("form-criar-agendamento");
-
-  const ag_data = document.getElementById("ag_data");
-  const ag_equipamento = document.getElementById("ag_equipamento");
-  const ag_quantidade = document.getElementById("ag_quantidade");
-  const ag_periodo = document.getElementById("ag_periodo");
-  const ag_aula = document.getElementById("ag_aula");
-  const resumoLista = document.getElementById("resumo-agendamento");
+  /* ---------- ELEMENTOS FIXOS ---------- */
+  const steps = document.querySelectorAll(".step"); // lista de todos os steps
+  const btnProximo = document.getElementById("btn-proximo"); // botão próximo
+  const btnVoltar = document.getElementById("btn-voltar"); // botão anterior
+  const btnFinalizar = document.getElementById("btn-finalizar"); // botão finalizar
+  const btnNovo = document.getElementById("btn-novo"); // botão novo agendamento
+  const btnFecharFinal = document.getElementById("btn-fechar-final"); // botão fechar final
+  const alertBox = document.getElementById("alert-agendamento"); // div de alertas
+  const form = document.getElementById("form-criar-agendamento"); // formulário principal
+  const ag_data = document.getElementById("ag_data"); // input de data
+  const listaAulas = document.getElementById("lista-aulas"); // container de linhas de aula
+  const btnAdicionarAula = document.getElementById("btn-adicionar-aula"); // botão adicionar aula
+  const listaEquipamentos = document.getElementById("lista-equipamentos"); // container de equipamentos
+  const resumoLista = document.getElementById("resumo-agendamento"); // container de resumo
 
   /* ---------- HELPERS ---------- */
+  // exibe alerta
   function showAlert(msg, type = "danger") {
     alertBox.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
   }
 
+  // mostra o step atual
   function mostrarPasso(n) {
-    steps.forEach((s) => s.classList.add("d-none"));
+    steps.forEach((s) => s.classList.add("d-none")); // oculta todos os steps
     const el = document.getElementById(`step-${n}`);
-    if (el) el.classList.remove("d-none");
+    if (el) el.classList.remove("d-none"); // mostra o step atual
 
-    btnVoltar.disabled = n === 1;
+    btnVoltar.disabled = n === 1; // desabilita voltar no primeiro passo
     btnProximo.classList.toggle("d-none", n >= 4);
     btnFinalizar.classList.toggle("d-none", n !== 4);
     btnNovo.classList.toggle("d-none", n !== 5);
@@ -50,6 +50,137 @@ function initCriarAgendamento() {
     }
   }
 
+  // cria uma nova linha de aula (passo 2)
+  function criarLinhaAula(periodo = "", aula = "") {
+    const linha = document.createElement("div");
+    linha.className = "linha-aula row mt-2 align-items-end";
+
+    // Select de período
+    const divPeriodo = document.createElement("div");
+    divPeriodo.className = "col-5";
+    const selectPeriodo = document.createElement("select");
+    selectPeriodo.className = "form-control ag_periodo";
+    selectPeriodo.innerHTML = `
+      <option value="">Selecione...</option>
+      <option value="manha">Manhã</option>
+      <option value="tarde">Tarde</option>
+      <option value="noite">Noite</option>
+    `;
+    selectPeriodo.value = periodo;
+    divPeriodo.appendChild(selectPeriodo);
+
+    // Select de aula
+    const divAula = document.createElement("div");
+    divAula.className = "col-5";
+    const selectAula = document.createElement("select");
+    selectAula.className = "form-control ag_aula";
+    selectAula.innerHTML = `
+      <option value="">Selecione...</option>
+      <option value="1">1ª Aula</option>
+      <option value="2">2ª Aula</option>
+      <option value="3">3ª Aula</option>
+      <option value="4">4ª Aula</option>
+      <option value="5">5ª Aula</option>
+      <option value="6">6ª Aula</option>
+    `;
+    selectAula.value = aula;
+    divAula.appendChild(selectAula);
+
+    // Botão remover
+    const divBtn = document.createElement("div");
+    divBtn.className = "col-2";
+    if (listaAulas.children.length > 0) {
+      const btnRemover = document.createElement("button");
+      btnRemover.type = "button";
+      btnRemover.className = "btn btn-danger btn-remover";
+      btnRemover.textContent = "Remover";
+      btnRemover.addEventListener("click", () => {
+        linha.remove(); // remove linha
+        atualizarEquipamentos(); // atualiza passo 3
+      });
+      divBtn.appendChild(btnRemover);
+    }
+
+    linha.appendChild(divPeriodo);
+    linha.appendChild(divAula);
+    linha.appendChild(divBtn);
+
+    listaAulas.appendChild(linha);
+  }
+
+  // cria linhas de equipamentos para cada aula (passo 3)
+  async function atualizarEquipamentos() {
+    listaEquipamentos.innerHTML = ""; // limpa container
+
+    const linhasAulas = listaAulas.querySelectorAll(".linha-aula");
+    const data = ag_data.value;
+
+    for (const linha of linhasAulas) {
+      const periodo = linha.querySelector(".ag_periodo").value;
+      const aula = linha.querySelector(".ag_aula").value;
+      if (!periodo || !aula) continue;
+
+      // cria container da linha
+      const divLinha = document.createElement("div");
+      divLinha.className = "linha-equipamento mt-3";
+
+      // label Turno/Aula
+      const label = document.createElement("label");
+      label.textContent = `Turno: ${periodo} | Aula: ${aula}`;
+      divLinha.appendChild(label);
+
+      // select de equipamento
+      const select = document.createElement("select");
+      select.className = "form-control ag_equipamento mt-1";
+      select.innerHTML = `<option value="">Carregando...</option>`;
+      divLinha.appendChild(select);
+
+      // input de quantidade
+      const inputQtd = document.createElement("input");
+      inputQtd.type = "number";
+      inputQtd.min = 1;
+      inputQtd.value = 1;
+      inputQtd.className = "form-control mt-2 ag_quantidade";
+      divLinha.appendChild(inputQtd);
+
+      listaEquipamentos.appendChild(divLinha);
+
+      // popula equipamentos disponíveis
+      try {
+        const resp = await fetch(
+          "/agendamentos/backend/api/listar_equipamentos.php"
+        );
+        const json = await resp.json();
+        select.innerHTML = `<option value="">Selecione...</option>`;
+        if (json?.equipamentos) {
+          for (const e of json.equipamentos) {
+            const dispResp = await fetch(
+              `/agendamentos/backend/api/disponibilidade.php?data=${encodeURIComponent(
+                data
+              )}&equipamento_id=${encodeURIComponent(
+                e.id
+              )}&periodo=${encodeURIComponent(
+                periodo
+              )}&aula=${encodeURIComponent(aula)}`
+            );
+            const disp = await dispResp.json();
+            const disponivel = disp.disponivel ?? 0;
+            if (disponivel > 0) {
+              const opt = document.createElement("option");
+              opt.value = e.id;
+              opt.textContent = `${e.nome} (Disponível: ${disponivel})`;
+              select.appendChild(opt);
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Erro ao carregar equipamentos:", err);
+        select.innerHTML = `<option value="">Erro ao carregar</option>`;
+      }
+    }
+  }
+
+  // valida passo atual
   function validarPasso(n) {
     if (n === 1) {
       if (!ag_data.value) {
@@ -63,103 +194,65 @@ function initCriarAgendamento() {
       }
     }
     if (n === 2) {
-      // passo 2 agora valida período e aula antes de mostrar equipamentos
-      if (!ag_periodo.value || !ag_aula.value) {
-        showAlert("Selecione período e aula primeiro!");
+      const linhas = listaAulas.querySelectorAll(".linha-aula");
+      if (linhas.length === 0) {
+        showAlert("Adicione ao menos uma aula!");
         return false;
+      }
+      const combinacoes = new Set();
+      for (const linha of linhas) {
+        const p = linha.querySelector(".ag_periodo").value;
+        const a = linha.querySelector(".ag_aula").value;
+        if (!p || !a) {
+          showAlert("Preencha período e aula em todas as linhas!");
+          return false;
+        }
+        const key = `${p}-${a}`;
+        if (combinacoes.has(key)) {
+          showAlert("Não repita o mesmo período e aula!");
+          return false;
+        }
+        combinacoes.add(key);
       }
     }
     if (n === 3) {
-      if (!ag_quantidade.value || Number(ag_quantidade.value) < 1) {
-        showAlert("Informe uma quantidade válida!");
-        return false;
+      const linhas = listaEquipamentos.querySelectorAll(".linha-equipamento");
+      for (const linha of linhas) {
+        const eq = linha.querySelector(".ag_equipamento").value;
+        const qtd = Number(linha.querySelector(".ag_quantidade").value);
+        if (!eq || !qtd || qtd < 1) {
+          showAlert("Escolha equipamento e quantidade válidos!");
+          return false;
+        }
       }
     }
     return true;
   }
 
-  /* ---------- CARREGA EQUIPAMENTOS DISPONÍVEIS ---------- */
-  async function carregarEquipamentosDisponiveis(data, periodo, aula) {
-    try {
-      // busca todos os equipamentos cadastrados
-      const resp = await fetch(
-        "/agendamentos/backend/api/listar_equipamentos.php"
-      );
-      const json = await resp.json();
-      ag_equipamento.innerHTML = `<option value="">Selecione...</option>`;
-
-      if (!json || !Array.isArray(json.equipamentos)) {
-        showAlert("Erro ao carregar equipamentos", "warning");
-        return;
-      }
-
-      // Para cada equipamento, consulta a disponibilidade no horário selecionado
-      for (const e of json.equipamentos) {
-        const dispResp = await fetch(
-          `/agendamentos/backend/api/disponibilidade.php?data=${encodeURIComponent(
-            data
-          )}&equipamento_id=${encodeURIComponent(
-            e.id
-          )}&periodo=${encodeURIComponent(periodo)}&aula=${encodeURIComponent(
-            aula
-          )}`
-        );
-        const disp = await dispResp.json();
-
-        const disponivel = disp.disponivel ?? 0; // quantidade disponível no horário
-        const opt = document.createElement("option");
-        opt.value = e.id;
-
-        // mostra somente equipamentos com quantidade > 0
-        if (disponivel > 0) {
-          opt.textContent = `${e.nome} (Disponível: ${disponivel})`;
-          ag_equipamento.appendChild(opt);
-        }
-      }
-    } catch (err) {
-      console.error("Erro carregar equipamentos disponíveis:", err);
-      showAlert("Falha ao carregar equipamentos do servidor.");
-    }
-  }
-
-  /* ---------- RESUMO DO AGENDAMENTO ---------- */
+  // preenche resumo (passo 4)
   function preencherResumo() {
     resumoLista.innerHTML = "";
-    const items = [
-      { label: "Data", value: ag_data.value },
-      {
-        label: "Equipamento",
-        value: ag_equipamento.options[ag_equipamento.selectedIndex]?.text || "",
-      },
-      { label: "Quantidade", value: ag_quantidade.value },
-      { label: "Período", value: ag_periodo.value },
-      { label: "Aula", value: ag_aula.value },
-    ];
-    items.forEach((it) => {
+    const data = ag_data.value;
+    const linhasAulas = listaAulas.querySelectorAll(".linha-aula");
+    const linhasEquip =
+      listaEquipamentos.querySelectorAll(".linha-equipamento");
+
+    linhasAulas.forEach((linha, i) => {
+      const p = linha.querySelector(".ag_periodo").value;
+      const a = linha.querySelector(".ag_aula").value;
+      const eqLinha = linhasEquip[i];
+      const eq =
+        eqLinha.querySelector(".ag_equipamento").selectedOptions[0]?.text || "";
+      const qtd = eqLinha.querySelector(".ag_quantidade").value;
+
       const li = document.createElement("li");
       li.className = "list-group-item";
-      li.innerHTML = `<b>${it.label}:</b> ${it.value}`;
+      li.innerHTML = `<b>Data:</b> ${data} <br><b>Turno:</b> ${p} <b>Aula:</b> ${a} <br><b>Equipamento:</b> ${eq} <b>Quantidade:</b> ${qtd}`;
       resumoLista.appendChild(li);
     });
   }
 
-  /* ---------- CONSULTA DE DISPONIBILIDADE ---------- */
-  async function consultarDisponibilidade(data, equipamento_id, periodo, aula) {
-    const url = `/agendamentos/backend/api/disponibilidade.php?data=${encodeURIComponent(
-      data
-    )}&equipamento_id=${encodeURIComponent(
-      equipamento_id
-    )}&periodo=${encodeURIComponent(periodo)}&aula=${encodeURIComponent(aula)}`;
-    try {
-      const resp = await fetch(url);
-      return await resp.json();
-    } catch (err) {
-      console.error("Erro disponibilidade:", err);
-      return { error: "Falha ao verificar disponibilidade" };
-    }
-  }
-
-  /* ---------- CRIAÇÃO DO AGENDAMENTO ---------- */
+  // cria agendamento via API
   async function criarAgendamento(payload) {
     try {
       const resp = await fetch("/agendamentos/backend/api/create.php", {
@@ -174,18 +267,21 @@ function initCriarAgendamento() {
     }
   }
 
-  /* ---------- HANDLERS DE NAVEGAÇÃO ---------- */
+  /* ---------- HANDLERS ---------- */
+  btnAdicionarAula.addEventListener("click", () => {
+    if (listaAulas.children.length >= MAX_AULAS) {
+      showAlert(`Máximo de ${MAX_AULAS} aulas por turno`);
+      return;
+    }
+    criarLinhaAula();
+  });
+
   btnProximo.addEventListener("click", async () => {
     alertBox.innerHTML = "";
     if (!validarPasso(step)) return;
 
     if (step === 2) {
-      // quando usuário avançar do passo 2 -> 3, carrega equipamentos disponíveis
-      await carregarEquipamentosDisponiveis(
-        ag_data.value,
-        ag_periodo.value,
-        ag_aula.value
-      );
+      await atualizarEquipamentos(); // gera linhas de equipamento
     }
 
     step++;
@@ -201,8 +297,10 @@ function initCriarAgendamento() {
 
   btnNovo.addEventListener("click", () => {
     form.reset();
+    listaAulas.innerHTML = "";
+    listaEquipamentos.innerHTML = "";
+    resumoLista.innerHTML = "";
     step = 1;
-    alertBox.innerHTML = "";
     mostrarPasso(step);
   });
 
@@ -212,36 +310,49 @@ function initCriarAgendamento() {
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const d = ag_data.value,
-      eq = ag_equipamento.value,
-      q = Number(ag_quantidade.value),
-      p = ag_periodo.value,
-      a = ag_aula.value;
+    alertBox.innerHTML = "";
 
-    if (!d || !eq || !q || !p || !a) {
-      showAlert("Dados incompletos");
-      return;
-    }
+    const data = ag_data.value;
+    const linhasEquip =
+      listaEquipamentos.querySelectorAll(".linha-equipamento");
 
-    const disp = await consultarDisponibilidade(d, eq, p, a);
-    if (disp.error) {
-      showAlert(disp.error);
-      return;
-    }
-    if ((disp.disponivel ?? 0) < q) {
-      showAlert(
-        `Somente ${disp.disponivel ?? 0} unidade(s) disponíveis neste horário.`
+    // monta payload de agendamentos
+    const payload = [];
+    for (const linha of linhasEquip) {
+      const periodoAulaIndex = Array.from(listaEquipamentos.children).indexOf(
+        linha
       );
-      return;
+      const aulaLinha = listaAulas.children[periodoAulaIndex];
+      const periodo = aulaLinha.querySelector(".ag_periodo").value;
+      const aula = aulaLinha.querySelector(".ag_aula").value;
+      const equipamento_id = linha.querySelector(".ag_equipamento").value;
+      const quantidade = Number(linha.querySelector(".ag_quantidade").value);
+
+      payload.push({ data, periodo, aula, equipamento_id, quantidade });
     }
 
-    const res = await criarAgendamento({
-      data: d,
-      equipamento_id: eq,
-      quantidade: q,
-      periodo: p,
-      aula: a,
-    });
+    // valida disponibilidade de cada equipamento
+    for (const item of payload) {
+      const resp = await fetch(
+        `/agendamentos/backend/api/disponibilidade.php?data=${encodeURIComponent(
+          item.data
+        )}&equipamento_id=${encodeURIComponent(
+          item.equipamento_id
+        )}&periodo=${encodeURIComponent(
+          item.periodo
+        )}&aula=${encodeURIComponent(item.aula)}`
+      );
+      const disp = await resp.json();
+      if ((disp.disponivel ?? 0) < item.quantidade) {
+        showAlert(
+          `Equipamento ${item.equipamento_id} tem apenas ${disp.disponivel} unidade(s) disponível(is) para ${item.periodo} - Aula ${item.aula}`
+        );
+        return;
+      }
+    }
+
+    // envia payload para criar agendamento
+    const res = await criarAgendamento(payload);
     if (res.error) {
       showAlert(res.error);
       return;
@@ -252,22 +363,23 @@ function initCriarAgendamento() {
     mostrarPasso(step);
   });
 
-  window.resetAgendamentoWizard = function () {
-    form.reset();
-    step = 1;
-    alertBox.innerHTML = "";
-    resumoLista.innerHTML = "";
-    mostrarPasso(step);
-  };
-
+  // reseta wizard ao fechar modal
   const modal = document.getElementById("modalAgendamento");
   modal.addEventListener("hidden.bs.modal", () => {
-    window.resetAgendamentoWizard();
+    form.reset();
+    listaAulas.innerHTML = "";
+    listaEquipamentos.innerHTML = "";
+    resumoLista.innerHTML = "";
+    step = 1;
+    mostrarPasso(step);
   });
 
   /* ---------- INICIALIZAÇÃO ---------- */
+  criarLinhaAula(); // cria linha inicial
   mostrarPasso(step);
 }
+
+/* ---------- CARREGA JS QUANDO DOM ESTÁ PRONTO ---------- */
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initCriarAgendamento);
 } else {

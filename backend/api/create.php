@@ -1,112 +1,160 @@
 <?php
-// Garante sessão ativa para identificar o professor.
+// Garante que a sessão esteja ativa
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Importa conexão com banco.
+// Importa conexão com banco
 require_once('../config/database.php');
 
-// Define saída JSON por padrão.
+// Define resposta como JSON
 header('Content-Type: application/json');
 
-// Bloqueia requisição caso usuário não esteja autenticado.
+// Bloqueia acesso se usuário não estiver logado
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
     echo json_encode(['error' => 'Usuário não autenticado']);
     exit;
 }
 
-// Aceita exclusivamente requisições POST contendo JSON.
+// Aceita apenas requisições POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['error' => 'Método não permitido']);
     exit;
 }
 
-// Converte corpo da requisição em array associativo.
+// Lê dados JSON enviados pelo frontend
 $input = json_decode(file_get_contents('php://input'), true);
 
-// Extrai os campos enviados pelo frontend.
-$data         = $input['data'] ?? null;
-$equipamento  = $input['equipamento_id'] ?? null;
-$quantidade   = (int)($input['quantidade'] ?? 1);
-$periodo      = $input['periodo'] ?? null;
-$aula         = $input['aula'] ?? null;
-
-// Obtém ID do professor diretamente da sessão ativa.
-$professor_id = $_SESSION['user_id'];
-
-// Valida presença de todos os campos obrigatórios.
-if (!$data || !$equipamento || !$periodo || !$aula || $quantidade < 1) {
-    echo json_encode(['error' => 'Dados incompletos']);
+// Verifica se é um array de agendamentos
+if (!is_array($input) || empty($input)) {
+    echo json_encode(['error' => 'Formato inválido']);
     exit;
 }
 
+// ID do professor logado
+$professor_id = $_SESSION['user_id'];
+
 try {
-    // Abre conexão com banco.
+    // Conecta ao banco
     $conn = getConnection();
 
-    // 1) Obtém a quantidade total disponível do equipamento.
-    $stmt = $conn->prepare("SELECT quantidade FROM equipamentos WHERE id = :id");
-    $stmt->execute([':id' => $equipamento]);
-    $equipInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Inicia transação para garantir consistência
+    $conn->beginTransaction();
 
-    if (!$equipInfo) {
-        echo json_encode(['error' => 'Equipamento não encontrado']);
-        exit;
+    // Array para guardar o que foi inserido com sucesso
+    $registrados = [];
+
+    // Array para controlar equipamentos já reservados no mesmo envio
+    $reservasDoEnvio = [];
+
+    foreach ($input as $index => $item) {
+        // Extrai campos individuais
+        $data        = $item['data'] ?? null;
+        $equipamento = $item['equipamento_id'] ?? null;
+        $quantidade  = (int)($item['quantidade'] ?? 1);
+        $periodo     = $item['periodo'] ?? null;
+        $aula        = $item['aula'] ?? null;
+
+        // Validação básica
+        if (!$data || !$equipamento || !$periodo || !$aula || $quantidade < 1) {
+            $conn->rollBack();
+            echo json_encode([
+                'error' => "Dados incompletos no item $index"
+            ]);
+            exit;
+        }
+
+        // 1) Consulta quantidade total do equipamento
+        $stmt = $conn->prepare("SELECT quantidade FROM equipamentos WHERE id = :id");
+        $stmt->execute([':id' => $equipamento]);
+        $equipInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$equipInfo) {
+            $conn->rollBack();
+            echo json_encode([
+                'error' => "Equipamento $equipamento não encontrado no item $index"
+            ]);
+            exit;
+        }
+
+        $quantidadeTotal = (int)$equipInfo['quantidade'];
+
+        // 2) Soma unidades já reservadas no banco
+        $stmt = $conn->prepare("
+            SELECT SUM(quantidade) AS total_agendado
+            FROM agendamentos
+            WHERE equipamento_id = :equip
+              AND data = :data
+              AND periodo = :periodo
+              AND aula = :aula
+        ");
+        $stmt->execute([
+            ':equip' => $equipamento,
+            ':data' => $data,
+            ':periodo' => $periodo,
+            ':aula' => $aula
+        ]);
+        $totalAgendado = (int)($stmt->fetch(PDO::FETCH_ASSOC)['total_agendado'] ?? 0);
+
+        // 3) Soma unidades já reservadas no mesmo envio
+        $chaveReserva = "$data|$periodo|$aula|$equipamento";
+        $jaReservadoNoEnvio = $reservasDoEnvio[$chaveReserva] ?? 0;
+
+        // Calcula unidades disponíveis considerando banco + envio atual
+        $disponivel = $quantidadeTotal - $totalAgendado - $jaReservadoNoEnvio;
+
+        if ($quantidade > $disponivel) {
+            $conn->rollBack();
+            echo json_encode([
+                'error' => "Somente $disponivel unidade(s) disponíveis para o item $index"
+            ]);
+            exit;
+        }
+
+        // 4) Insere agendamento
+        $stmt = $conn->prepare("
+            INSERT INTO agendamentos
+            (equipamento_id, professor_id, data, aula, periodo, quantidade, status)
+            VALUES (:equip, :prof, :data, :aula, :periodo, :quant, 0)
+        ");
+        $stmt->execute([
+            ':equip' => $equipamento,
+            ':prof' => $professor_id,
+            ':data' => $data,
+            ':aula' => $aula,
+            ':periodo' => $periodo,
+            ':quant' => $quantidade
+        ]);
+
+        // Atualiza reservas do envio
+        $reservasDoEnvio[$chaveReserva] = ($jaReservadoNoEnvio + $quantidade);
+
+        // Adiciona item na lista de registrados
+        $registrados[] = [
+            'data' => $data,
+            'periodo' => $periodo,
+            'aula' => $aula,
+            'equipamento_id' => $equipamento,
+            'quantidade' => $quantidade
+        ];
     }
 
-    $quantidadeTotal = (int)$equipInfo['quantidade'];
+    // Confirma todos os inserts
+    $conn->commit();
 
-    // 2) Verifica quantas unidades já estão agendadas para o mesmo horário.
-    $stmt = $conn->prepare("
-        SELECT SUM(quantidade) AS total_agendado
-        FROM agendamentos
-        WHERE equipamento_id = :equip
-          AND data = :data
-          AND periodo = :periodo
-          AND aula = :aula
-    ");
-    $stmt->execute([
-        ':equip' => $equipamento,
-        ':data' => $data,
-        ':periodo' => $periodo,
-        ':aula' => $aula
-    ]);
-
-    $totalAgendado = (int)($stmt->fetch(PDO::FETCH_ASSOC)['total_agendado'] ?? 0);
-
-    // 3) Calcula quantas unidades ainda podem ser reservadas.
-    $disponivel = $quantidadeTotal - $totalAgendado;
-
-    if ($quantidade > $disponivel) {
-        echo json_encode(['error' => "Somente $disponivel unidade(s) disponíveis para este horário"]);
-        exit;
-    }
-
-    // 4) Insere o agendamento.
-    $stmt = $conn->prepare("
-        INSERT INTO agendamentos 
-        (equipamento_id, professor_id, data, aula, periodo, quantidade, status)
-        VALUES (:equip, :prof, :data, :aula, :periodo, :quant, 0)
-    ");
-
-    $stmt->execute([
-        ':equip' => $equipamento,
-        ':prof' => $professor_id,
-        ':data' => $data,
-        ':aula' => $aula,
-        ':periodo' => $periodo,
-        ':quant' => $quantidade
-    ]);
-
+    // Retorna sucesso com lista de agendamentos registrados
     echo json_encode([
         'success' => true,
-        'message' => 'Agendamento registrado com sucesso!'
+        'registrados' => $registrados
     ]);
 } catch (Exception $e) {
+    // Desfaz transação em caso de erro
+    if ($conn->inTransaction()) {
+        $conn->rollBack();
+    }
     http_response_code(500);
-    error_log("Erro create agendamento: " . $e->getMessage());
-    echo json_encode(['error' => 'Erro ao registrar agendamento']);
+    error_log("Erro create múltiplos agendamentos: " . $e->getMessage());
+    echo json_encode(['error' => 'Erro ao registrar agendamentos']);
 }

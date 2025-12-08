@@ -26,17 +26,12 @@ h3 {
 /* Mensagens e Chat */
 .mensagem-item,
 .chat-msg {
-  background: #ffffff;
+  background: #00ce0010;
   border-radius: 12px;
   padding: 15px;
   margin-bottom: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.205);
   transition: all 0.2s ease;
-}
-.mensagem-item:hover,
-.chat-msg:hover {
-  transform: scale(1.01);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 #chat-professores {

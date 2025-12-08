@@ -31,6 +31,7 @@ html {
   width: 100%;
   height: 100%;
   padding: 0;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -62,12 +63,15 @@ html {
 
 /* Robozinho */
 #robozinho {
+  position: relative;
+  top: -30px;
   width: 260px;
   height: 260px;
 }
 
 /* Botão de Google */
 .google-btn {
+  position: relative;
   background-color: #fff;
   color: #ff8c00;
   border: 2px solid #ff8c00;
@@ -79,18 +83,20 @@ html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease;
 }
 
 .google-btn:active {
   background: #ff8c00;
   color: white;
-  transform: scale(0.95);
+  transform: scale(0.90);
+  transition: transform 0.1s ease;
 }
+
 
 /* Link Sobre */
 .about-link {
-  margin-top: 40px;
+  margin-top: 70px;
   color: #ff8c00;
   cursor: pointer;
   font-weight: 500;
@@ -150,10 +156,28 @@ html {
     top: -38px;
   }
 
+  /* Ajustes de versão desktop para logos maiores */
+  #robozinho {
+    top: -70px;
+    width: 330px;
+    height: 330px;
+    margin-bottom: 0.1rem;
+  }
+
+  .google-btn {
+    position: relative;
+    width: calc(50vw - 8rem);
+    top: -40px;
+  }
+
   .google-btn:hover {
     background: #ff8c00;
     color: white;
     transform: scale(1.02);
+  }
+
+  .about-link {
+    margin-top: 40px;
   }
 
   /* Vídeo aparece */
@@ -188,20 +212,6 @@ html {
     margin-bottom: 1rem;
   }
 
-  /* Ajustes de versão desktop para logos maiores */
-  #robozinho {
-    position: relative;
-    top: -70px;
-    width: 330px;
-    height: 330px;
-    margin-bottom: 0.1rem;
-  }
-
-  .google-btn {
-    position: relative;
-    width: calc(50vw - 8rem);
-    top: -40px;
-  }
 }
 
 /* ========================================================= */

@@ -160,7 +160,7 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
 
   .sidebar-item {
     opacity: 0;
-    transform: translateX(-30px); /* deslocamento */
+    transform: translateX(-110px); /* deslocamento */
     transition: all 1s ease; /* transição lenta e suave */
   }
 
