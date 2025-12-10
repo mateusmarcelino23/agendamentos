@@ -83,14 +83,13 @@ html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: transform 0.25s ease;
+  transition: 0.3s;
 }
 
 .google-btn:active {
   background: #ff8c00;
   color: white;
   transform: scale(0.90);
-  transition: transform 0.1s ease;
 }
 
 
@@ -173,7 +172,7 @@ html {
   .google-btn:hover {
     background: #ff8c00;
     color: white;
-    transform: scale(1.02);
+    transform: scale(1.05);
   }
 
   .about-link {

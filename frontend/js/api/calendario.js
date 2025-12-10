@@ -1,6 +1,5 @@
 let calendarioInstance;
 
-// Função para abrir modal com detalhes do dia
 function abrirDetalhesDoDia(data, detalhes) {
   const container = document.getElementById("detalhes-container");
   const titulo = container.querySelector(".modal-title");
@@ -11,70 +10,83 @@ function abrirDetalhesDoDia(data, detalhes) {
   footer.innerHTML = "";
 
   const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+
   const dataSelecionada = new Date(data + "T00:00:00");
+  dataSelecionada.setHours(0, 0, 0, 0);
 
-  if (dataSelecionada < hoje) {
-    // Dias passados
-    titulo.textContent = `Data ${data}`;
-    if (detalhes.length > 0) {
-      body.innerHTML = `<p>Detalhes não disponíveis para datas passadas.</p>`;
-    } else {
+  const isPast = dataSelecionada < hoje;
+
+  titulo.textContent = `Agendamentos em ${data}`;
+
+  if (detalhes.length === 0) {
+    if (isPast) {
       body.innerHTML = `<p>Não houve agendamentos neste dia.</p>`;
-    }
-  } else {
-    // Dias atuais/futuros
-    titulo.textContent = `Agendamentos em ${data}`;
-    if (detalhes.length > 0) {
-      // Lista todos os agendamentos
-      const tabela = document.createElement("table");
-      tabela.className = "table table-sm";
-      tabela.innerHTML = `
-                <thead>
-                    <tr>
-                        <th>Aula</th>
-                        <th>Período</th>
-                        <th>Quantidade</th>
-                        <th>Equipamento</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${detalhes
-                      .map(
-                        (d) => `
-                        <tr>
-                            <td>${d.aula}</td>
-                            <td>${d.periodo}</td>
-                            <td>${d.quantidade}</td>
-                            <td>${d.equipamento}</td>
-                        </tr>`
-                      )
-                      .join("")}
-                </tbody>
-            `;
-      body.appendChild(tabela);
-
-      // Botão agendar
-      const btn = document.createElement("button");
-      btn.className = "btn btn-primary mt-2";
-      btn.textContent = "Agendar";
-      btn.onclick = () => alert(`Abrir formulário para agendar em ${data}`);
-      footer.appendChild(btn);
     } else {
       body.innerHTML = `<p>Nenhum agendamento neste dia.</p>`;
+
       const btn = document.createElement("button");
       btn.className = "btn btn-primary mt-2";
       btn.textContent = "Agendar neste dia";
-      btn.onclick = () => alert(`Abrir formulário para agendar em ${data}`);
+      btn.onclick = () => {
+        const modalDetalhesEl = document.getElementById("detalhes-container");
+        const modalDetalhes = bootstrap.Modal.getInstance(modalDetalhesEl);
+        if (modalDetalhes) modalDetalhes.hide();
+
+        abrirAgendamentoComData(data);
+      };
+      footer.appendChild(btn);
+    }
+  } else {
+    const tabela = document.createElement("table");
+    tabela.className = "table table-sm";
+
+    tabela.innerHTML = `
+      <thead>
+        <tr>
+          <th>Professor</th>
+          <th>Período</th>
+          <th>Aula</th>
+          <th>Equipamento</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${detalhes
+          .map(
+            (d) => `
+          <tr>
+            <td>${d.professor}</td>
+            <td>${d.periodo}</td>
+            <td>${d.aula}</td>
+            <td>${d.equipamento}</td>
+          </tr>
+        `
+          )
+          .join("")}
+      </tbody>
+    `;
+
+    body.appendChild(tabela);
+
+    if (!isPast) {
+      const btn = document.createElement("button");
+      btn.className = "btn btn-primary mt-2";
+      btn.textContent = "Agendar também neste dia";
+      btn.onclick = () => {
+        const modalDetalhesEl = document.getElementById("detalhes-container");
+        const modalDetalhes = bootstrap.Modal.getInstance(modalDetalhesEl);
+        if (modalDetalhes) modalDetalhes.hide();
+
+        abrirAgendamentoComData(data);
+      };
       footer.appendChild(btn);
     }
   }
 
-  // Abrir modal (Bootstrap)
   const modal = new bootstrap.Modal(container);
   modal.show();
 }
 
-// Inicializa o calendário
 async function inicializarCalendario() {
   try {
     const res = await fetch("/agendamentos/backend/api/get_agendamentos.php");
@@ -123,7 +135,6 @@ async function inicializarCalendario() {
   }
 }
 
-// Inicializa automaticamente ao carregar o script
 document.addEventListener("DOMContentLoaded", () => {
   inicializarCalendario();
 });

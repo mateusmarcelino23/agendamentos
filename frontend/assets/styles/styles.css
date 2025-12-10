@@ -311,6 +311,7 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
   }
 
   .conteudo-principal {
+    position: relative;
     padding-top: 80px;
     border-top: 20px;
     height: 100vh;
@@ -318,8 +319,7 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
     width: 100%;
     z-index: 0;
     background-color: #fff;
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-      sans-serif;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   }
 }
 

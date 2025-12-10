@@ -231,24 +231,33 @@ function initCriarAgendamento() {
 
   // preenche resumo (passo 4)
   function preencherResumo() {
-    resumoLista.innerHTML = "";
+    resumoLista.innerHTML = ""; // limpa o container de resumo
     const data = ag_data.value;
     const linhasAulas = listaAulas.querySelectorAll(".linha-aula");
     const linhasEquip =
       listaEquipamentos.querySelectorAll(".linha-equipamento");
 
+    // percorre cada linha de aula
     linhasAulas.forEach((linha, i) => {
+      const eqLinha = linhasEquip[i]; // tenta pegar a linha de equipamento correspondente
+      if (!eqLinha) return; // se não existir linha de equipamento correspondente, pula
+
+      // pega período e aula da linha de aula
       const p = linha.querySelector(".ag_periodo").value;
       const a = linha.querySelector(".ag_aula").value;
-      const eqLinha = linhasEquip[i];
-      const eq =
-        eqLinha.querySelector(".ag_equipamento").selectedOptions[0]?.text || "";
-      const qtd = eqLinha.querySelector(".ag_quantidade").value;
 
+      // pega equipamento e quantidade da linha de equipamento
+      const eqSelect = eqLinha.querySelector(".ag_equipamento");
+      const eq = eqSelect ? eqSelect.selectedOptions[0]?.text || "" : "";
+      const qtdInput = eqLinha.querySelector(".ag_quantidade");
+      const qtd = qtdInput ? qtdInput.value : "";
+
+      // cria item de lista para o resumo
       const li = document.createElement("li");
       li.className = "list-group-item";
       li.innerHTML = `<b>Data:</b> ${data} <br><b>Turno:</b> ${p} <b>Aula:</b> ${a} <br><b>Equipamento:</b> ${eq} <b>Quantidade:</b> ${qtd}`;
-      resumoLista.appendChild(li);
+
+      resumoLista.appendChild(li); // adiciona ao container de resumo
     });
   }
 
@@ -278,10 +287,26 @@ function initCriarAgendamento() {
 
   btnProximo.addEventListener("click", async () => {
     alertBox.innerHTML = "";
+
     if (!validarPasso(step)) return;
 
+    // se for do passo 2 → 3
     if (step === 2) {
-      await atualizarEquipamentos(); // gera linhas de equipamento
+      // bloqueia o botão
+      btnProximo.disabled = true;
+      const originalText = btnProximo.textContent;
+      btnProximo.textContent = "Carregando...";
+
+      try {
+        await atualizarEquipamentos(); // gera linhas de equipamento
+      } catch (err) {
+        console.error(err);
+        showAlert("Erro ao carregar equipamentos!");
+      }
+
+      // libera o botão
+      btnProximo.disabled = false;
+      btnProximo.textContent = originalText;
     }
 
     step++;
@@ -373,6 +398,47 @@ function initCriarAgendamento() {
     step = 1;
     mostrarPasso(step);
   });
+
+  // Função global para resetar o wizard externamente
+  window.resetAgendamentoWizard = function () {
+    form.reset();
+    listaAulas.innerHTML = "";
+    listaEquipamentos.innerHTML = "";
+    resumoLista.innerHTML = "";
+    step = 1;
+
+    // remove travamento da data
+    ag_data.removeAttribute("readonly");
+
+    // recria linha inicial
+    criarLinhaAula();
+    mostrarPasso(step);
+  };
+
+  // Abre modal já com data definida e pula para o passo 2
+  window.abrirAgendamentoComData = function (dataISO) {
+    // zera estado
+    window.resetAgendamentoWizard();
+
+    // define a data
+    ag_data.value = dataISO;
+
+    // trava edição (opcional)
+    ag_data.setAttribute("readonly", true);
+
+    // pula para o passo 2
+    step = 2;
+    mostrarPasso(step);
+
+    // atualiza equipamentos conforme a data
+    atualizarEquipamentos();
+
+    // exibe modal
+    const modal = new bootstrap.Modal(
+      document.getElementById("modalAgendamento")
+    );
+    modal.show();
+  };
 
   /* ---------- INICIALIZAÇÃO ---------- */
   criarLinhaAula(); // cria linha inicial
