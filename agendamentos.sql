@@ -1,23 +1,32 @@
--- phpMyAdmin SQL Dump - Reformulado e Normalizado
 -- Banco de dados: agendamentos
+CREATE DATABASE IF NOT EXISTS `agendamentos` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `agendamentos`;
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-CREATE DATABASE IF NOT EXISTS agendamentos CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE agendamentos;
+-- --------------------------------------------------------
+-- Tabela: professores
+-- --------------------------------------------------------
+CREATE TABLE `professores` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(80) NOT NULL,
+  `email` varchar(255) NOT NULL UNIQUE,
+  `google_id` varchar(100) DEFAULT NULL,
+  `foto` text DEFAULT NULL,
+  `criado_em` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ultimo_login` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `funcao` enum('professor','admin') NOT NULL DEFAULT 'professor',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 -- Tabela: equipamentos
 -- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS equipamentos (
-    id INT NOT NULL AUTO_INCREMENT,
-    nome VARCHAR(100) NOT NULL,
-    tipo ENUM('informatica', 'guardiao') NOT NULL,
-    quantidade INT DEFAULT 0,
-    status ENUM('disponivel', 'em_uso', 'em_manutencao') DEFAULT 'disponivel',
-    PRIMARY KEY (id)
+CREATE TABLE `equipamentos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(100) NOT NULL,
+  `tipo` enum('informatica','guardiao') NOT NULL,
+  `quantidade` int(11) DEFAULT 0,
+  `status` enum('disponivel','em_uso','em_manutencao') DEFAULT 'disponivel',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `equipamentos` (`id`, `nome`, `tipo`, `quantidade`) VALUES
@@ -29,84 +38,70 @@ INSERT INTO `equipamentos` (`id`, `nome`, `tipo`, `quantidade`) VALUES
 (6, 'Informática 3', 'informatica', 30);
 
 -- --------------------------------------------------------
--- Tabela: professores
--- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS professores (
-    id INT NOT NULL AUTO_INCREMENT,
-    nome VARCHAR(80) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    google_id VARCHAR(100),
-    foto TEXT,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ultimo_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    funcao ENUM('professor','admin') NOT NULL DEFAULT 'professor',
-    PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
 -- Tabela: agendamentos
 -- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS agendamentos (
-    id INT NOT NULL AUTO_INCREMENT,
-    equipamento_id INT NOT NULL,
-    professor_id INT NOT NULL,
-    data DATE NOT NULL,
-    aula TINYINT UNSIGNED NOT NULL CHECK(aula BETWEEN 1 AND 6),
-    periodo ENUM('manha','tarde','noite') NOT NULL,
-    quantidade INT NOT NULL DEFAULT 1,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status TINYINT(2) NOT NULL DEFAULT 0,
-    PRIMARY KEY (id),
-    CONSTRAINT fk_equipamento FOREIGN KEY (equipamento_id) REFERENCES equipamentos(id) ON DELETE CASCADE,
-    CONSTRAINT fk_professor FOREIGN KEY (professor_id) REFERENCES professores(id) ON DELETE CASCADE,
-    INDEX idx_data (data),
-    INDEX idx_equipamento (equipamento_id),
-    INDEX idx_professor (professor_id)
+CREATE TABLE `agendamentos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `equipamento_id` int(11) NOT NULL,
+  `professor_id` int(11) NOT NULL,
+  `data` date NOT NULL,
+  `aula` tinyint(3) UNSIGNED NOT NULL CHECK (`aula` BETWEEN 1 AND 6),
+  `periodo` enum('manha','tarde','noite') NOT NULL,
+  `quantidade` int(11) NOT NULL DEFAULT 1,
+  `criado_em` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` tinyint(2) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `idx_data` (`data`),
+  KEY `idx_equipamento` (`equipamento_id`),
+  KEY `idx_professor` (`professor_id`),
+  CONSTRAINT `fk_equipamento` FOREIGN KEY (`equipamento_id`) REFERENCES `equipamentos` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_professor` FOREIGN KEY (`professor_id`) REFERENCES `professores` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 -- Tabela: alertas_equipamentos
 -- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS alertas_equipamentos (
-    id INT NOT NULL AUTO_INCREMENT,
-    equipamento_id INT NOT NULL,
-    professor_id INT NOT NULL,
-    descricao TEXT NOT NULL,
-    status ENUM('novo','em_analise','resolvido') DEFAULT 'novo',
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    CONSTRAINT fk_alerta_equipamento FOREIGN KEY (equipamento_id) REFERENCES equipamentos(id) ON DELETE CASCADE,
-    CONSTRAINT fk_alerta_professor FOREIGN KEY (professor_id) REFERENCES professores(id) ON DELETE CASCADE
+CREATE TABLE `alertas_equipamentos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `equipamento_id` int(11) NOT NULL,
+  `professor_id` int(11) NOT NULL,
+  `descricao` text NOT NULL,
+  `status` enum('novo','em_analise','resolvido') DEFAULT 'novo',
+  `criado_em` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `atualizado_em` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_alerta_equipamento` (`equipamento_id`),
+  KEY `fk_alerta_professor` (`professor_id`),
+  CONSTRAINT `fk_alerta_equipamento` FOREIGN KEY (`equipamento_id`) REFERENCES `equipamentos` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_alerta_professor` FOREIGN KEY (`professor_id`) REFERENCES `professores` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 -- Tabela: mensagens_admin
 -- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS mensagens_admin (
-    id INT NOT NULL AUTO_INCREMENT,
-    professor_id INT NOT NULL,
-    titulo VARCHAR(100) NOT NULL,
-    mensagem TEXT NOT NULL,
-    lida TINYINT(1) DEFAULT 0,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(id),
-    CONSTRAINT fk_msg_admin_professor FOREIGN KEY(professor_id)
-        REFERENCES professores(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `mensagens_admin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `professor_id` int(11) NOT NULL,
+  `titulo` varchar(100) NOT NULL,
+  `mensagem` text NOT NULL,
+  `lida` tinyint(1) DEFAULT 0,
+  `criado_em` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_msg_admin_professor` (`professor_id`),
+  CONSTRAINT `fk_msg_admin_professor` FOREIGN KEY (`professor_id`) REFERENCES `professores` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 -- Tabela: mensagens_professores
 -- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS mensagens_professores (
-    id INT NOT NULL AUTO_INCREMENT,
-    professor_id INT NOT NULL,
-    titulo VARCHAR(100) NOT NULL,
-    mensagem TEXT NOT NULL,
-    status ENUM('novo','lida','resolvida') DEFAULT 'novo',
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(id),
-    CONSTRAINT fk_msg_professor FOREIGN KEY(professor_id)
-        REFERENCES professores(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+CREATE TABLE `mensagens_professores` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `professor_id` int(11) NOT NULL,
+  `titulo` varchar(100) NOT NULL,
+  `mensagem` text NOT NULL,
+  `status` enum('novo','lida','resolvida') DEFAULT 'novo',
+  `criado_em` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_msg_professor` (`professor_id`),
+  CONSTRAINT `fk_msg_professor` FOREIGN KEY (`professor_id`) REFERENCES `professores` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

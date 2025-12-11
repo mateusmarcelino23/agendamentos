@@ -130,7 +130,7 @@ function initHeader() {
           const nomeElement =
             contaDropdownMobile.querySelector(".nome-professor");
 
-          if (fotoElement) fotoElement.src = data.foto || "default.jpg";
+          if (fotoElement) fotoElement.src = data.foto || "/agendamentos/frontend/assets/img/default.png";
           if (nomeElement) nomeElement.textContent = data.nome;
         })
         .catch((err) =>
@@ -218,7 +218,7 @@ function initHeader() {
         const fotoElement = contaDesktop.querySelector(".foto-professor");
         const nomeElement = contaDesktop.querySelector(".nome-professor");
 
-        if (fotoElement) fotoElement.src = data.foto || "caminho-da-foto.jpg";
+        if (fotoElement) fotoElement.src = data.foto || "/agendamentos/frontend/assets/img/default.png";
         if (nomeElement) nomeElement.textContent = data.nome;
       })
       .catch((err) => console.error("Erro ao buscar dados do professor:", err));
