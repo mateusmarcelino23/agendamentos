@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnLogin) btnLogin.classList.add("loading");
 
   // Verifica login no backend
-  fetch("/agendamentos/backend/api/login.php", {
+  fetch("backend/api/login.php", {
     method: "GET",
     credentials: "include",
     headers: { "X-Requested-With": "XMLHttpRequest" },

@@ -89,7 +89,7 @@ function abrirDetalhesDoDia(data, detalhes) {
 
 async function inicializarCalendario() {
   try {
-    const res = await fetch("/agendamentos/backend/api/get_agendamentos.php");
+    const res = await fetch("../../backend/api/get_agendamentos.php");
     const data = await res.json();
 
     if (!data.success) {

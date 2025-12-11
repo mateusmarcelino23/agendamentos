@@ -1,7 +1,7 @@
 // Função principal para carregar os dados do dashboard
 async function carregarDashboard() {
   try {
-    const response = await fetch("/agendamentos/backend/api/dashboard.php", {
+    const response = await fetch("../../backend/api/dashboard.php", {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     });
 
@@ -9,7 +9,7 @@ async function carregarDashboard() {
 
     // Se o usuário não estiver autenticado, redireciona
     if (data.error === "Usuário não autenticado") {
-      window.location.href = "/agendamentos/";
+      window.location.href = "../../";
       return;
     }
 
@@ -118,7 +118,7 @@ function preencherCalendario(datas) {
 function abrirDetalhesDoDia(dataSelecionada) {
   alert(`Exibindo agendamentos do dia ${formatarData(dataSelecionada)}.`);
   // Aqui você pode abrir um modal ou redirecionar para nova página
-  // window.location.href = `/frontend/novo_agendamento.php?data=${dataSelecionada}`;
+  // window.location.href = `/novo_agendamento.php?data=${dataSelecionada}`;
 }
 
 // Formata a data em padrão brasileiro sem problemas de fuso horário
@@ -143,7 +143,7 @@ function formatarData(isoDate) {
 async function verificarAgendamentoAtivo() {
   try {
     const res = await fetch(
-      "/agendamentos/backend/api/verificar_agendamento_ativo.php",
+      "../../backend/api/verificar_agendamento_ativo.php",
       {
         headers: { "X-Requested-With": "XMLHttpRequest" },
       }
@@ -180,7 +180,7 @@ async function usarEquipamento(agendamentoId, acao) {
     formData.append("acao", acao);
 
     const res = await fetch(
-      "/agendamentos/backend/api/atualizar_equipamento.php",
+      "../../backend/api/atualizar_equipamento.php",
       {
         method: "POST",
         body: formData,

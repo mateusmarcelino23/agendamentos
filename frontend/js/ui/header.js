@@ -117,7 +117,7 @@ function initHeader() {
 
     // ======== FETCH PARA CARREGAR DADOS DO PROFESSOR ========
     if (contaDropdownMobile) {
-      fetch("/agendamentos/backend/api/get_professor.php")
+      fetch("../backend/api/get_professor.php")
         .then((response) => response.json())
         .then((data) => {
           if (data.error) {
@@ -130,7 +130,7 @@ function initHeader() {
           const nomeElement =
             contaDropdownMobile.querySelector(".nome-professor");
 
-          if (fotoElement) fotoElement.src = data.foto || "/agendamentos/frontend/assets/img/default.png";
+          if (fotoElement) fotoElement.src = data.foto || "../assets/img/default.png";
           if (nomeElement) nomeElement.textContent = data.nome;
         })
         .catch((err) =>
@@ -207,7 +207,7 @@ function initHeader() {
     contaDesktop.style.pointerEvents = "none";
 
     // ======== FETCH PARA CARREGAR DADOS DO PROFESSOR ========
-    fetch("/agendamentos/backend/api/get_professor.php")
+    fetch("../backend/api/get_professor.php")
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
@@ -218,7 +218,7 @@ function initHeader() {
         const fotoElement = contaDesktop.querySelector(".foto-professor");
         const nomeElement = contaDesktop.querySelector(".nome-professor");
 
-        if (fotoElement) fotoElement.src = data.foto || "/agendamentos/frontend/assets/img/default.png";
+        if (fotoElement) fotoElement.src = data.foto || "../assets/img/default.png";
         if (nomeElement) nomeElement.textContent = data.nome;
       })
       .catch((err) => console.error("Erro ao buscar dados do professor:", err));
