@@ -2,7 +2,7 @@
 async function carregarRelatorios() {
   try {
     // Faz a requisição AJAX para o backend (relatorios.php)
-    const response = await fetch("/agendamentos/backend/api/relatorios.php", {
+    const response = await fetch("../../backend/api/relatorios.php", {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     });
 
@@ -11,7 +11,7 @@ async function carregarRelatorios() {
 
     // Se o usuário não estiver autenticado, redireciona para o login
     if (data.error === "Usuário não autenticado") {
-      window.location.href = "/agendamentos/";
+      window.location.href = "../../";
       return;
     }
 

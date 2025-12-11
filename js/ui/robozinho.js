@@ -8,7 +8,7 @@ function carregarRobo(containerId) {
     renderer: "svg",
     loop: true,
     autoplay: true,
-    path: "frontend/assets/animations/RobotSaludando.json",
+    path: "assets/animations/RobotSaludando.json",
   });
 }
 

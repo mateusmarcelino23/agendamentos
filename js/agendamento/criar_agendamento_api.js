@@ -1,6 +1,6 @@
 // criar_agendamento_api.js
 export async function listarEquipamentos() {
-  const resp = await fetch("/agendamentos/backend/api/listar_equipamentos.php");
+  const resp = await fetch("../../backend/api/listar_equipamentos.php");
   return await resp.json();
 }
 
@@ -11,7 +11,7 @@ export async function verificarDisponibilidade(
   aula
 ) {
   const resp = await fetch(
-    `/agendamentos/backend/api/disponibilidade.php?data=${encodeURIComponent(
+    `../../backend/api/disponibilidade.php?data=${encodeURIComponent(
       data
     )}&equipamento_id=${encodeURIComponent(
       equipamento_id
@@ -22,7 +22,7 @@ export async function verificarDisponibilidade(
 
 export async function criarAgendamento(payload) {
   try {
-    const resp = await fetch("/agendamentos/backend/api/create.php", {
+    const resp = await fetch("../../backend/api/create.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const headerContainer = document.getElementById("header");
   if (!headerContainer) return;
 
-  const headerPath = "/agendamentos/frontend/components/header.html";
+  const headerPath = "../../components/header.html";
 
   fetch(headerPath)
     .then((response) => {
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Carrega o JS do header dinamicamente
       const script = document.createElement("script");
-      script.src = "/agendamentos/frontend/js/ui/header.js";
+      script.src = "../../js/ui/header.js";
       script.onload = () => {
         // Opcional: podemos disparar alguma função de inicialização se header.js tiver
         if (typeof initHeader === "function") {

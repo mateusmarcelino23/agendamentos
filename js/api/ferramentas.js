@@ -1,14 +1,14 @@
 // Função principal para carregar os dados da página de ferramentas
 async function carregarFerramentas() {
   try {
-    const response = await fetch("/agendamentos/backend/api/ferramentas.php", {
+    const response = await fetch("../../backend/api/ferramentas.php", {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     });
 
     const data = await response.json();
 
     if (data.error === "Usuário não autenticado") {
-      window.location.href = "/agendamentos/";
+      window.location.href = "../../";
       return;
     }
 
@@ -77,7 +77,7 @@ async function enviarAlertaProblema() {
     formData.append("equipamento_id", equipamentoId);
     formData.append("descricao", descricao);
 
-    const response = await fetch("/agendamentos/backend/api/ferramentas.php", {
+    const response = await fetch("../../backend/api/ferramentas.php", {
       method: "POST",
       body: formData,
       headers: { "X-Requested-With": "XMLHttpRequest" },
@@ -176,7 +176,7 @@ async function enviarMensagemProfessor() {
     formData.append("titulo", titulo);
     formData.append("mensagem", mensagem);
 
-    const response = await fetch("/agendamentos/backend/api/ferramentas.php", {
+    const response = await fetch("../../backend/api/ferramentas.php", {
       method: "POST",
       body: formData,
       headers: { "X-Requested-With": "XMLHttpRequest" },

@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const modalPath = "/agendamentos/frontend/components/criar_agendamento.html";
+  const modalPath = "../../components/criar_agendamento.html";
 
   fetch(modalPath)
     .then((response) => response.text())
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Carrega o JS funcional do modal com cache-busting
       const script = document.createElement("script");
-      script.src = `/agendamentos/frontend/js/api/criar_agendamento.js?ts=${Date.now()}`;
+      script.src = `../../js/api/criar_agendamento.js?ts=${Date.now()}`;
       script.onload = () => {
         // ---------- RESET AUTOMÁTICO AO FECHAR ----------
         const modal = document.getElementById("modalAgendamento");

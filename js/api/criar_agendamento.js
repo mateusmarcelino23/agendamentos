@@ -148,14 +148,14 @@ function initCriarAgendamento() {
       // popula equipamentos disponíveis
       try {
         const resp = await fetch(
-          "/agendamentos/backend/api/listar_equipamentos.php"
+          "../../backend/api/listar_equipamentos.php"
         );
         const json = await resp.json();
         select.innerHTML = `<option value="">Selecione...</option>`;
         if (json?.equipamentos) {
           for (const e of json.equipamentos) {
             const dispResp = await fetch(
-              `/agendamentos/backend/api/disponibilidade.php?data=${encodeURIComponent(
+              `../../backend/api/disponibilidade.php?data=${encodeURIComponent(
                 data
               )}&equipamento_id=${encodeURIComponent(
                 e.id
@@ -264,7 +264,7 @@ function initCriarAgendamento() {
   // cria agendamento via API
   async function criarAgendamento(payload) {
     try {
-      const resp = await fetch("/agendamentos/backend/api/create.php", {
+      const resp = await fetch("../../backend/api/create.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -359,7 +359,7 @@ function initCriarAgendamento() {
     // valida disponibilidade de cada equipamento
     for (const item of payload) {
       const resp = await fetch(
-        `/agendamentos/backend/api/disponibilidade.php?data=${encodeURIComponent(
+        `../../backend/api/disponibilidade.php?data=${encodeURIComponent(
           item.data
         )}&equipamento_id=${encodeURIComponent(
           item.equipamento_id
