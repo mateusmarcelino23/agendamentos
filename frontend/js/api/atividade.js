@@ -1,7 +1,7 @@
 // Função principal para carregar os dados da página de atividade
 async function carregarAtividade() {
   try {
-    const response = await fetch("../../../backend/api/atividade.php", {
+    const response = await fetch("../../backend/api/atividade.php", {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     });
 

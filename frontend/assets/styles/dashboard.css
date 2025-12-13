@@ -49,7 +49,7 @@
     transform: translate(-50%, 250px);
   }
   50% {
-    transform: translate(-50%, -300px);
+    transform: translate(-50%, -250px);
   }
 }
 
@@ -299,7 +299,7 @@
   }
 
   .imagem1__bg {
-    top: -360px;
+    /* top: -360px; */
     width: 100%;
   }
 }
@@ -312,7 +312,7 @@
   }
 
   .imagem1__bg {
-    top: -500px;
+    /* top: -500px; */
     width: 100%;
   }
 

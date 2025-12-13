@@ -117,7 +117,7 @@ function initHeader() {
 
     // ======== FETCH PARA CARREGAR DADOS DO PROFESSOR ========
     if (contaDropdownMobile) {
-      fetch("../backend/api/get_professor.php")
+      fetch("../../backend/api/get_professor.php")
         .then((response) => response.json())
         .then((data) => {
           if (data.error) {
@@ -130,7 +130,8 @@ function initHeader() {
           const nomeElement =
             contaDropdownMobile.querySelector(".nome-professor");
 
-          if (fotoElement) fotoElement.src = data.foto || "../assets/img/default.png";
+          if (fotoElement)
+            fotoElement.src = data.foto || "../assets/img/default.png";
           if (nomeElement) nomeElement.textContent = data.nome;
         })
         .catch((err) =>
@@ -162,16 +163,25 @@ function initHeader() {
 
     const menuItem = animDiv.closest(".nav-menu__item");
     if (!menuItem) return;
-    const link = menuItem.querySelector("a");
 
-    // Hover
-    menuItem.addEventListener("mouseover", () => anim.play());
-    menuItem.addEventListener("mouseout", () => {
-      if (!link.classList.contains("active-page")) anim.stop();
+    const link = menuItem.querySelector("a");
+    const isContaMenu = menuItem.classList.contains("conta-menu-desktop");
+
+    // Hover (todos)
+    menuItem.addEventListener("mouseenter", () => {
+      anim.play();
     });
 
-    // Página atual
-    if (link.getAttribute("href") === window.location.pathname) {
+    menuItem.addEventListener("mouseleave", () => {
+      anim.stop();
+    });
+
+    // Página atual (exceto Conta)
+    const linkPath = new URL(link.getAttribute("href"), window.location.href)
+      .pathname;
+    const currentPath = window.location.pathname;
+
+    if (!isContaMenu && linkPath === currentPath) {
       anim.play();
       link.classList.add("active-page");
     }
@@ -207,7 +217,7 @@ function initHeader() {
     contaDesktop.style.pointerEvents = "none";
 
     // ======== FETCH PARA CARREGAR DADOS DO PROFESSOR ========
-    fetch("../backend/api/get_professor.php")
+    fetch("../../backend/api/get_professor.php")
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
@@ -218,7 +228,8 @@ function initHeader() {
         const fotoElement = contaDesktop.querySelector(".foto-professor");
         const nomeElement = contaDesktop.querySelector(".nome-professor");
 
-        if (fotoElement) fotoElement.src = data.foto || "../assets/img/default.png";
+        if (fotoElement)
+          fotoElement.src = data.foto || "../assets/img/default.png";
         if (nomeElement) nomeElement.textContent = data.nome;
       })
       .catch((err) => console.error("Erro ao buscar dados do professor:", err));
