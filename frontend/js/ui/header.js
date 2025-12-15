@@ -142,6 +142,7 @@ function initHeader() {
 
   // ---- Header Desktop ----
   const animacoesDesktop = document.querySelectorAll(".animacao");
+
   animacoesDesktop.forEach((animDiv) => {
     const anim = lottie.loadAnimation({
       container: animDiv,
@@ -167,24 +168,28 @@ function initHeader() {
     const link = menuItem.querySelector("a");
     const isContaMenu = menuItem.classList.contains("conta-menu-desktop");
 
+    const linkPath = new URL(link.getAttribute("href"), window.location.href)
+      .pathname;
+    const currentPath = window.location.pathname;
+    const isCurrentPage = !isContaMenu && linkPath === currentPath;
+
+    // Se estiver na página atual, mantém a animação sempre ativa
+    if (isCurrentPage) {
+      anim.play();
+      link.classList.add("active-page");
+    }
+
     // Hover (todos)
     menuItem.addEventListener("mouseenter", () => {
       anim.play();
     });
 
     menuItem.addEventListener("mouseleave", () => {
-      anim.stop();
+      if (!isCurrentPage) {
+        // só para se não for a página atual
+        anim.stop();
+      }
     });
-
-    // Página atual (exceto Conta)
-    const linkPath = new URL(link.getAttribute("href"), window.location.href)
-      .pathname;
-    const currentPath = window.location.pathname;
-
-    if (!isContaMenu && linkPath === currentPath) {
-      anim.play();
-      link.classList.add("active-page");
-    }
   });
 
   // Ajustes visuais desktop

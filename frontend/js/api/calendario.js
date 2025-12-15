@@ -114,6 +114,13 @@ async function inicializarCalendario() {
       initialView: "dayGridMonth",
       height: 500,
       events: eventos,
+      buttonText: {
+        today: "Hoje",
+        month: "Mês",
+        week: "Semana",
+        day: "Dia",
+        list: "Lista",
+      },
       dateClick: function (info) {
         const evento = eventos.find((e) => e.start === info.dateStr);
         abrirDetalhesDoDia(
