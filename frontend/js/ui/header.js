@@ -18,29 +18,32 @@ function initHeader() {
         p.setAttribute("fill", "#ff8c00");
         p.setAttribute("stroke", "#ff8c00");
       });
+
+      // Ajuste adicional: se for animação específica, reduz visualmente o SVG
+      try {
+        const svg = animDiv.querySelector("svg");
+        if (svg && animDiv.dataset.path) {
+          const p = animDiv.dataset.path.toLowerCase();
+          if (p.endsWith("report.json")) {
+            svg.style.transformOrigin = "50% 50%";
+            svg.style.transform = "scale(0.85)"; // reduzir levemente
+            svg.style.width = "auto";
+            svg.style.height = "auto";
+            svg.style.display = "block";
+          }
+          if (p.endsWith("users.json")) {
+            svg.style.transformOrigin = "50% 50%";
+            svg.style.transform = "scale(0.75)"; // reduzir um pouco mais
+            svg.style.width = "auto";
+            svg.style.height = "auto";
+            svg.style.display = "block";
+          }
+        }
+      } catch (e) {
+        console.error("Erro ao ajustar escala do SVG Lottie:", e);
+      }
     });
   });
-
-  // Ajustes visuais mobile
-  setTimeout(() => {
-    const svg = document.querySelector(
-      ".sidebar-item:nth-child(3) .animacao-mobile svg"
-    );
-    if (svg) {
-      svg.style.transform = "scale(0.8)";
-      svg.style.transformOrigin = "center";
-    }
-  }, 500);
-
-  setTimeout(() => {
-    const svg = document.querySelector(
-      ".sidebar-item:last-child .animacao-mobile svg"
-    );
-    if (svg) {
-      svg.style.transform = "scale(0.7)";
-      svg.style.transformOrigin = "center";
-    }
-  }, 500);
 
   // -------------------------------
   // Menu mobile
@@ -160,6 +163,29 @@ function initHeader() {
         p.setAttribute("fill", "#ff8c00");
         p.setAttribute("stroke", "#ff8c00");
       });
+      // Ajuste adicional para desktop (mesma lógica)
+      try {
+        const svg = animDiv.querySelector("svg");
+        if (svg && animDiv.dataset.path) {
+          const p = animDiv.dataset.path.toLowerCase();
+          if (p.endsWith("report.json")) {
+            svg.style.transformOrigin = "50% 50%";
+            svg.style.transform = "scale(0.85)";
+            svg.style.width = "auto";
+            svg.style.height = "auto";
+            svg.style.display = "block";
+          }
+          if (p.endsWith("users.json")) {
+            svg.style.transformOrigin = "50% 50%";
+            svg.style.transform = "scale(0.75)";
+            svg.style.width = "auto";
+            svg.style.height = "auto";
+            svg.style.display = "block";
+          }
+        }
+      } catch (e) {
+        console.error("Erro ao ajustar escala do SVG Lottie (desktop):", e);
+      }
     });
 
     const menuItem = animDiv.closest(".nav-menu__item");
@@ -191,27 +217,6 @@ function initHeader() {
       }
     });
   });
-
-  // Ajustes visuais desktop
-  setTimeout(() => {
-    const svg = document.querySelector(
-      ".nav-menu__item:nth-child(3) .animacao svg"
-    );
-    if (svg) {
-      svg.style.transform = "scale(0.8)";
-      svg.style.transformOrigin = "center";
-    }
-  }, 500);
-
-  setTimeout(() => {
-    const svg = document.querySelector(
-      ".nav-menu__item:last-child .animacao svg"
-    );
-    if (svg) {
-      svg.style.transform = "scale(0.7)";
-      svg.style.transformOrigin = "center";
-    }
-  }, 500);
 
   // ==== Conta Desktop ====
   const contaDesktop = document.querySelector(

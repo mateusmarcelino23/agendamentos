@@ -1,13 +1,10 @@
 <?php
-// Inicia a sessão se ainda não estiver ativa
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Importa a conexão com o banco de dados
 require_once('../config/database.php');
 
-// Verifica se o usuário está logado
 if (!isset($_SESSION['user_id'])) {
     header('Content-Type: application/json');
     echo json_encode(['error' => 'Usuário não autenticado']);
@@ -19,108 +16,80 @@ $professorId = $_SESSION['user_id'];
 try {
     $conn = getConnection();
 
-    // -------------------------
-    // 1. Dados do professor
-    // -------------------------
+    // Dados do professor
     $stmt = $conn->prepare("SELECT nome, email FROM professores WHERE id = :id");
     $stmt->execute([':id' => $professorId]);
     $professor = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$professor) throw new Exception("Professor não encontrado");
-
     $nomeCompleto = trim($professor['nome']);
 
-    // -------------------------
-    // 2. Determinar período atual
-    // -------------------------
+    // Período atual
     $horaAtual = date('H:i');
     $periodoAtual = null;
-    if ($horaAtual >= '07:00' && $horaAtual <= '12:20') {
-        $periodoAtual = 'manha';
-    } elseif ($horaAtual >= '13:00' && $horaAtual <= '17:30') {
-        $periodoAtual = 'tarde';
-    } elseif ($horaAtual >= '18:00' && $horaAtual <= '22:45') {
-        $periodoAtual = 'noite';
-    }
+    if ($horaAtual >= '07:00' && $horaAtual <= '12:20') $periodoAtual = 'manha';
+    elseif ($horaAtual >= '13:00' && $horaAtual <= '17:30') $periodoAtual = 'tarde';
+    elseif ($horaAtual >= '18:00' && $horaAtual <= '22:45') $periodoAtual = 'noite';
 
-    // -------------------------
-    // 3. Agendamento ativo agora (baseado no período e hora da aula)
-    // -------------------------
+    // Agendamento ativo
     $agendamentoAtivo = null;
     if ($periodoAtual) {
         $stmt = $conn->prepare("
-            SELECT 
-                a.id,
-                e.nome AS equipamento,
-                a.aula,
-                a.periodo,
-                a.status
+            SELECT a.id, e.nome AS equipamento, a.aula, a.periodo, a.status
             FROM agendamentos a
             JOIN equipamentos e ON a.equipamento_id = e.id
             WHERE a.professor_id = :professor_id
               AND a.data = CURDATE()
               AND a.periodo = :periodo
-              AND a.status = 0  -- 0 = pendente/ativo
+              AND a.status = 0
             ORDER BY a.aula ASC
             LIMIT 1
         ");
-        $stmt->execute([
-            ':professor_id' => $professorId,
-            ':periodo' => $periodoAtual
-        ]);
+        $stmt->execute([':professor_id' => $professorId, ':periodo' => $periodoAtual]);
         $agendamentoAtivo = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
-    // -------------------------
-    // 4. Histórico mensal do professor
-    // -------------------------
+    // Próximos agendamentos (futuros e hoje)
     $stmt = $conn->prepare("
-        SELECT 
-            id,
-            equipamento_id,
-            data,
-            aula,
-            periodo,
-            status
-        FROM agendamentos
-        WHERE professor_id = :professor_id
-          AND MONTH(data) = MONTH(CURDATE())
-          AND YEAR(data) = YEAR(CURDATE())
-        ORDER BY data ASC, aula ASC
+        SELECT a.id, e.nome AS equipamento, a.quantidade, a.data, a.aula, a.periodo, a.status
+        FROM agendamentos a
+        JOIN equipamentos e ON a.equipamento_id = e.id
+        WHERE a.professor_id = :professor_id
+          AND a.data >= CURDATE()
+        ORDER BY a.data ASC, a.aula ASC
+    ");
+    $stmt->execute([':professor_id' => $professorId]);
+    $proximosAgendamentos = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+    // Histórico mensal (sem status nem botões)
+    $stmt = $conn->prepare("
+        SELECT e.nome AS equipamento, a.quantidade, a.data, a.aula, a.periodo
+        FROM agendamentos a
+        JOIN equipamentos e ON a.equipamento_id = e.id
+        WHERE a.professor_id = :professor_id
+          AND MONTH(a.data) = MONTH(CURDATE())
+          AND YEAR(a.data) = YEAR(CURDATE())
+        ORDER BY a.data ASC, a.aula ASC
     ");
     $stmt->execute([':professor_id' => $professorId]);
     $historicoMensal = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
-    // -------------------------
-    // 5. Cards detalhados
-    // -------------------------
-    // Total de agendamentos do mês
+    // Cards detalhados
     $totalMes = count($historicoMensal);
 
-    // Agendamentos pendentes
-    $pendentes = array_filter($historicoMensal, fn($a) => $a['status'] == 0);
-    $totalPendentes = count($pendentes);
-
-    // Agendamentos concluídos
-    $concluidos = array_filter($historicoMensal, fn($a) => $a['status'] == 1);
-    $totalConcluidos = count($concluidos);
-
-    // Agendamentos cancelados
-    $cancelados = array_filter($historicoMensal, fn($a) => $a['status'] == 2);
-    $totalCancelados = count($cancelados);
-
-    // Próximo agendamento (futuro)
+    // Agendamentos pendentes/concluídos/cancelados (mesmo mês)
     $stmt = $conn->prepare("
-        SELECT a.data, a.aula, e.nome AS equipamento
-        FROM agendamentos a
-        JOIN equipamentos e ON a.equipamento_id = e.id
-        WHERE a.professor_id = :professor_id AND a.data >= CURDATE()
-        ORDER BY a.data ASC, a.aula ASC
-        LIMIT 1
+        SELECT status FROM agendamentos
+        WHERE professor_id = :professor_id
+          AND MONTH(data) = MONTH(CURDATE())
+          AND YEAR(data) = YEAR(CURDATE())
     ");
     $stmt->execute([':professor_id' => $professorId]);
-    $proximoAgendamento = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    $todosStatus = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-    // Equipamento mais usado pelo professor (no mês)
+    $totalPendentes = count(array_filter($todosStatus, fn($s) => $s == 0));
+    $totalConcluidos = count(array_filter($todosStatus, fn($s) => $s == 1));
+
+    // Equipamento mais usado
     $stmt = $conn->prepare("
         SELECT e.nome, COUNT(*) AS vezes
         FROM agendamentos a
@@ -133,9 +102,8 @@ try {
         LIMIT 1
     ");
     $stmt->execute([':professor_id' => $professorId]);
-    $equipamentoMaisUsado = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    $equipamentoMaisUsado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Monta array de cards detalhados
     $cardsDetalhados = [
         ['titulo' => 'Total de Agendamentos no Mês', 'valor' => $totalMes],
         ['titulo' => 'Agendamentos Pendentes', 'valor' => $totalPendentes],
@@ -143,12 +111,11 @@ try {
         ['titulo' => 'Equipamento Mais Usado', 'valor' => $equipamentoMaisUsado['nome'] ?? 'Nenhum']
     ];
 
-    // -------------------------
-    // 6. Retorna os dados em JSON
-    // -------------------------
+    // Retorno final
     $data = [
         'nomeCompleto' => $nomeCompleto,
         'agendamentoAtivo' => $agendamentoAtivo,
+        'proximosAgendamentos' => $proximosAgendamentos,
         'historicoMensal' => $historicoMensal,
         'cardsDetalhados' => $cardsDetalhados
     ];

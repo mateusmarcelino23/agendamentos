@@ -22,6 +22,3 @@ define('GOOGLE_USER_INFO_URL', 'https://www.googleapis.com/oauth2/v2/userinfo');
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
-
-?>

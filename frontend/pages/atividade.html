@@ -17,98 +17,133 @@
   <body>
     <div id="header"></div>
 
-    <div class="conteudo-principal container-fluid">
-      <!-- Mensagem de boas-vindas -->
-      <div class="row mb-4">
-        <div class="col-12 text-center">
-          <h1 id="bem-vindo">Atividade do Professor</h1>
-        </div>
-      </div>
-
-      <!-- Agendamento ativo agora -->
-      <div class="row mb-4">
-        <div class="col-12">
-          <h3>Agendamento Ativo</h3>
-          <div
-            id="agendamento-ativo"
-            class="p-3 border rounded bg-light text-muted"
-          >
-            Carregando informações de agendamento ativo...
+    <div class="conteudo-principal">
+      <div class="conteudo-atividade ccontainer-fluid">
+        <!-- Mensagem de apresentação -->
+        <div class="apresentacao-row row mb-4">
+          <div class="apresentacao-col col-12 text-center">
+            <h1 id="bem-vindo" class="apresentacao-title">
+              Atividade do Professor
+            </h1>
           </div>
         </div>
-      </div>
 
-      <!-- Botões -->
-      <div class="row mb-4 text-center justify-content-center">
-        <div class="col-md-3 mb-2">
-          <a
-            href="#"
-            data-bs-toggle="modal"
-            data-bs-target="#modalAgendamento"
-            class="shortcut-card btn btn-primary w-100"
-          >
-            <span>Novo Agendamento</span>
-          </a>
-        </div>
-        
-        <div class="col-md-3 mb-2">
-          <a
-            href="relatorios.html#meus-relatorios"
-            class="btn btn-secondary w-100"
-            >Ver meus relatórios</a
-          >
-        </div>
-      </div>
-
-      <!-- Tabela de histórico mensal -->
-      <div class="row mb-4">
-        <div class="col-12">
-          <h3>Histórico Mensal de Agendamentos</h3>
-          <div class="table-responsive">
-            <table
-              class="table table-striped table-bordered align-middle"
-              id="tabela-historico-mensal"
+        <!-- Agendamento ativo agora -->
+        <div class="agendamento-row row mb-4">
+          <div class="agendamento-col col-12">
+            <h3 class="agendamento-title">Agendamento Ativo</h3>
+            <div
+              id="agendamento-ativo"
+              class="agendamento-box p-3 border rounded bg-light text-muted"
             >
-              <thead class="table-light">
-                <tr>
-                  <th>Data</th>
-                  <th>Aula / Período</th>
-                  <th>Equipamento</th>
-                  <th>Status</th>
-                  <th></th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td colspan="5" class="text-center text-muted">
-                    Carregando histórico mensal...
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+              Carregando informações de agendamento ativo...
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Cards detalhados do professor -->
-      <div class="row mb-5" id="cards-detalhados">
-        <!-- Os cards serão inseridos dinamicamente pelo JS -->
-      </div>
+        <!-- Botões -->
+        <div class="botoes-row row mb-4 text-center justify-content-center">
+          <div class="botao-col col-md-3 mb-2">
+            <a
+              href="#"
+              data-bs-toggle="modal"
+              data-bs-target="#modalAgendamento"
+              class="botao-novo shortcut-card btn btn-primary w-100"
+            >
+              <span>Novo Agendamento</span>
+            </a>
+          </div>
 
-      <!-- Rodapé -->
-      <div id="rodape"></div>
+          <div class="botao-col-rel col-md-3 mb-2">
+            <a
+              href="relatorios.html#meus-relatorios"
+              class="botao-rel btn btn-secondary w-100"
+              >Ver meus relatórios</a
+            >
+          </div>
+        </div>
+
+        <!-- Tabela de próximos agendamentos -->
+        <div class="proximos-row row mb-4">
+          <div class="proximos-col col-12">
+            <h3 class="proximos-title">Próximos Agendamentos</h3>
+            <div class="proximos-table-responsive table-responsive">
+              <table
+                class="proximos-table table table-striped table-bordered"
+                id="tabela-proximos-agendamentos"
+              >
+                <thead>
+                  <tr class="proximos-tr">
+                    <th class="proximos-th">Equipamento</th>
+                    <th class="proximos-th">Quantidade</th>
+                    <th class="proximos-th">Data</th>
+                    <th class="proximos-th">Período</th>
+                    <th class="proximos-th">Aula</th>
+                    <th class="proximos-th">Status</th>
+                    <th class="proximos-th"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="proximos-tr-body">
+                    <td colspan="7" class="proximos-td text-center text-muted">
+                      Carregando próximos agendamentos...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabela de histórico mensal -->
+        <div class="historico-row row mb-4">
+          <div class="historico-col col-12">
+            <h3 class="historico-title">Histórico Mensal de Agendamentos</h3>
+            <div class="historico-table-responsive table-responsive">
+              <table
+                class="historico-table table table-striped table-bordered"
+                id="tabela-historico-mensal"
+              >
+                <thead>
+                  <tr class="historico-tr">
+                    <th class="historico-th">Equipamento</th>
+                    <th class="historico-th">Data</th>
+                    <th class="historico-th">Quantidade</th>
+                    <th class="historico-th">Período</th>
+                    <th class="historico-th">Aula</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="historico-tr-body">
+                    <td colspan="5" class="historico-td text-center text-muted">
+                      Carregando histórico mensal...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cards detalhados do professor -->
+        <div class="cards-row row mb-5" id="cards-detalhados">
+          <!-- Os cards serão inseridos dinamicamente pelo JS -->
+        </div>
+      </div>
     </div>
+
+    <!-- Rodapé -->
+    <div id="footer"></div>
+
+    <!-- Script para carregar o header -->
+    <script src="../js/ui/carregar_header.js"></script>
+    <!-- Script para carregar o footer -->
+    <script src="../js/ui/carregar_footer.js"></script>
+    <!-- API da página de atividade -->
+    <script src="../js/api/atividade.js"></script>
+    <!-- Script para carregar modal de agendamento -->
+    <script src="../js/ui/carregar_modal_agendamento.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
   </body>
-
-  <!-- Script para carregar o header -->
-  <script src="../js/ui/carregar_header.js"></script>
-  <!-- Script para carregar o footer -->
-  <script src="../js/ui/carregar_footer.js"></script>
-  <!-- API da página de atividade -->
-  <script src="../js/api/atividade.js"></script>
-  <!-- Script para carregar modal de agendamento -->
-  <script src="../js/ui/carregar_modal_agendamento.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </html>

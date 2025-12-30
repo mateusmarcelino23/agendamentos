@@ -3,6 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      /* Loader inline imediato para evitar flash antes do JS */
+      #global-loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.96);
+        z-index: 99999;
+      }
+      #lottie-placeholder {
+        width: 150px;
+        height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
     <!-- Favicon -->
     <link
       rel="icon"
@@ -20,10 +39,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.2/lottie.min.js"></script>
     <!-- Estilos personalizados -->
     <link rel="stylesheet" href="frontend/assets/styles/login.css" />
+    <!-- Loader antes do html -->
+    <script src="frontend/js/ui/loader_login.js" defer></script>
     <title>Login do Professor - SAEE</title>
   </head>
 
   <body>
+    <!-- Loader (marcação inline para primeiro paint) -->
+    <div id="loader">
+      <div id="global-loader">
+        <div id="lottie-placeholder"></div>
+      </div>
+    </div>
+
     <div class="login-layout">
       <div class="login-side">
         <!-- Cabeçalho com logos -->
@@ -114,14 +142,14 @@
         </div>
       </div>
     </div>
+
+    <script src="frontend/js/api/login.js"></script>
+    <script src="frontend/js/ui/robozinho.js"></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
   </body>
-
-  <script src="frontend/js/api/login.js"></script>
-  <script src="frontend/js/ui/robozinho.js"></script>
-
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-    crossorigin="anonymous"
-  ></script>
 </html>

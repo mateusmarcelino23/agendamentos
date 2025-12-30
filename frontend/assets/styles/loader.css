@@ -1,0 +1,24 @@
+#global-loader {
+  position: fixed;
+  inset: 0;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Mobile first */
+@media (min-width: 768px) {
+  #global-loader lottie-player {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (min-width: 1200px) {
+  #global-loader lottie-player {
+    width: 250px;
+    height: 250px;
+  }
+}

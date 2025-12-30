@@ -45,7 +45,8 @@
 }
 
 @keyframes floatStrong {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(-50%, 250px);
   }
   50% {
@@ -75,7 +76,8 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.shortcut-card.touch-feedback, .shortcut-card:focus {
+.shortcut-card.touch-feedback,
+.shortcut-card:focus {
   transform: scale(0.95);
   background-color: #ff8c0046;
 }
@@ -98,24 +100,24 @@
   overflow: hidden;
   border: none;
   padding: 0;
-  box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
-  transition: transform .15s ease;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.15s ease;
 }
 
 /* Efeito de hover */
 .cartao-info:hover {
   transform: scale(1.01);
-  box-shadow: 0px 6px 10px rgba(0,0,0,0.2);
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Header do card: flex para alinhar ícone + título, padding e tamanho de fonte ajustados */
 .card-header-custom {
   display: flex;
   align-items: center;
-  gap: .5rem;
-  padding: .65rem .8rem;
+  gap: 0.5rem;
+  padding: 0.65rem 0.8rem;
   font-weight: 600;
-  font-size: 1.20rem;
+  font-size: 1.2rem;
 }
 
 /* Ícone do header: tamanho proporcional ao card */
@@ -125,14 +127,14 @@
 
 /* Corpo do card: padding menor, fundo branco e texto escuro */
 .cartao-info .card-body {
-  padding: .8rem .9rem;
+  padding: 0.8rem 0.9rem;
   background: #fff;
   color: #333;
 }
 
 /* Texto do corpo: tamanho reduzido e sem margens */
 .cartao-info .card-text {
-  font-size: .9rem;
+  font-size: 0.9rem;
   margin: 0;
 }
 
@@ -176,7 +178,7 @@
   background: #fff4ec;
   border-radius: 16px;
   padding: 12px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
   overflow-x: auto;
   animation: aparecer 0.4s ease;
   margin-bottom: 3rem;
@@ -211,7 +213,7 @@
   font-size: 1rem;
   text-align: center;
   vertical-align: middle;
-  box-shadow: 0 2px 0 rgba(0,0,0,0.05);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -235,13 +237,13 @@
 .tabela-agendamentos tbody tr {
   background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .tabela-agendamentos tbody tr:hover {
   transform: scale(1.01);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Células */
@@ -262,7 +264,6 @@
   border-bottom-right-radius: 12px;
 }
 
-
 /* Caixa principal de exibição */
 .caixa-uso {
   border: 1px solid #dee2e6; /* Borda cinza clara ao redor da caixa */
@@ -281,7 +282,7 @@
 /* Efeito de hover da caixa */
 .caixa-uso:hover {
   transform: translateY(-2px); /* Eleva a caixa levemente */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Adiciona sombra para destaque */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adiciona sombra para destaque */
 }
 
 /* Estilo do título da seção */

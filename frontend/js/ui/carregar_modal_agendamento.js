@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const modalPath = "../components/criar_agendamento.html";
+  const modalPath = "../pages/criar_agendamento.html";
 
   fetch(modalPath)
     .then((response) => response.text())

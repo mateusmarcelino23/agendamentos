@@ -15,6 +15,9 @@ async function carregarAtividade() {
     // Atualiza o agendamento ativo
     mostrarAgendamentoAtivo(data.agendamentoAtivo);
 
+    // Preenche a tabela de próximos agendamentos
+    preencherProximosAgendamentos(data.proximosAgendamentos);
+
     // Preenche a tabela do histórico mensal
     preencherHistoricoMensal(data.historicoMensal);
 
@@ -43,9 +46,8 @@ function mostrarAgendamentoAtivo(agendamento) {
   `;
 }
 
-// Preenche a tabela de histórico mensal
-function preencherHistoricoMensal(agendamentos) {
-  const tbody = document.querySelector("#tabela-historico-mensal tbody");
+function preencherProximosAgendamentos(agendamentos) {
+  const tbody = document.querySelector("#tabela-proximos-agendamentos tbody");
   if (!tbody) return;
 
   tbody.innerHTML = "";
@@ -53,7 +55,7 @@ function preencherHistoricoMensal(agendamentos) {
   if (!agendamentos || agendamentos.length === 0) {
     const tr = document.createElement("tr");
     tr.innerHTML =
-      '<td colspan="6" class="text-center text-muted">Nenhum agendamento registrado neste mês.</td>';
+      '<td colspan="7" class="text-center text-muted">Nenhum próximo agendamento.</td>';
     tbody.appendChild(tr);
     return;
   }
@@ -61,17 +63,12 @@ function preencherHistoricoMensal(agendamentos) {
   agendamentos.forEach((a) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
+      <td>${a.equipamento}</td>
+      <td>${a.quantidade}</td>
       <td>${formatarData(a.data)}</td>
-      <td>${a.aula} (${a.periodo})</td>
-      <td>${a.equipamento_id}</td>
+      <td>${a.periodo}</td>
+      <td>${a.aula}</td>
       <td>${formatarStatus(a.status)}</td>
-      <td>
-        ${
-          a.status === 0
-            ? `<button class="btn btn-success btn-sm" onclick="concluirAgendamento(${a.id})">Concluir</button>`
-            : "-"
-        }
-      </td>
       <td>
         ${
           a.status === 0
@@ -83,6 +80,34 @@ function preencherHistoricoMensal(agendamentos) {
     tbody.appendChild(tr);
   });
 }
+
+function preencherHistoricoMensal(agendamentos) {
+  const tbody = document.querySelector("#tabela-historico-mensal tbody");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  if (!agendamentos || agendamentos.length === 0) {
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td colspan="5" class="text-center text-muted">Nenhum agendamento registrado neste mês.</td>';
+    tbody.appendChild(tr);
+    return;
+  }
+
+  agendamentos.forEach((a) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${a.equipamento}</td>
+      <td>${formatarData(a.data)}</td>
+      <td>${a.quantidade}</td>
+      <td>${a.periodo}</td>
+      <td>${a.aula}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
 
 // Atualiza os cards detalhados
 function atualizarCardsDetalhados(cards) {
@@ -105,38 +130,13 @@ function atualizarCardsDetalhados(cards) {
   });
 }
 
-// Concluir agendamento via AJAX
-async function concluirAgendamento(id) {
-  if (!confirm("Deseja realmente concluir este agendamento?")) return;
-
-  try {
-    const response = await fetch(
-      `../../../backend/api/concluir_agendamento.php?id=${id}`,
-      {
-        method: "POST",
-        headers: { "X-Requested-With": "XMLHttpRequest" },
-      }
-    );
-
-    const result = await response.json();
-    if (result.success) {
-      alert("Agendamento concluído com sucesso!");
-      carregarAtividade(); // Recarrega os dados
-    } else {
-      alert("Erro ao concluir agendamento.");
-    }
-  } catch (error) {
-    console.error("Erro ao concluir agendamento:", error);
-  }
-}
-
 // Cancelar agendamento via AJAX
 async function cancelarAgendamento(id) {
   if (!confirm("Deseja realmente cancelar este agendamento?")) return;
 
   try {
     const response = await fetch(
-      `../../../backend/api/cancelar_agendamento.php?id=${id}`,
+      `../../backend/api/cancelar_agendamento.php?id=${id}`,
       {
         method: "POST",
         headers: { "X-Requested-With": "XMLHttpRequest" },
