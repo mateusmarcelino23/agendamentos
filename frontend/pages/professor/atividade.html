@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/img/logo_escola.png" />
+    <link rel="stylesheet" href="../../assets/styles/atividade.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.2/lottie.min.js"></script>
+    <title>Minha Atividade</title>
+  </head>
+
+  <body>
+    <div id="loader"></div>
+
+    <div id="header"></div>
+
+    <div class="conteudo-principal container-fluid">
+      <!-- Mensagem de apresentação -->
+      <div class="apresentacao-row row mb-5">
+        <div class="apresentacao-col col-12 text-center">
+          <img
+            src="../../assets/img/atividade_title.png"
+            alt=""
+            class="apresentacao-imagem"
+          />
+        </div>
+      </div>
+
+      <!-- Agendamento ativo agora -->
+      <div class="agendamento-row row mb-6">
+        <div class="agendamento-col col-12">
+          <h3 class="agendamento-title">Agendamento Ativo</h3>
+          <div
+            id="agendamento-ativo"
+            class="agendamento-box p-3 border rounded bg-light text-muted"
+          >
+            Carregando informações de agendamento ativo...
+          </div>
+        </div>
+      </div>
+
+      <!-- Botões de ação -->
+      <div class="atalhos-row row justify-content-center mb-6">
+        <div class="col-12 col-md-5 col-lg-4 mb-4">
+          <a
+            href="#"
+            data-bs-toggle="modal"
+            data-bs-target="#modalAgendamento"
+            class="shortcut-card botao-novo"
+          >
+            <img src="../../assets/img/checkbranco.png" class="icone-botao" />
+            <span>Novo Agendamento</span>
+          </a>
+        </div>
+
+        <div class="col-12 col-md-5 col-lg-4 mb-2">
+          <a
+            href="relatorios.html#meus-relatorios"
+            class="shortcut-card botao-rel"
+          >
+            <img src="../../assets/img/graficobranco.png" class="icone-botao" />
+            <span>Ver meus relatórios</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Tabela de próximos agendamentos -->
+      <div class="proximos-row row mb-6">
+        <div class="proximos-col col-12">
+          <h3 class="proximos-title">Próximos Agendamentos</h3>
+          <div class="proximos-table-responsive table-responsive">
+            <table
+              class="proximos-table table"
+              id="tabela-proximos-agendamentos"
+            >
+              <thead>
+                <tr class="proximos-tr">
+                  <th class="proximos-th">Equipamento</th>
+                  <th class="proximos-th">Quantidade</th>
+                  <th class="proximos-th">Data</th>
+                  <th class="proximos-th">Período</th>
+                  <th class="proximos-th">Aula</th>
+                  <th class="proximos-th">Status</th>
+                  <th class="proximos-th"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="proximos-tr-body">
+                  <td colspan="7" class="proximos-td text-center text-muted">
+                    Carregando próximos agendamentos...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela de histórico mensal -->
+      <div class="historico-row row mb-6">
+        <div class="historico-col col-12">
+          <h3 class="historico-title">Histórico Mensal de Agendamentos</h3>
+          <div class="historico-table-responsive table-responsive">
+            <table class="historico-table table" id="tabela-historico-mensal">
+              <thead>
+                <tr class="historico-tr">
+                  <th class="historico-th">Equipamento</th>
+                  <th class="historico-th">Data</th>
+                  <th class="historico-th">Quantidade</th>
+                  <th class="historico-th">Período</th>
+                  <th class="historico-th">Aula</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="historico-tr-body">
+                  <td colspan="5" class="historico-td text-center text-muted">
+                    Carregando histórico mensal...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cards detalhados do professor -->
+      <div class="cards-row row" id="cards-detalhados">
+        <!-- Os cards serão inseridos dinamicamente pelo JS -->
+      </div>
+    </div>
+
+    <!-- Rodapé -->
+    <div id="footer"></div>
+
+    <!-- Script do loader -->
+    <script src="../../js/ui/loader.js"></script>
+    <!-- Script para carregar o header -->
+    <script src="../../js/ui/carregar_header.js"></script>
+    <!-- Script para carregar o footer -->
+    <script src="../../js/ui/carregar_footer.js"></script>
+    <!-- API da página de atividade -->
+    <script src="../../js/api/atividade.js"></script>
+    <!-- Script para carregar modal de agendamento -->
+    <script src="../../js/ui/carregar_modal_agendamento.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

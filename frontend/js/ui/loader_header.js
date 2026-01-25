@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Pré-carrega o webcomponent do lottie e o JSON da animação em paralelo para exibir imediatamente
     const lottieScriptSrc =
       "https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js";
-    const animationJsonPath = "frontend/assets/animations/loading.json";
+    const animationJsonPath = "../assets/animations/loading.json"; // ajustar caminho relativo à página
 
     const loadScriptOnce = (src) => {
       if (!window.__loadedScripts) window.__loadedScripts = {};
@@ -51,18 +51,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Inicia pré-carregamento do script e do JSON
     await Promise.all([loadScriptOnce(lottieScriptSrc), prefetchAnimation()]);
 
-    // Assim que os scripts externos necessários estiverem carregados (ex: lottie-player),
-    // criamos dinamicamente o <lottie-player> e o adicionamos ao placeholder.
+    // Criar e configurar o lottie-player usando o Blob URL (se disponível)
     const placeholder = document.getElementById("lottie-placeholder");
     if (!placeholder) {
       console.error("#lottie-placeholder não encontrado");
       return;
     }
 
-    // Criar e configurar o lottie-player usando o Blob URL (se disponível)
     const lp = document.createElement("lottie-player");
     if (animationBlobUrl) lp.setAttribute("src", animationBlobUrl);
-    else lp.setAttribute("src", "frontend/assets/animations/loading.json");
+    else lp.setAttribute("src", animationJsonPath);
     lp.setAttribute("background", "transparent");
     lp.setAttribute("speed", "1");
     lp.style.width = "150px";
@@ -78,29 +76,58 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     // Pequeno delay antes de checar a sessão (deixar recursos estabilizarem)
-    await new Promise((r) => setTimeout(r, 700));
+    await new Promise((r) => setTimeout(r, 500));
 
-    // Checa a sessão
-    const res = await fetch("backend/api/check_session.php");
+    // Checa a sessão: se não existir, redireciona para login
+    const res = await fetch("../backend/api/check_session.php");
     const data = await res.json();
 
-    if (data.logged_in) {
-      // limpar blob url se existir
+    if (!data.logged_in) {
       if (animationBlobUrl) URL.revokeObjectURL(animationBlobUrl);
-      window.location.href = "frontend/pages/dashboard.html";
-    } else {
-      // Pequeno fade-out visual (se quiser manter simples, remove diretamente)
-      try {
-        loader.style.transition = "opacity 220ms ease";
-        loader.style.opacity = "0";
-        setTimeout(() => {
-          loader.remove();
-          if (animationBlobUrl) URL.revokeObjectURL(animationBlobUrl);
-        }, 240);
-      } catch (e) {
+      window.location.href = "../../index.html";
+      return; // garante que o loader não tente continuar
+    }
+
+    // Espera apenas o header carregar antes de remover o loader
+    const waitForHeader = () => {
+      return new Promise((resolve) => {
+        const header = document.getElementById("header");
+        if (!header) {
+          console.warn("Div #header não encontrada");
+          resolve();
+          return;
+        }
+
+        // Se header já tiver conteúdo, resolve imediatamente
+        if (header.innerHTML.trim() !== "") {
+          resolve();
+          return;
+        }
+
+        // Caso contrário, observar mudanças no header
+        const observer = new MutationObserver((mutations, obs) => {
+          if (header.innerHTML.trim() !== "") {
+            obs.disconnect();
+            resolve();
+          }
+        });
+        observer.observe(header, { childList: true, subtree: true });
+      });
+    };
+
+    await waitForHeader();
+
+    // Remover loader com fade-out
+    try {
+      loader.style.transition = "opacity 220ms ease";
+      loader.style.opacity = "0";
+      setTimeout(() => {
         loader.remove();
         if (animationBlobUrl) URL.revokeObjectURL(animationBlobUrl);
-      }
+      }, 240);
+    } catch (e) {
+      loader.remove();
+      if (animationBlobUrl) URL.revokeObjectURL(animationBlobUrl);
     }
   } catch (err) {
     console.error("Erro ao carregar loader ou checar sessão", err);

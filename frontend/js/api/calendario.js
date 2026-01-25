@@ -89,7 +89,7 @@ function abrirDetalhesDoDia(data, detalhes) {
 
 async function inicializarCalendario() {
   try {
-    const res = await fetch("../../backend/api/get_agendamentos.php");
+    const res = await fetch("../../../backend/api/get_agendamentos.php");
     const data = await res.json();
 
     if (!data.success) {
@@ -122,6 +122,13 @@ async function inicializarCalendario() {
         list: "Lista",
       },
       dateClick: function (info) {
+        const diaSemana = info.date.getDay(); // 0 = dom, 6 = sáb
+
+        if (diaSemana === 0 || diaSemana === 6) {
+          info.jsEvent.preventDefault();
+          return;
+        }
+
         const evento = eventos.find((e) => e.start === info.dateStr);
         abrirDetalhesDoDia(
           info.dateStr,

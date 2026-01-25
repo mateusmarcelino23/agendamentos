@@ -1,3 +1,20 @@
+/* Conteúdo principal - fazendo espaçamento entre elementos */
+.conteudo-principal {
+  padding: 1.5rem;
+}
+.conteudo-principal > .apresentacao {
+  margin-bottom: 4rem;
+}
+.conteudo-principal .atalhos {
+  padding-bottom: 4rem;
+}
+.conteudo-principal .tabela-wrapper {
+  margin-bottom: 4rem;
+}
+.conteudo-principal .caixa-uso {
+  margin-bottom: 4rem;
+}
+
 .apresentacao {
   position: relative;
   top: -20px;
@@ -13,7 +30,6 @@
   align-items: center;
   text-align: center;
   gap: 1rem;
-  margin-bottom: 4rem;
   opacity: 1;
   transform: translateY(20px);
 }
@@ -58,7 +74,6 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  padding-bottom: 3rem;
   gap: 1rem;
 }
 
@@ -72,7 +87,9 @@
   padding: 20px;
   border-radius: 10px;
   height: 180px;
-  transition: transform 0.2s, background-color 0.2s;
+  transition:
+    transform 0.2s,
+    background-color 0.2s;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -181,7 +198,6 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
   overflow-x: auto;
   animation: aparecer 0.4s ease;
-  margin-bottom: 3rem;
 }
 
 /* Animação suave ao carregar */
@@ -214,7 +230,9 @@
   text-align: center;
   vertical-align: middle;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .tabela-agendamentos thead th:hover {
@@ -238,7 +256,9 @@
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .tabela-agendamentos tbody tr:hover {
@@ -252,6 +272,7 @@
   border-top: none;
   font-size: 0.9rem;
   color: #2c3e50;
+  border-right: 1px solid #e4e3e3;
 }
 
 /* Remover borda lateral default */
@@ -266,17 +287,18 @@
 
 /* Caixa principal de exibição */
 .caixa-uso {
-  border: 1px solid #dee2e6; /* Borda cinza clara ao redor da caixa */
-  background-color: #f8f9fa; /* Fundo levemente cinza */
-  color: #495057; /* Cor do texto dentro da caixa */
-  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Animação suave para hover */
-  min-height: 80px; /* Altura mínima da caixa */
-  display: flex; /* Flexbox para centralização */
-  align-items: center; /* Centraliza verticalmente o conteúdo */
-  justify-content: center; /* Centraliza horizontalmente o conteúdo */
-  text-align: center; /* Centraliza textos multilinha */
-  font-size: 0.95rem; /* Tamanho de fonte inicial */
-  margin-bottom: 3rem; /* Espaço inferior entre caixas */
+  border: 1px solid #dee2e6;
+  background-color: #f8f9fa;
+  color: #495057;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.95rem;
 }
 
 /* Efeito de hover da caixa */

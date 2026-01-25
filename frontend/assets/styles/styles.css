@@ -232,7 +232,7 @@ BREAKPOINTS POR LARGURA (MOBILE FIRST)
 .conta-dropdown-mobile {
   display: none;
   position: fixed;
-  top: -312px;
+  top: -300px;
   left: 0;
   width: 100vw;
   height: 100vh;

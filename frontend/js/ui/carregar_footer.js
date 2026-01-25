@@ -7,7 +7,7 @@ function ajustarAlturaConteudo() {
 
   if (alturaConteudo < alturaTela) {
     // aumenta a altura do conteúdo para forçar rolagem
-    const diferenca = alturaTela - footer.offsetHeight + 100;
+    const diferenca = alturaTela - footer.offsetHeight + 80;
     conteudo.style.minHeight = diferenca + "px";
   } else {
     conteudo.style.minHeight = "auto";
@@ -15,7 +15,7 @@ function ajustarAlturaConteudo() {
 }
 
 // Carrega o footer
-fetch("../components/footer.html")
+fetch("../../components/footer.html")
   .then((response) => response.text())
   .then((data) => {
     document.getElementById("footer").innerHTML = data;

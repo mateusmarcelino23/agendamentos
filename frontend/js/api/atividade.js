@@ -1,14 +1,14 @@
 // Função principal para carregar os dados da página de atividade
 async function carregarAtividade() {
   try {
-    const response = await fetch("../../backend/api/atividade.php", {
+    const response = await fetch("../../../backend/api/atividade.php", {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     });
 
     const data = await response.json();
 
     if (data.error === "Usuário não autenticado") {
-      window.location.href = "../../";
+      window.location.href = "../../../";
       return;
     }
 
@@ -135,12 +135,16 @@ async function cancelarAgendamento(id) {
   if (!confirm("Deseja realmente cancelar este agendamento?")) return;
 
   try {
+    const formData = new FormData();
+    formData.append("id", id);
+
     const response = await fetch(
-      `../../backend/api/cancelar_agendamento.php?id=${id}`,
+      "../../../backend/api/cancelar_agendamento.php",
       {
         method: "POST",
+        body: formData,
         headers: { "X-Requested-With": "XMLHttpRequest" },
-      }
+      },
     );
 
     const result = await response.json();
@@ -148,12 +152,13 @@ async function cancelarAgendamento(id) {
       alert("Agendamento cancelado com sucesso!");
       carregarAtividade(); // Recarrega os dados
     } else {
-      alert("Erro ao cancelar agendamento.");
+      alert("Erro ao cancelar agendamento: " + (result.message || ""));
     }
   } catch (error) {
     console.error("Erro ao cancelar agendamento:", error);
   }
 }
+
 
 // Formata o status do agendamento
 function formatarStatus(status) {
