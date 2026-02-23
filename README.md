@@ -38,17 +38,6 @@ Vá no seu PHPMyAdmin e importe o arquivo `db.sql` para criar as tabelas necess�
 2. Acesse: `http://127.0.0.1:8081/SAE/`
 3. Clique em "Entrar com Google"
 
-## Estrutura de Arquivos
-
-- `index.php` - Página de login
-- `callback.php` - Processa o retorno do Google OAuth
-- `dashboard.php` - Página após login
-- `logout.php` - Encerra a sessão
-- `config.php` - Configurações
-- `database.php` - Funções do banco de dados
-- `style.css` - Estilos
-- `db.sql` - Script de criação do banco
-
 ## Requisitos
 
 - PHP 7.4+
