@@ -119,7 +119,7 @@ function atualizarCardsDetalhados(cards) {
     const div = document.createElement("div");
     div.className = "col-md-3 mb-3";
     div.innerHTML = `
-      <div class="card text-white bg-info h-100">
+      <div class="card text-white h-100">
         <div class="card-body">
           <h5 class="card-title">${card.titulo}</h5>
           <p class="card-text">${card.valor}</p>

@@ -2,6 +2,10 @@
   margin-bottom: 4rem !important;
 }
 
+.mb-7 {
+  margin-bottom: 5rem !important;
+}
+
 /* Apresentação / título principal */
 .apresentacao-row {
   display: flex;
@@ -216,7 +220,21 @@ transform: scale(1.01);
   overflow: hidden;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   transition: transform 0.15s ease;
+  background: #fff;
+  border: 3px solid transparent;
+  background-clip: padding-box, border-box;
+  background-origin: border-box;
+  background-image:
+    linear-gradient(#fff, #fff), /* fundo do card */
+    linear-gradient(to right, 
+      #8e2de2 0%, 
+      #c834ff 20%, 
+      #ff4f81 40%, 
+      #7f00ff 60%, 
+      #e100ff 80%
+    );
 }
+
 #cards-detalhados .card .card-body {
   padding: 0.9rem;
   background: #fff;
