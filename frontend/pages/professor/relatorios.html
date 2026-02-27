@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
@@ -20,19 +20,34 @@
     <div id="header"></div>
 
     <div class="conteudo-principal container-fluid">
-      <!-- Título principal -->
-      <div class="row mb-4">
+      <!-- Mensagem de apresentação -->
+      <div class="apresentacao-row row mb-1">
+        <div class="apresentacao-col col-12 text-center">
+          <img
+            src="../../assets/img/relatorios_title.png"
+            alt=""
+            class="apresentacao-imagem"
+          />
+        </div>
+      </div>
+
+      <!-- Mês atual -->
+      <div class="row mb-5">
         <div class="col-12 text-center">
-          <h1>Relatórios do Mês</h1>
+          <div>
+            <h3 class="mes-atual-title mb-0">
+              <span id="mes">...</span>
+            </h3>
+          </div>
         </div>
       </div>
 
       <!-- ===============================
-         🏆 RANKINGS
+         RANKINGS
     ================================ -->
-      <div class="row mb-5 rankings-container">
-        <div class="col-12 text-center mb-4">
-          <h3 class="rankings-title">Rankings do Mês</h3>
+      <div class="row mb-6 rankings-container">
+        <div class="col-12">
+          <h3 class="ranking-title mb-3">Rankings do mês</h3>
         </div>
 
         <div class="col-md-4">
@@ -70,53 +85,67 @@
       </div>
 
       <!-- ===============================
-         📈 GRÁFICOS DO SISTEMA
+         INFORMAÇÕES DO SISTEMA
     ================================ -->
-      <div class="row mb-5">
-        <div class="col-12 text-center mb-3">
-          <h3>Relatórios Gerais do Sistema</h3>
+      <div class="row mb-6">
+        <div class="col-12 mb-3">
+          <h3>Informações Gerais</h3>
         </div>
 
+        <!-- Cards -->
         <div class="col-md-3 mb-2">
-          <div class="card text-white bg-primary mb-3">
-            <div class="card-body">
-              <h5 class="card-title">Total de Agendamentos</h5>
-              <p class="card-text" id="card-total-mes">Carregando...</p>
+          <div class="dashboard-card total mb-3">
+            <div class="card-body dashboard-card-body">
+              <h5 class="card-title dashboard-card-title">
+                Total de Agendamentos
+              </h5>
+              <p class="card-text dashboard-card-value" id="card-total-mes">
+                Carregando...
+              </p>
             </div>
           </div>
         </div>
 
         <div class="col-md-3 mb-2">
-          <div class="card text-white bg-success mb-3">
-            <div class="card-body">
-              <h5 class="card-title">Concluídos</h5>
-              <p class="card-text" id="card-concluidos">Carregando...</p>
+          <div class="dashboard-card concluidos mb-3">
+            <div class="card-body dashboard-card-body">
+              <h5 class="card-title dashboard-card-title">Concluídos</h5>
+              <p class="card-text dashboard-card-value" id="card-concluidos">
+                Carregando...
+              </p>
             </div>
           </div>
         </div>
 
         <div class="col-md-3 mb-2">
-          <div class="card text-white bg-danger mb-3">
-            <div class="card-body">
-              <h5 class="card-title">Cancelados</h5>
-              <p class="card-text" id="card-cancelados">Carregando...</p>
+          <div class="dashboard-card cancelados mb-3">
+            <div class="card-body dashboard-card-body">
+              <h5 class="card-title dashboard-card-title">Cancelados</h5>
+              <p class="card-text dashboard-card-value" id="card-cancelados">
+                Carregando...
+              </p>
             </div>
           </div>
         </div>
 
         <div class="col-md-3 mb-2">
-          <div class="card text-white bg-info mb-3">
-            <div class="card-body">
-              <h5 class="card-title">Equipamento Mais Usado</h5>
-              <p class="card-text" id="card-equipamento">Carregando...</p>
+          <div class="dashboard-card equipamento mb-3">
+            <div class="card-body dashboard-card-body">
+              <h5 class="card-title dashboard-card-title">
+                Equipamento Mais Usado
+              </h5>
+              <p class="card-text dashboard-card-value" id="card-equipamento">
+                Carregando...
+              </p>
             </div>
           </div>
         </div>
 
-        <div class="col-md-6 mb-4">
+        <!-- Gráficos -->
+        <div class="col-md-6">
           <div
             id="grafico-status-sistema"
-            class="border rounded p-3"
+            class="border rounded p-3 mb-4 grafico-container"
             style="height: 350px"
           >
             Carregando gráfico...
@@ -125,7 +154,7 @@
         <div class="col-md-6 mb-4">
           <div
             id="grafico-tipo-sistema"
-            class="border rounded p-3"
+            class="border rounded p-3 grafico-container"
             style="height: 350px"
           >
             Carregando gráfico...
@@ -135,7 +164,7 @@
         <div class="col-md-6 mb-4">
           <div
             id="grafico-periodos-sistema"
-            class="border rounded p-3"
+            class="border rounded p-3 grafico-container"
             style="height: 350px"
           >
             Carregando gráfico...
@@ -144,7 +173,7 @@
         <div class="col-md-6 mb-4">
           <div
             id="grafico-evolucao"
-            class="border rounded p-3"
+            class="border rounded p-3 grafico-container"
             style="height: 350px"
           >
             Carregando gráfico...
@@ -153,46 +182,56 @@
       </div>
 
       <!-- ===============================
-         👨‍🏫 RELATÓRIOS DO PROFESSOR
+         RELATÓRIOS DO PROFESSOR
     ================================ -->
       <div class="row mb-4" id="meus-relatorios">
-        <div class="col-12 text-center mb-3">
-          <h3>Meus Relatórios do Mês</h3>
+        <div class="col-12 mb-3">
+          <h3>Minhas informações</h3>
         </div>
 
         <!-- Cards pessoais -->
         <div class="col-md-3 mb-2">
-          <div class="card text-white bg-primary mb-3">
-            <div class="card-body">
-              <h5 class="card-title">Total</h5>
-              <p class="card-text" id="meus-total">Carregando...</p>
+          <div class="dashboard-card total mb-3">
+            <div class="card-body dashboard-card-body">
+              <h5 class="card-title dashboard-card-title">Total</h5>
+              <p class="card-text dashboard-card-value" id="meus-total">
+                Carregando...
+              </p>
             </div>
           </div>
         </div>
 
         <div class="col-md-3 mb-2">
-          <div class="card text-white bg-success mb-3">
-            <div class="card-body">
-              <h5 class="card-title">Concluídos</h5>
-              <p class="card-text" id="meus-concluidos">Carregando...</p>
+          <div class="dashboard-card concluidos mb-3">
+            <div class="card-body dashboard-card-body">
+              <h5 class="card-title dashboard-card-title">Concluídos</h5>
+              <p class="card-text dashboard-card-value" id="meus-concluidos">
+                Carregando...
+              </p>
             </div>
           </div>
         </div>
 
         <div class="col-md-3 mb-2">
-          <div class="card text-white bg-danger mb-3">
-            <div class="card-body">
-              <h5 class="card-title">Cancelados</h5>
-              <p class="card-text" id="meus-cancelados">Carregando...</p>
+          <div class="dashboard-card cancelados mb-3">
+            <div class="card-body dashboard-card-body">
+              <h5 class="card-title dashboard-card-title">Cancelados</h5>
+              <p class="card-text dashboard-card-value" id="meus-cancelados">
+                Carregando...
+              </p>
             </div>
           </div>
         </div>
 
         <div class="col-md-3 mb-2">
-          <div class="card text-white bg-info mb-3">
-            <div class="card-body">
-              <h5 class="card-title">Equipamento Mais Usado</h5>
-              <p class="card-text" id="meu-equipamento">Carregando...</p>
+          <div class="dashboard-card equipamento mb-3">
+            <div class="card-body dashboard-card-body">
+              <h5 class="card-title dashboard-card-title">
+                Equipamento Mais Usado
+              </h5>
+              <p class="card-text dashboard-card-value" id="meu-equipamento">
+                Carregando...
+              </p>
             </div>
           </div>
         </div>
@@ -201,7 +240,7 @@
         <div class="col-md-6 mb-4">
           <div
             id="grafico-status-professor"
-            class="border rounded p-3"
+            class="border rounded p-3 grafico-container"
             style="height: 350px"
           >
             Carregando gráfico...
@@ -210,7 +249,7 @@
         <div class="col-md-6 mb-4">
           <div
             id="grafico-equip-professor"
-            class="border rounded p-3"
+            class="border rounded p-3 grafico-container"
             style="height: 350px"
           >
             Carregando gráfico...
@@ -220,7 +259,7 @@
         <div class="col-12 mb-4">
           <div
             id="grafico-periodos-professor"
-            class="border rounded p-3"
+            class="border rounded p-3 grafico-container"
             style="height: 350px"
           >
             Carregando gráfico...

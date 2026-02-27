@@ -1,3 +1,33 @@
+.mb-6 {
+  margin-bottom: 4rem !important;
+}
+
+.mb-7 {
+  margin-bottom: 5rem !important;
+}
+
+/* Apresentação / título principal */
+.apresentacao-row {
+  display: flex;
+  justify-content: center;
+}
+.apresentacao-imagem {
+  width: 150px; /* a imagem ocupa toda a largura do container */
+  height: 50px; /* altura desejada do recorte */
+  object-fit: cover; /* cobre todo o container, cortando excesso */
+  object-position: center; /* centraliza vertical e horizontalmente */
+  display: block; /* remove gaps indesejados */
+  margin: 0 auto; /* centraliza horizontalmente */
+}
+
+#mes {
+  font-weight: bold;
+  color: #24a344;
+  font-size: 2rem;
+  /* fonte arredondada e moderna */
+  font-family: "Arial Rounded MT Bold", "Helvetica Rounded";
+}
+
 /* Container do ranking */
 .ranking-card {
   border-radius: 8px;
@@ -94,4 +124,59 @@
   color: #999;
   font-style: italic;
   font-weight: 500;
+}
+
+.dashboard-card {
+  border-radius: 30px;
+  overflow: hidden;
+  padding: 20px 30px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dashboard-card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.dashboard-card.total {
+  border: 3px solid #3234a0;
+}
+
+.dashboard-card.concluidos {
+  border: 3px solid #43aa39;
+}
+
+.dashboard-card.cancelados {
+  border: 3px solid #b93a47;
+}
+
+.dashboard-card.equipamento {
+  border: 3px solid #dfd548;
+}
+
+.dashboard-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+}
+
+.dashboard-card:hover .dashboard-card-title {
+  opacity: 1;
+}
+
+.dashboard-card-title {
+  opacity: 0.9;
+  transition: opacity 0.25s ease;
+}
+
+.grafico-container {
+  background-color: #fff4ec;  /* a cor que você quer */
+}
+
+@media (min-width: 768px) {
+  .apresentacao-imagem {
+    width: 200px;
+    height: 70px;
+  }
 }

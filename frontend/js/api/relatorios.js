@@ -129,7 +129,6 @@ function atualizarRankings(rankings) {
   });
 }
 
-
 // Desenha todos os gráficos do sistema (dados globais)
 function desenharGraficosSistema(graficos) {
   if (!graficos) return;
@@ -138,7 +137,7 @@ function desenharGraficosSistema(graficos) {
   desenharPizza(
     "grafico-status-sistema",
     graficos.status,
-    "Agendamentos por Status"
+    "Agendamentos por Status",
   );
 
   // Gráfico por tipo de equipamento (laboratório ou guardião)
@@ -146,7 +145,7 @@ function desenharGraficosSistema(graficos) {
     "grafico-tipo-sistema",
     graficos.tipoEquipamento,
     "Agendamentos por Tipo de Equipamento",
-    "tipo"
+    "tipo",
   );
 
   // Gráfico de agendamentos por período (manhã, tarde, noite)
@@ -154,14 +153,14 @@ function desenharGraficosSistema(graficos) {
     "grafico-periodos-sistema",
     graficos.periodos,
     "Agendamentos por Período",
-    "periodo"
+    "periodo",
   );
 
   // Gráfico de linha mostrando evolução diária de agendamentos
   desenharLinha(
     "grafico-evolucao",
     graficos.evolucao,
-    "Evolução Diária dos Agendamentos"
+    "Evolução Diária dos Agendamentos",
   );
 }
 
@@ -173,14 +172,14 @@ function desenharGraficosProfessor(graficos) {
   desenharPizza(
     "grafico-status-professor",
     graficos.status,
-    "Meus Agendamentos por Status"
+    "Meus Agendamentos por Status",
   );
 
   // Gráfico de barras com os equipamentos mais usados pelo professor
   desenharBarras(
     "grafico-equip-professor",
     graficos.equipamentos,
-    "Meus Equipamentos Mais Usados"
+    "Meus Equipamentos Mais Usados",
   );
 
   // Gráfico de pizza com a distribuição dos turnos do professor
@@ -188,7 +187,7 @@ function desenharGraficosProfessor(graficos) {
     "grafico-periodos-professor",
     graficos.periodos,
     "Meus Agendamentos por Período",
-    "periodo"
+    "periodo",
   );
 }
 
@@ -207,11 +206,13 @@ function desenharPizza(elementId, dados, titulo, chave = "status") {
   });
 
   const chart = new google.visualization.PieChart(
-    document.getElementById(elementId)
+    document.getElementById(elementId),
   );
   chart.draw(dataTable, {
     title: titulo,
     height: 300,
+    backgroundColor: { fill: "transparent" },
+    chartArea: { backgroundColor: "#fff4ec" },
     animation: { startup: true, duration: 800, easing: "out" }, // animação de entrada
   });
 }
@@ -224,11 +225,13 @@ function desenharBarras(elementId, dados, titulo) {
   dados.forEach((d) => dataTable.addRow([d.nome, parseInt(d.total)]));
 
   const chart = new google.visualization.ColumnChart(
-    document.getElementById(elementId)
+    document.getElementById(elementId),
   );
   chart.draw(dataTable, {
     title: titulo,
     height: 300,
+    backgroundColor: { fill: "transparent" },
+    chartArea: { backgroundColor: "#fff4ec" },
     animation: { startup: true, duration: 800, easing: "out" },
   });
 }
@@ -241,16 +244,38 @@ function desenharLinha(elementId, dados, titulo) {
   dados.forEach((d) => dataTable.addRow([`Dia ${d.dia}`, parseInt(d.total)]));
 
   const chart = new google.visualization.LineChart(
-    document.getElementById(elementId)
+    document.getElementById(elementId),
   );
   chart.draw(dataTable, {
     title: titulo,
     height: 300,
     curveType: "function",
     legend: { position: "bottom" },
+    backgroundColor: { fill: "transparent" },
+    chartArea: { backgroundColor: "#fff4ec" },
     animation: { startup: true, duration: 1000, easing: "out" },
   });
 }
+
+const meses = [
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
+];
+
+const hoje = new Date();
+const mesAtual = meses[hoje.getMonth()];
+
+document.getElementById("mes").textContent = mesAtual;
 
 // Executa automaticamente quando o DOM estiver carregado
 document.addEventListener("DOMContentLoaded", carregarRelatorios);
