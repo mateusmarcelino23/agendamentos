@@ -43,7 +43,7 @@ try {
     JOIN professores p ON a.professor_id = p.id
     WHERE MONTH(a.data) = MONTH(CURDATE())
       AND YEAR(a.data) = YEAR(CURDATE())
-      AND a.status IN (1, 2) -- considera concluídos e cancelados
+      AND a.status IN (1) -- considera concluídos e cancelados
     GROUP BY p.id
     ORDER BY total DESC
     LIMIT 5
@@ -57,7 +57,7 @@ try {
     JOIN equipamentos e ON a.equipamento_id = e.id
     WHERE MONTH(a.data) = MONTH(CURDATE())
       AND YEAR(a.data) = YEAR(CURDATE())
-      AND a.status IN (1, 2)
+      AND a.status IN (1)
     GROUP BY e.id
     ORDER BY total DESC
     LIMIT 5
@@ -70,7 +70,7 @@ try {
     FROM agendamentos
     WHERE MONTH(data) = MONTH(CURDATE())
       AND YEAR(data) = YEAR(CURDATE())
-      AND status IN (1, 2)
+      AND status IN (1)
     GROUP BY periodo
     ORDER BY total DESC
 ");
@@ -89,6 +89,7 @@ try {
     FROM agendamentos
     WHERE MONTH(data) = MONTH(CURDATE())
       AND YEAR(data) = YEAR(CURDATE())
+      
 ");
     $stmt->execute();
     $cards = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -211,6 +212,7 @@ try {
     WHERE professor_id = :id
       AND MONTH(data) = MONTH(CURDATE())
       AND YEAR(data) = YEAR(CURDATE())
+      AND status IN (1,2)
     GROUP BY status
 ");
     $stmt->execute([':id' => $userId]);

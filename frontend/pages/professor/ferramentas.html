@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
@@ -20,23 +20,79 @@
     <div id="header"></div>
 
     <div class="conteudo-principal container-fluid">
-      <!-- Título -->
-      <div class="row mb-4">
-        <div class="col-12 text-center">
-          <h1>Ferramentas do Professor</h1>
+      <!-- Mensagem de apresentação -->
+      <div class="apresentacao-row row mb-6">
+        <div class="apresentacao-col col-12 text-center">
+          <img
+            src="../../assets/img/ferramentas_title.png"
+            alt=""
+            class="apresentacao-imagem"
+          />
         </div>
       </div>
 
-      <!-- Tabela de Equipamentos -->
-      <div class="card shadow-sm mb-5">
-        <div class="card-body">
-          <h3 class="mb-3">Equipamentos</h3>
-          <div class="table-responsive">
-            <table
-              class="table table-striped align-middle"
-              id="tabela-equipamentos"
-            >
-              <thead class="table-light">
+      <div class="row g-3 mb-7">
+        <!-- Mensagens do Admin -->
+        <div class="col-md-6 mb-3">
+          <div class="custom-card">
+            <div class="custom-card-header">Mensagens do Admin</div>
+            <div class="custom-card-body" id="preview-mensagens-admin">
+              <!-- JS vai preencher -->
+            </div>
+            <div class="custom-card-footer">
+              <button
+                class="btn btn-sm ver-mensagens"
+                data-bs-toggle="modal"
+                data-bs-target="#modal-mensagens-admin"
+              >
+                <i class="bi bi-envelope-fill"></i> Ver todas
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat dos Professores -->
+        <div class="col-md-6">
+          <div class="custom-card">
+            <div class="custom-card-header">Chat dos Professores</div>
+            <div class="custom-card-body" id="preview-chat-professores">
+              <!-- JS vai preencher -->
+            </div>
+            <div class="custom-card-footer">
+              <button
+                class="btn btn-sm abrir-chat"
+                data-bs-toggle="modal"
+                data-bs-target="#modal-chat"
+              >
+                <i class="bi bi-chat-dots"></i> Abrir chat
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botões principais -->
+      <div
+        class="text-center mb-6 d-flex flex-column flex-md-row gap-3 justify-content-center"
+      >
+        <button
+          id="btn-alerta"
+          class="btn btn-danger btn-lg shadow-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#modal-alerta"
+        >
+          Alertar Problema
+        </button>
+      </div>
+
+      <!-- Tabela de equipamentos -->
+      <div class="equipamentos row mb-5">
+        <div class="col-12">
+          <h3 class="titulo-equipamentos">Equipamentos</h3>
+
+          <div class="tabela-wrapper table-responsive">
+            <table class="tabela-equipamentos table" id="tabela-equipamentos">
+              <thead>
                 <tr>
                   <th>Equipamento</th>
                   <th>Tipo</th>
@@ -54,38 +110,6 @@
             </table>
           </div>
         </div>
-      </div>
-
-      <!-- Botões principais -->
-      <div
-        class="text-center mb-5 d-flex flex-column flex-md-row gap-3 justify-content-center"
-      >
-        <button
-          id="btn-alerta"
-          class="btn btn-danger btn-lg shadow-sm"
-          data-bs-toggle="modal"
-          data-bs-target="#modal-alerta"
-        >
-          Alertar Problema
-        </button>
-
-        <button
-          id="btn-mensagens-admin"
-          class="btn btn-primary btn-lg shadow-sm"
-          data-bs-toggle="modal"
-          data-bs-target="#modal-mensagens-admin"
-        >
-          Mensagens do Admin
-        </button>
-
-        <button
-          id="btn-chat-professores"
-          class="btn btn-success btn-lg shadow-sm"
-          data-bs-toggle="modal"
-          data-bs-target="#modal-chat"
-        >
-          Chat dos Professores
-        </button>
       </div>
     </div>
 
@@ -154,14 +178,14 @@
       class="modal fade"
       id="modal-mensagens-admin"
       tabindex="-1"
-      aria-labelledby="mensagensAdminLabel"
+      aria-labelledby="modalMensagensAdminLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content rounded-4 shadow">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="mensagensAdminLabel">
-              Mensagens do Administrador
+            <h5 class="modal-title" id="modalMensagensAdminLabel">
+              Mensagens do Admin
             </h5>
             <button
               type="button"
@@ -171,7 +195,7 @@
             ></button>
           </div>
           <div class="modal-body">
-            <div id="lista-mensagens-admin"></div>
+            <div id="lista-mensagens-admin" class="list-group"></div>
           </div>
           <div class="modal-footer">
             <button

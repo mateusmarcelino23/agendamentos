@@ -13,17 +13,19 @@ async function carregarFerramentas() {
     }
 
     // Preenche tabela de equipamentos
-    preencherTabelaEquipamentos(data.equipamentos);
+    preencherTabelaEquipamentos(data.equipamentos || []);
 
-    // Atualiza botão de mensagens do admin
-    atualizarMensagensAdmin(data.mensagensAdmin, data.mensagensNaoLidas);
+    // Atualiza os previews (mostra 3 últimas mensagens nas caixas)
+    atualizarPreviewMensagensAdmin(data.mensagensAdmin || []);
+    atualizarPreviewChatProfessores(data.chatProfessores || []);
 
-    // Preenche chat dos professores
-    preencherChatProfessores(data.chatProfessores);
+    // Popula o conteúdo completo dos modais (mas NÃO abre o modal automaticamente)
+    preencherChatProfessores(data.chatProfessores || []);
+    // remover chamada: abrirModalMensagensAdmin(data.mensagensAdmin || []);
 
-    // Atualiza botão de alertas
-    atualizarAlertas(data.alertas, data.alertasNaoLidas);
-
+    if (typeof atualizarAlertas === "function" && data.alertas) {
+      atualizarAlertas(data.alertas, data.alertasNaoLidas || 0);
+    }
   } catch (error) {
     console.error("Erro ao carregar ferramentas:", error);
   }
@@ -98,6 +100,28 @@ async function enviarAlertaProblema() {
 // =======================================================
 //  MENSAGENS DO ADMIN
 // =======================================================
+function atualizarPreviewMensagensAdmin(mensagens) {
+  const preview = document.getElementById("preview-mensagens-admin");
+  if (!preview) return;
+
+  preview.innerHTML = "";
+
+  const ultimas = mensagens.slice(0, 3); // só mostra 3 últimas
+  if (!ultimas.length) {
+    preview.innerHTML = `<p class="text-muted">Nenhuma mensagem recebida.</p>`;
+  } else {
+    ultimas.forEach((m) => {
+      const div = document.createElement("div");
+      div.className = "mb-2";
+      div.innerHTML = `
+        <strong>${m.titulo}</strong>
+        <p class="mb-0 text-truncate" style="max-width:100%">${m.mensagem}</p>
+        <small class="text-muted">${formatarData(m.criado_em)}</small>
+      `;
+      preview.appendChild(div);
+    });
+  }
+}
 
 function atualizarMensagensAdmin(mensagens, naoLidas) {
   const btn = document.getElementById("btn-mensagens-admin");
@@ -137,6 +161,28 @@ function abrirModalMensagensAdmin(mensagens) {
 // =======================================================
 //  CHAT ENTRE PROFESSORES
 // =======================================================
+function atualizarPreviewChatProfessores(chat) {
+  const preview = document.getElementById("preview-chat-professores");
+  if (!preview) return;
+
+  preview.innerHTML = "";
+
+  const ultimas = chat.slice(-3); // últimas 3 mensagens
+  if (!ultimas.length) {
+    preview.innerHTML = `<p class="text-muted">Nenhuma mensagem no chat.</p>`;
+  } else {
+    ultimas.forEach((msg) => {
+      const div = document.createElement("div");
+      div.className = "mb-2";
+      div.innerHTML = `
+        <strong>${msg.professor}</strong>:
+        <p class="mb-0 text-truncate" style="max-width:100%">${msg.mensagem}</p>
+        <small class="text-muted">${formatarData(msg.criado_em)}</small>
+      `;
+      preview.appendChild(div);
+    });
+  }
+}
 
 function preencherChatProfessores(chat) {
   const container = document.getElementById("chat-professores");

@@ -96,11 +96,23 @@ try {
     $stmt = $conn->query("SELECT id, nome, tipo, quantidade, status FROM equipamentos ORDER BY nome ASC");
     $equipamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Mensagens do admin
+    // Mensagens do admin (suporta presença ou não da coluna `global`)
+    $stmt = $conn->prepare("
+        SELECT COUNT(*) AS c
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = 'mensagens_admin'
+          AND COLUMN_NAME = 'global'
+    ");
+    $stmt->execute();
+    $hasGlobal = (bool) ($stmt->fetch(PDO::FETCH_ASSOC)['c'] ?? 0);
+
+    $cond = $hasGlobal ? "(professor_id = :professor_id OR `global` = 1)" : "professor_id = :professor_id";
+
     $stmt = $conn->prepare("
         SELECT id, titulo, mensagem, criado_em, lida
         FROM mensagens_admin
-        WHERE professor_id = :professor_id
+        WHERE $cond
         ORDER BY criado_em DESC
         LIMIT 10
     ");
@@ -111,7 +123,7 @@ try {
     $stmt = $conn->prepare("
         SELECT COUNT(*) AS nao_lidas
         FROM mensagens_admin
-        WHERE professor_id = :professor_id AND lida = 0
+        WHERE $cond AND lida = 0
     ");
     $stmt->execute([':professor_id' => $professorId]);
     $naoLidas = $stmt->fetch(PDO::FETCH_ASSOC)['nao_lidas'] ?? 0;

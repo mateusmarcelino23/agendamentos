@@ -98,7 +98,7 @@ function atualizarRankings(rankings) {
 
     if (!items || items.length === 0) {
       // mostra um placeholder elegante (mantendo a classe loading)
-      ul.appendChild(criarLi(0, "Carregando...", true));
+      ul.appendChild(criarLi(0, "Nenhum dado disponível", true));
       return;
     }
 
@@ -200,9 +200,17 @@ function desenharPizza(elementId, dados, titulo, chave = "status") {
   dataTable.addColumn("number", "Total");
 
   dados.forEach((d) => {
+    // Ignora status pendente (0)
+    if (chave === "status" && ![1, 2].includes(Number(d.status))) {
+      return;
+    }
+
     let nome = d[chave];
-    if (chave === "status") nome = mapStatus[d.status] || "Outro";
-    if (nome) dataTable.addRow([nome, parseInt(d.total)]);
+    if (chave === "status") nome = mapStatus[d.status];
+
+    if (nome) {
+      dataTable.addRow([nome, parseInt(d.total)]);
+    }
   });
 
   const chart = new google.visualization.PieChart(

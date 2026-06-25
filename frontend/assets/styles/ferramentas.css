@@ -3,6 +3,221 @@ h3 {
   font-weight: 600;
 }
 
+.mb-6 {
+  margin-bottom: 4rem !important;
+}
+
+.mb-7 {
+  margin-bottom: 5rem !important;
+}
+
+/* Apresentação / título principal */
+.apresentacao-row {
+  display: flex;
+  justify-content: center;
+}
+.apresentacao-imagem {
+  width: 180px; /* a imagem ocupa toda a largura do container */
+  height: 50px; /* altura desejada do recorte */
+  object-fit: cover; /* cobre todo o container, cortando excesso */
+  object-position: center; /* centraliza vertical e horizontalmente */
+  display: block; /* remove gaps indesejados */
+  margin: 0 auto; /* centraliza horizontalmente */
+}
+
+/* Container principal do card */
+.custom-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: all 0.2s ease;
+}
+
+/* Hover suave */
+.custom-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* Header */
+.custom-card-header {
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #65ac65;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Body */
+.custom-card-body {
+  padding: 16px;
+  flex: 1;
+  overflow-y: auto;
+  max-height: 250px;
+}
+
+/* Scroll bonito */
+.custom-card-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-card-body::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 6px;
+}
+
+/* Footer */
+.custom-card-footer {
+  padding: 10px 16px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-custom {
+  border: none;
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+/* Botão verde (chat) */
+.btn-chat {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+.btn-chat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(34, 197, 94, 0.45);
+}
+
+/* Botão azul (mensagens) */
+.btn-msg {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-msg:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(59, 130, 246, 0.45);
+}
+
+/* Efeito de clique */
+.btn-custom:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Ícones */
+.btn-custom i {
+  font-size: 1rem;
+}
+
+/* Wrapper com sombra e bordas arredondadas */
+.tabela-wrapper {
+  background: #fff4ec;
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+  animation: aparecer 0.4s ease;
+}
+
+/* Animação suave ao carregar */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tabela limpa e moderna */
+.tabela-equipamentos {
+  width: 100%;
+  border-collapse: separate !important;
+  border-spacing: 0 6px;
+}
+
+/* Cabeçalho */
+.tabela-equipamentos thead th {
+  background: #b8dfff;
+  font-weight: 600;
+  color: #0d007e;
+  border: none;
+  padding: 12px;
+  font-size: 1rem;
+  text-align: center;
+  vertical-align: middle;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.tabela-equipamentos thead th:hover {
+  background: #99ccff;
+  transform: scale(1.02);
+}
+
+/* Arredonda apenas os cantos do header */
+.tabela-equipamentos thead th:first-child {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.tabela-equipamentos thead th:last-child {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+/* Linhas */
+.tabela-equipamentos tbody tr {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.tabela-equipamentos tbody tr:hover {
+  transform: scale(1.01);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Células */
+.tabela-equipamentos tbody td {
+  padding: 14px 12px;
+  border-top: none;
+  font-size: 0.9rem;
+  color: #2c3e50;
+  border-right: 1px solid #e4e3e3;
+}
+
+/* Cantos arredondados das linhas */
+.tabela-equipamentos tbody tr td:first-child {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.tabela-equipamentos tbody tr td:last-child {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
 /* Bolinha vermelha para novas mensagens */
 .tem-novas::after {
   content: "";
@@ -41,4 +256,15 @@ h3 {
 
 textarea {
   resize: none;
+}
+
+@media (min-width: 768px) {
+  .apresentacao-imagem {
+    width: 250px;
+    height: 70px;
+  }
+
+  .custom-card-body {
+    max-height: 200px;
+  }
 }

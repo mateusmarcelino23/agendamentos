@@ -86,6 +86,7 @@ try {
         FROM agendamentos a
         JOIN professores p ON a.professor_id = p.id
         JOIN equipamentos e ON a.equipamento_id = e.id
+        WHERE a.status = 1
         ORDER BY a.data DESC, a.aula DESC
         LIMIT 10
     ");
