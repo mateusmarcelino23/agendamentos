@@ -2,7 +2,7 @@
 
 ⚠ Nota de transparência sobre o desenvolvimento: a IA foi utilizada como apoio para acelerar a escrita de partes mais complexas do código. Todo o código foi revisado, ajustado e complementado por mim, incluindo a definição da estrutura do sistema, organização das pastas e arquivos e integração das funcionalidades.
 
-Sistema simples para suprir uma necessidade interna da escola. Permite que os professores agendem equipamentos como `Tablets`, `Notebooks` e os `Labs. de Informática`.
+Descrição do projeto: Sistema Web desenvolvido para suprir uma necessidade interna da escola. Permite que os professores agendem equipamentos como `Tablets`, `Notebooks` e os `Labs. de Informática` de forma mais prática e organizada.
 
 ## Configuração
 
